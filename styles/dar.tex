@@ -1,0 +1,58 @@
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{mathrsfs}
+\usepackage{natbib}
+\usepackage{float}
+\usepackage{graphicx}
+
+% Figure captions
+\makeatletter
+\newsavebox{\tempbox}
+\newcommand{\@makefigcaption}[2]{%
+\vspace{10pt}{#1.--- #2\par}}%
+\renewcommand{\figure}{\let\@makecaption\@makefigcaption\@float{figure}}
+\makeatother
+
+% No overflow
+\setlength{\emergencystretch}{2em}
+
+% Typeography
+\newcommand{\foreign}[1]{\textsl{#1}}
+\newcommand{\aposteriori}{\foreign{a~posteriori}}
+\newcommand{\apriori}{\foreign{a~priori}}
+\newcommand{\adhoc}{\foreign{ad~hoc}}
+\newcommand{\etal}{\foreign{et al.}}
+\newcommand{\eg}{\foreign{e.g.}}
+\newcommand{\affil}[1]{{\footnotesize\textsl{#1}}}
+
+% Notes
+\newcommand{\note}[1]{\endnote{#1}}
+\def\enotesize{\normalsize}
+\renewcommand{\thefootnote}{\fnsymbol{footnote}} % the ONE footnote needs this
+
+% Problems
+\newcounter{problem}
+\newenvironment{problem}{\paragraph{\problemname~\theproblem:}%
+\refstepcounter{problem}}{}
+
+% Math stuff
+\newcommand{\mmatrix}[1]{\boldsymbol{#1}}
+\newcommand{\inverse}[1]{{#1}^{-1}}
+\newcommand{\transpose}[1]{{#1}^{\scriptscriptstyle \top}}
+\newcommand{\parametervector}[1]{\mmatrix{#1}}
+\newcommand{\bvec}[1]{\mmatrix{#1}}
+\newcommand{\setofall}[3]{\{{#1}\}_{{#2}}^{{#3}}}
+\newcommand{\dd}{\,\mathrm{d}}
+
+% Headers
+\renewcommand{\MakeUppercase}[1]{#1}
+\pagestyle{myheadings}
+\renewcommand{\sectionmark}[1]{\markright{\thesection.~#1}}
+\markboth{\this}{}
+
+% Arxiv references.
+\usepackage{color,hyperref}
+\definecolor{linkcolor}{rgb}{0,0,0.5}
+\hypersetup{colorlinks=true,linkcolor=linkcolor,citecolor=linkcolor,
+            filecolor=linkcolor,urlcolor=linkcolor}
+\newcommand{\arxiv}[1]{\href{http://arxiv.org/abs/#1}{arXiv:#1}}

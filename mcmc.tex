@@ -1,0 +1,66 @@
+\documentclass[12pt,twoside,pdftex]{article}
+
+\usepackage{styles/dar_endnotes}
+
+\newcommand{\this}{Introduction to Markov chain Monte Carlo}
+\include{styles/dar}
+
+\begin{document}
+
+\thispagestyle{plain}\raggedbottom
+\section*{Data analysis recipes:\ \this\footnotemark}
+
+\footnotetext{%
+    The notes begin on page~\pageref{note:first}, including the
+    license\note{\label{note:first}
+        Copyright 2010 by the authors. This work is licensed under a
+        \href{http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en\_US}{%
+            Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported
+            License}.}
+    and the acknowledgements\note{%
+        We would like to thank\ldots
+    }.
+}
+
+\noindent
+Dan~Foreman-Mackey\\
+\affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,%
+       New York University}
+\\[1ex]
+David~W.~Hogg\\
+\affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,%
+       New York University}\\
+\affil{Max-Planck-Institut f\"ur Astronomie, Heidelberg}
+
+\begin{abstract}
+    WTF is MCMC?
+\end{abstract}
+
+\section{Statistical error bars}
+
+
+
+% \begin{figure}[htbp]
+% \exampleplot{ex17}
+% \caption{Partial solution to \problemname~\ref{prob:bayesintrinsic}:
+% The marginalized posterior probability distribution for the intrinsic
+% variance.}\label{fig:bayesintrinsic}
+% \end{figure}
+
+\clearpage
+\markright{Notes}\theendnotes
+
+\clearpage
+\begin{thebibliography}{}\markright{References}
+
+\bibitem[Bovy, Hogg, \& Roweis(2009)]{bovy}
+  Bovy,~J., Hogg,~D.~W., \& Roweis, S.~T., 2009,
+  Extreme deconvolution: inferring complete distribution functions from noisy, heterogeneous, and incomplete observations,
+  \arxiv{0905.2979} [stat.ME]
+
+\bibitem[Foreman-Mackey et al.(2012)]{emcee} Foreman-Mackey,
+    D., Hogg, D.~W., Lang, D., \& Goodman, J.\ 2012, \arxiv{1202.3665}
+
+\end{thebibliography}
+
+\end{document}
