@@ -38,12 +38,20 @@ David~W.~Hogg\\
 \affil{Max-Planck-Institut f\"ur Astronomie, Heidelberg}
 
 \begin{abstract}
-    WTF is MCMC?
+Markov Chain Monte Carlo (MCMC) methods for sampling probability
+distribution functions, plus abundant computation, have transformed
+the sciences.  Here we give a fast overview of basic MCMC methods and
+then turn to practical advice for their use in real inference
+problems.  We give advice on method choice, tuning for performance,
+initialization and burn-in, judging convergence, and use of the chain
+output to make results with error bars. [Insert some generally useful
+  point here!]
 \end{abstract}
 
 \section{When do you need MCMC?}
 
-...Search, optimization, and sampling in inference.
+...Search, optimization, and sampling in inference.  MCMC does only
+one of these things well!
 
 \section{What is M--H MCMC?}
 
@@ -52,6 +60,9 @@ David~W.~Hogg\\
 ...Why does it work (briefly)?
 
 ...What is a typical proposal distribution?
+
+...You can't sample the likelihood!  You can only sample a posterior
+pdf!
 
 \section{stretch move and other variants}
 
@@ -105,6 +116,9 @@ package \emph{afterwards}.
 ...The Bayes integral / evidence integral?
 
 ...Posterior predictive checks?
+
+...Finally, to repeat: You can't sample the likelihood!  You can only
+sample a posterior pdf!
 
 % \begin{figure}[htbp]
 % \exampleplot{ex17}
