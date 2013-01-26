@@ -21,6 +21,7 @@
           Jo Bovy (IAS),
           Brendon Brewer (Auckland),
           Jonathan Goodman (NYU),
+          Fengji Hou (NYU),
           Dustin Lang (CMU),
           \ldots
         for valuable advice and comments.}.
@@ -44,29 +45,66 @@ David~W.~Hogg\\
 
 ...Search, optimization, and sampling in inference.
 
-\section{What is MCMC?}
+\section{What is M--H MCMC?}
 
-\section{Metropolis--Hastings, stretch move, and more}
+...The algorithm
 
-...M-H, emcee, and references to competitor methods like nested and hamiltionian etc.
+...Why does it work (briefly)?
+
+...What is a typical proposal distribution?
+
+\section{stretch move and other variants}
+
+...How does the stretch move work?
+
+...Why is the stretch move useful?
+
+...What, briefly, is nested sampling, and why is it good?
+
+...What, briefly, is hamiltonian, and why is it good?
 
 \section{Results, error bars, and figures}
 
-...using the output to make figures, get numbers with error bars, and show results
+...So you have a chain output, what do you do with it?
 
-\section{Tuning}
+...What is the number and error bar?  What is an upper limit?
 
-...tuning and Gibbs sampling and the like
+...What figures should you make to check the chain?
 
 \section{Convergence}
 
-...how do you know you have run long enough?
+...How do you know you have run long enough?  Heuristically...
+
+...Autocorrelation time
+
+\section{Tuning}
+
+...How do you make it run fast?
+
+...Acceptance ratio and ESJD and etc.
+
+...Gibbs sampling and interior marginalizations
 
 \section{Initialization and burn-in}
 
+...Precede with optimization
+
+...Start from different locations
+
+...Dealing with multi-modal problems
+
 \section{Advice and discussion}
 
-...Don'ts and no-nos and breaking Markov-ness.
+...Write and debug your own M--H sampler and then download a real
+package \emph{afterwards}.
+
+...breaking Markov-ness.
+
+...Initialization and burn-in advice we haven't addressed earlier?
+
+...The Bayes integral / evidence integral?
+
+...Posterior predictive checks?
 
 % \begin{figure}[htbp]
 % \exampleplot{ex17}
