@@ -2,6 +2,7 @@
 *.aux
 *.bbl
 *.blg
+*.brf
 *.dvi
 *.fdb_latexmk
 *.glg
@@ -28,3 +29,4 @@
 *.mtc0
 *.ent
 .DS_Store
+*~
