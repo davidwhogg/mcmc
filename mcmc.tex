@@ -139,12 +139,18 @@ setting of a huge blob of parameters $\pars$\note{Again, the parameter
 % The "generative model" is a probabilistic description of your *prior
 % beliefs about what the data are going to be*. </Wild Subjective Bayesian>
 And say you also can write down some kind of informative or
-uninformative prior pdf $p(\pars)$ for the parameter blob.
+vague prior pdf $p(\pars)$ for the parameter blob.
+% ************* BJB
+% Uninformative should be banished! The correct word is vague :). Attempts
+% at finding formal uninformative priors are misguided IMHO.
 If all these things are true, then---even if you can't compute
 anything else---in principle a trivial-to-implement MCMC can give you
 a fair sampling of the posterior pdf.
-That is, you can run MCMC (for a very long time\note{A very, very long
-  time; we will return to that below.}) and you will be left with a
+That is, you can run MCMC (for a very long time\note{Sometimes a very, very long
+  time; we will return to that below.})
+% ************* BJB
+% It's not always super slow, so added the word "sometimes"
+and you will be left with a
 set of $K$ parameter-blob settings $\pars_k$ such that the full set
 $\setofall{\pars_k}_{k=1}^K$ constitutes a fair sampling from the
 posterior pdf $p(\pars\given\data$).
