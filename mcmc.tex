@@ -1,8 +1,28 @@
+% to-do
+% -----
+% - write zeroth draft
+% - write first draft
+% - send to friendlies for comments
+%   - Brewer
+%   - Lang
+%   - Rix
+%   - Bovy
+% - post on arXiv
+
+% style notes
+% -----------
+% - [LaTeX] newline after every full stop for proper git diffing
+% - [LaTeX] eqnarray not equation
+% - pdf not PDF
+
 \documentclass[12pt,twoside,pdftex]{article}
 \usepackage{styles/dar_endnotes}
 
 \newcommand{\this}{Using Markov Chain Monte Carlo}
 \include{styles/dar}
+
+\newcommand{\data}{D}
+\newcommand{\pars}{\theta}
 
 \begin{document}
 
@@ -39,18 +59,102 @@ David~W.~Hogg\\
 \begin{abstract}
 Markov Chain Monte Carlo (MCMC) methods for sampling probability
 distribution functions, plus abundant computation, have transformed
-the sciences.  Here we give a fast overview of basic MCMC methods and
-then turn to practical advice for their use in real inference
-problems.  We give advice on method choice, tuning for performance,
+the sciences.
+Here we give a fast overview of basic MCMC methods and then turn to
+practical advice for their use in real inference problems.
+We give advice on method choice, tuning for performance,
 initialization and burn-in, judging convergence, and use of the chain
-output to make results with error bars. [Insert some generally useful
-  point here!]
+output to make results with error bars.
+[Insert some generally useful point here!]
 \end{abstract}
 
 \section{When do you need MCMC?}
 
-...Search, optimization, and sampling in inference.  MCMC does only
-one of these things well!
+Markov Chain Monte Carlo (MCMC) methods are methods for sampling
+probability distribution functions (pdfs).
+They don't require that you have a full analytic description of the
+properly normalized pdf for sampling to proceed; they only require
+that you be able to compute ratios of the pdf at pairs of locations.
+These properties make MCMC methods ideal for sampling \emph{posterior
+  pdfs} in probabilistic inferences:
+In probabilistic inferences, the posterior pdf $p(\pars\given\data)$,
+or pdf for the parameters $\pars$ given the data $\data$, is
+constructed from the likelihood $p(\data\given\pars)$, or pdf for the
+data given the parameters, and the prior pdf $p(\pars)$ for the
+parameters by what's often known as ``Bayes rule'',
+\begin{eqnarray}
+p(\pars\given\data) &=& \frac{1}{Z}\,p(\data\given\pars)\,p(\pars)
+\quad .
+\end{eqnarray}
+In these contexts, the constant $Z$ is sometimes written as
+$p(\data)$, is sometimes called the ``evidence'' or the ``Bayes
+integral'', and is usually \emph{extremely hard to
+  calculate}.\note{Say words about why we call it $Z$ not $p(\data)$
+  and why it is extremely hard to calculate.}
+That is, you often know the function $p(\pars\given\data)$ up to a
+constant factor; you can compute ratios of the pdf at pairs of points,
+but not the precise value at any individual point.
+
+In addition to this normalization-insensitive property of MCMC, in its
+simplest forms it can be run without computing any derivatives or
+integrals of the function, and (as we will show below) in its simplest
+forms it is \emph{extremely easy to implement}.
+For all these reasons, MCMC is ideal for sampling posterior pdfs in
+the real situations in which scientists find themselves.
+
+Say you are in this situation.
+You have a huge blob of data $\data$ (think of this as a vector or
+list or heterogeneous collection of observations\note{In general in
+  this \documentname\ we will treat any variable as being capable of
+  containing not just a value but some huge arbitrarily structured set
+  of values in matrix, vector, or more complex form.}).
+You also have a model sophisticated enough---a probabilistic,
+generative model, if you will\note{For our definition of a
+  \emph{model}, see [SOME OTHER NOTE] in this series.}---that, given a
+setting of a huge blob of parameters $\pars$\note{Again, the parameter
+  blob $\pars$ should also be thought of as an immense, arbitrarily
+  structured set or list of parameters, possibly even with no fixed
+  dimension!}, you can compute a pdf for data (or likelihood\note{We
+  bash the terminology ``likelihood'' in [SOME OTHER NOTE] in this
+  series.}) $p(\data\given\pars)$.
+And say you also can write down some kind of informative or
+uninformative prior pdf $p(\pars)$ for the parameter blob.
+If all these things are true, then---even if you can't compute
+anything else---in principle a trivial-to-implement MCMC can give you
+a fair sampling of the posterior pdf.
+That is, you can run MCMC (for a very long time\note{A very, very long
+  time; we will return to that below.}) and you will be left with a
+set of $K$ parameter-blob settings $\pars_k$ such that the full set
+$\setofall{\pars_k}_{k=1}^K$ constitutes a fair sampling from the
+posterior pdf $p(\pars\given\data$).
+
+All that said, and adhering to the traditions of the \project{Data
+  Analysis Recipes} project\note{Every chapter in the \project{Data
+    Analysis Recipes} series begins with a rant in which we argue that
+  most uses of the methods in question are not appropriate!}, we are
+compelled to note that MCMC is in fact \emph{over-used}.
+Because MCMC provably (under assumptions\note{Hint at assumptions
+  here.}, some of which will be discussed below) samples the full
+posterior pdf in all of parameter space, many investigators use MCMC
+because it will sample \emph{all} of the parameter space
+($\pars$-space).
+That is, they are using MCMC because they want to
+\emph{search the parameter space for good models}.
+Because MCMC samples the parameter representatively, it spends most of
+its time near very good models; models that (within the confines of
+the prior pdf) do a good job of explaining the data.
+For this reason, many investigators are using MCMC because it
+effectively \emph{optimizes the posterior pdf}.
+
+Both of these reasons for using MCMC---that it is a parameter-space
+search algorithm, and that it is a simple-to-code effective
+optimizer---are \emph{not good reasons}.  MCMC is first and foremost a
+\emph{sampler}.  If you are trying to find the optimum of the
+likelihood or the posterior pdf, you should use an \emph{optimzer},
+not a sampler.  If you want to make sure you search all of parameter
+space, you should use a \emph{search algorithm}, not a sampler.  MCMC
+is good at one thing, and one thing only: Sampling ill-normalized
+pdfs.
 
 \section{What is M--H MCMC?}
 
