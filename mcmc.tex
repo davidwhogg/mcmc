@@ -67,8 +67,9 @@ We give advice on method choice, tuning for performance,
 initialization and burn-in, judging convergence, and use of the chain
 output to make results {\it with error bars}.
 % ******* BJB
-% Giving MCMC results with error bars is uncommon, but cool. I thought it
-% deserved an italic
+% Do you mean errorbars on the parameters or errorbars
+% on posterior quantities as a result of having used a Monte
+% Carlo method? The former is much more useful and introductiony
 [Insert some generally useful point here!]
 \end{abstract}
 
@@ -154,6 +155,10 @@ and you will be left with a
 set of $K$ parameter-blob settings $\pars_k$ such that the full set
 $\setofall{\pars_k}_{k=1}^K$ constitutes a fair sampling from the
 posterior pdf $p(\pars\given\data$).
+% ************* BJB
+% Notions of "sampling" and "Monte Carlo" are interesting. You might like to
+% refer the interested reader to the paper "Monte Carlo is Fundamentally
+% Unsound" by Tony O'Hagan.
 
 All that said, and adhering to the traditions of the \project{Data
   Analysis Recipes} project\note{Every chapter in the \project{Data
@@ -173,6 +178,12 @@ the prior pdf) do a good job of explaining the data.
 For this reason, many investigators are using MCMC because it
 effectively \emph{optimizes the posterior pdf}.
 
+% ********** BJB
+% I'm a bit puzzled by this discussion. Most people using MCMC to "optimize"
+% are using it on problems where they SHOULD be sampling. Fitting data is almost
+% always an inference problem naturally, not an optimization. Optimization is
+% more useful for fitting one model to another model.
+
 Both of these reasons for using MCMC---that it is a parameter-space
 search algorithm, and that it is a simple-to-code effective
 optimizer---are \emph{not good reasons}.  MCMC is first and foremost a
@@ -182,6 +193,13 @@ not a sampler.  If you want to make sure you search all of parameter
 space, you should use a \emph{search algorithm}, not a sampler.  MCMC
 is good at one thing, and one thing only: Sampling ill-normalized
 pdfs.
+
+% ********** BJB
+% More puzzlement. Most optimizers are degenerate cases of MCMC where
+% the target distribution is very concentrated. e.g. M-H becomes an uphill step
+% thing, emcee becomes something like the Simplex method, Hamiltonian MCMC
+% becomes steepest descent...MCMC and optimization are closely related. You may
+% want some discussion of that (but then, it might be too highfalutin).
 
 \section{What is M--H MCMC?}
 
@@ -193,6 +211,22 @@ pdfs.
 
 ...You can't sample the likelihood!  You can only sample a posterior
 pdf!
+% *********** BJB
+% YES!!!! Although you can sample the likelihood if your samples are in
+% data space. :)
+
+% *********** BJB
+% I suggest partitioning the discussion of different methods into the following
+% two categories:
+%
+%  i) Methods for getting around the target distribution
+% ii) Methods that change the target distribution to something
+% other than the posterior pdf, to help the sampling somehow
+%
+% i) Would include things like M-H, the stretch move,
+% Hamiltonian, slice sampling (maybe skip the latter)
+% ii) would include things like annealing and Nested Sampling
+
 
 \section{stretch move and other variants}
 
@@ -209,6 +243,9 @@ pdf!
 ...So you have a chain output, what do you do with it?
 
 ...What is the number and error bar?  What is an upper limit?
+% Do you mean the error bar on the parameter or the error
+% bar induced by the sampling?
+
 
 ...What figures should you make to check the chain?
 
@@ -224,6 +261,11 @@ pdf!
 
 ...Acceptance ratio and ESJD and etc.
 
+% BJB
+% Please suggest mixtures of scales for M-H proposals.
+% You can mimic the properties of slice sampling but with
+% much easier code.
+
 ...Gibbs sampling and interior marginalizations
 
 \section{Initialization and burn-in}
@@ -238,8 +280,14 @@ pdf!
 
 ...Write and debug your own M--H sampler and then download a real
 package \emph{afterwards}.
+% ***** BJB
+% I AGREE WHOLEHEARTEDLY. That's how to learn.
 
 ...breaking Markov-ness.
+% ***** BJB
+% "Diminishing adaptations" is an idea that is quite easy
+% to explain. There are other ways to break Markov-ness but
+% this probably covers enough of them for an intro document
 
 ...Initialization and burn-in advice we haven't addressed earlier?
 
