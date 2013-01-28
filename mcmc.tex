@@ -87,6 +87,9 @@ properly normalized pdf for sampling to proceed; they only require
 that you be able to compute ratios of the pdf at pairs of locations.
 These properties make MCMC methods ideal for sampling \emph{posterior
   pdfs} in probabilistic inferences:
+% ******** BJB
+% I know you don't like it, but LOTS of people use and understand the word
+% Bayesian.
 In probabilistic inferences, the posterior pdf $p(\pars\given\data)$,
 or pdf for the parameters $\pars$ given the data $\data$, is
 constructed from the likelihood $p(\data\given\pars)$, or pdf for the
@@ -96,9 +99,13 @@ parameters by what's often known as ``Bayes rule'',
 p(\pars\given\data) &=& \frac{1}{Z}\,p(\data\given\pars)\,p(\pars)
 \quad .
 \end{eqnarray}
-In these contexts, the constant $Z$ is sometimes written as
-$p(\data)$, is sometimes called the ``evidence'' or the ``Bayes
-integral'', and is usually \emph{extremely hard to
+% ********* BJB
+% Unfortunately there are many more names for the evidence. I prefer
+% marginal likelihood myself.
+In these contexts, the constant $Z$, sometimes written as
+$p(\data)$, is known by the names ``evidence'', ``marginal likelihood''
+the ``Bayes integral'' and ``prior predictive probability'', and is usually
+\emph{extremely hard to
   calculate}.\note{Say words about why we call it $Z$ not $p(\data)$
   and why it is extremely hard to calculate.}
 That is, you often know the function $p(\pars\given\data)$ up to a
