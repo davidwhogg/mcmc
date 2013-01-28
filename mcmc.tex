@@ -58,13 +58,16 @@ David~W.~Hogg\\
 
 \begin{abstract}
 Markov Chain Monte Carlo (MCMC) methods for sampling probability
-distribution functions, plus abundant computation, have transformed
+distribution functions, plus abundant computational resources,
+have transformed
 the sciences.
 Here we give a fast overview of basic MCMC methods and then turn to
 practical advice for their use in real inference problems.
 We give advice on method choice, tuning for performance,
 initialization and burn-in, judging convergence, and use of the chain
-output to make results with error bars.
+output to make results {\it with error bars}.
+% Giving MCMC results with error bars is uncommon, but cool. I thought it
+% deserved an italic
 [Insert some generally useful point here!]
 \end{abstract}
 
@@ -72,6 +75,8 @@ output to make results with error bars.
 
 Markov Chain Monte Carlo (MCMC) methods are methods for sampling
 probability distribution functions (pdfs).
+% pdf usually stands for probability density function. You are using non-standard
+% terminology here.
 They don't require that you have a full analytic description of the
 properly normalized pdf for sampling to proceed; they only require
 that you be able to compute ratios of the pdf at pairs of locations.
