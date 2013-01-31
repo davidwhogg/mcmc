@@ -47,19 +47,17 @@
 
 \noindent
 Dan~Foreman-Mackey\\
-\affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,%
-       New York University}
-\\[1ex]
+\affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,
+       New York University}\\[1ex]
 David~W.~Hogg\\
-\affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,%
+\affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,
        New York University}\\
 \affil{Max-Planck-Institut f\"ur Astronomie, Heidelberg}
 
 \begin{abstract}
 Markov Chain Monte Carlo (MCMC) methods for sampling probability
 distribution functions, plus abundant computational resources,
-have transformed
-the sciences.
+have transformed the sciences.
 Here we give a fast overview of basic MCMC methods and then turn to
 practical advice for their use in real inference problems.
 We give advice on method choice, tuning for performance,
@@ -116,16 +114,18 @@ list or heterogeneous collection of observations\note{In general in
 You also have a model sophisticated enough---a probabilistic,
 generative model, if you will\note{For our definition of a
   \emph{model}, see [SOME OTHER NOTE] in this series.}---that, given a
-setting of a huge blob of parameters $\pars$\note{Again, the parameter
+setting of a huge blob of parameters\note{Again, the parameter
   blob $\pars$ should also be thought of as an immense, arbitrarily
   structured set or list of parameters, possibly even with no fixed
-  dimension!}, you can compute a pdf for data (or likelihood\note{We
+  dimension!} $\pars$, you can compute a pdf for data (or likelihood\note{We
   bash the terminology ``likelihood'' in [SOME OTHER NOTE] in this
   series.}) $p(\data\given\pars)$.
 % ************* BJB
 % <Wild Subjective Bayesian>
 % The "generative model" is a probabilistic description of your *prior
 % beliefs about what the data are going to be*. </Wild Subjective Bayesian>
+% ************* Hogg
+% That comment should go in the ``What is a Model?'' Chapter.
 And say you also can write down some kind of informative or
 vague prior pdf $p(\pars)$ for the parameter blob.
 If all these things are true, then---even if you can't compute
