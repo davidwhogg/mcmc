@@ -219,13 +219,52 @@ pdf!
 ...What should you report as the inferred parameter value and
 associated uncertainty (error bar)?  What is an upper limit?
 
-...What figures should you make to check the chain?
+...What do you do in high-dimensional spaces?  Note the issue
+that---even in a unimodal posterior PDF---the most probable model
+might not be at the set of parameter values that are reported if you
+compute the parameter values to report in one-dimensional projections
+of the posterior pdf.  This requires a figure to demonstrate.  What to
+do here?
+
+...What figures should you make to display the chain?
+
+...If you are really good, you will pass forward a sampling.  How big
+should it be?  Refer to Mackay here.
 
 \section{Convergence}
 
-...How do you know you have run long enough?  Heuristically...
+A key question for an MCMC operator---\emph{the} key question in some
+sense---is \emph{how long to run} to be sure of having reliable
+results.
+It is disappointing and annoying to many that there is no extremely
+simple and reliable answer to this question.
 
-...Autocorrelation time
+The reason that there is no simple answer is that you can't really
+ever know that you have sampled the full posterior pdf, and the reason
+for \emph{that} is that if you \emph{could} know that, you would also
+be able to solve the famously difficult discrete optimization
+problem.\note{explain this remark and cite something here}
+Another way to put it is that you might have two modes---two separated
+regions of substantial total probability---in the posterior pdf that
+are both important but separated by a large region of low probability.
+If you are using a simple sampler, you could sample one of these modes
+very well but the sampler will take effectively infinite time to find
+the other mode.
+Any test of convergence would be passed, but in fact the sampling
+would be incomplete and not representative.
+That is, knowing that you have a complete and representative sampling
+is nearly impossible.
+
+Heuristically, however, you have sampled long enough when you can see
+that the (or each) walker has traversed the high-probability parts of
+the parameter space many times in the length of the chain.
+Or, equivalently, you have sampled long enough when the first half of
+the chain shows very much the same posterior pdf morphology as the
+second half of the chain, or indeed as any substantial subset.
+
+...What plot should you make?  Make plots that demonstrate a non-converged and a converged chain.
+
+...Autocorrelation time is the premier tool.  It is not a panacea, and why?
 
 \section{Tuning}
 
