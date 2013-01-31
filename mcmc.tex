@@ -3,7 +3,6 @@
 % - write zeroth draft
 % - write first draft
 % - send to friendlies for comments
-%   - Brewer
 %   - Lang
 %   - Rix
 %   - Bovy
@@ -65,33 +64,24 @@ Here we give a fast overview of basic MCMC methods and then turn to
 practical advice for their use in real inference problems.
 We give advice on method choice, tuning for performance,
 initialization and burn-in, judging convergence, and use of the chain
-output to make results {\it with error bars}.
-% ******* BJB
-% Do you mean errorbars on the parameters or errorbars
-% on posterior quantities as a result of having used a Monte
-% Carlo method? The former is much more useful and introductiony
+output to produce parameter estimates with associated uncertainties.
 [Insert some generally useful point here!]
 \end{abstract}
 
 \section{When do you need MCMC?}
 
 Markov Chain Monte Carlo (MCMC) methods are methods for sampling
-probability distribution functions (pdfs). These pdfs may be either probability
-mass functions on a discrete space, or probability densities on a continuous
-space.
-% ******* BJB
-% pdf usually stands for probability density function. You are using non-standard
-% terminology here. My words above might be too technical given the aim of your
-% document.
-They don't require that you have a full analytic description of the
+probability distribution functions or probability density functions (pdfs).
+These pdfs may be either probability mass functions on a discrete
+space, or probability densities on a continuous space, though we will
+concentrate on the latter in this \documentname.
+MCMC methods don't require that you have a full analytic description of the
 properly normalized pdf for sampling to proceed; they only require
 that you be able to compute ratios of the pdf at pairs of locations.
-These properties make MCMC methods ideal for sampling \emph{posterior
+This makes MCMC methods ideal for sampling \emph{posterior
   pdfs} in probabilistic inferences:
-% ******** BJB
-% I know you don't like it, but LOTS of people use and understand the word
-% Bayesian.
-In probabilistic inferences, the posterior pdf $p(\pars\given\data)$,
+
+In a probabilistic inference, the posterior pdf $p(\pars\given\data)$,
 or pdf for the parameters $\pars$ given the data $\data$, is
 constructed from the likelihood $p(\data\given\pars)$, or pdf for the
 data given the parameters, and the prior pdf $p(\pars)$ for the
@@ -100,9 +90,6 @@ parameters by what's often known as ``Bayes rule'',
 p(\pars\given\data) &=& \frac{1}{Z}\,p(\data\given\pars)\,p(\pars)
 \quad .
 \end{eqnarray}
-% ********* BJB
-% Unfortunately there are many more names for the evidence. I prefer
-% marginal likelihood myself.
 In these contexts, the constant $Z$, sometimes written as
 $p(\data)$, is known by the names ``evidence'', ``marginal likelihood''
 the ``Bayes integral'' and ``prior predictive probability'', and is usually
@@ -141,20 +128,14 @@ setting of a huge blob of parameters $\pars$\note{Again, the parameter
 % beliefs about what the data are going to be*. </Wild Subjective Bayesian>
 And say you also can write down some kind of informative or
 vague prior pdf $p(\pars)$ for the parameter blob.
-% ************* BJB
-% Uninformative should be banished! The correct word is vague :). Attempts
-% at finding formal uninformative priors are misguided IMHO.
 If all these things are true, then---even if you can't compute
 anything else---in principle a trivial-to-implement MCMC can give you
 a fair sampling of the posterior pdf.
-That is, you can run MCMC (for a very long time\note{Sometimes a very, very long
-  time; we will return to that below.})
-% ************* BJB
-% It's not always super slow, so added the word "sometimes"
-and you will be left with a
-set of $K$ parameter-blob settings $\pars_k$ such that the full set
-$\setofall{\pars_k}_{k=1}^K$ constitutes a fair sampling from the
-posterior pdf $p(\pars\given\data$).
+That is, you can run MCMC (for a very long time\note{Sometimes a very,
+  very long time; we will return to that below.})  and you will be
+left with a set of $K$ parameter-blob settings $\pars_k$ such that the
+full set $\setofall{\pars_k}_{k=1}^K$ constitutes a fair sampling from
+the posterior pdf $p(\pars\given\data$).
 % ************* BJB
 % Notions of "sampling" and "Monte Carlo" are interesting. You might like to
 % refer the interested reader to the paper "Monte Carlo is Fundamentally
@@ -176,13 +157,14 @@ Because MCMC samples the parameter representatively, it spends most of
 its time near very good models; models that (within the confines of
 the prior pdf) do a good job of explaining the data.
 For this reason, many investigators are using MCMC because it
-effectively \emph{optimizes the posterior pdf}.
-
-% ********** BJB
-% I'm a bit puzzled by this discussion. Most people using MCMC to "optimize"
-% are using it on problems where they SHOULD be sampling. Fitting data is almost
-% always an inference problem naturally, not an optimization. Optimization is
-% more useful for fitting one model to another model.
+effectively \emph{optimizes the posterior pdf}, or, for certain
+choices of prior pdf, \emph{optimizes the likelihood}.\note{Of course
+  a committed Bayesian would argue that any time you are optimizing a
+  posterior pdf or optimizing a likelihood, you \emph{should} be
+  sampling a posterior pdf.  That is, for some, the fact that when
+  someone ``wants'' to optimize, it is actually useful that they
+  choose the ``wrong'' tool, because that ``wrong'' tool gives them
+  back something far more useful than the output of any optimizer!}
 
 Both of these reasons for using MCMC---that it is a parameter-space
 search algorithm, and that it is a simple-to-code effective
@@ -191,15 +173,8 @@ optimizer---are \emph{not good reasons}.  MCMC is first and foremost a
 likelihood or the posterior pdf, you should use an \emph{optimzer},
 not a sampler.  If you want to make sure you search all of parameter
 space, you should use a \emph{search algorithm}, not a sampler.  MCMC
-is good at one thing, and one thing only: Sampling ill-normalized
-pdfs.
-
-% ********** BJB
-% More puzzlement. Most optimizers are degenerate cases of MCMC where
-% the target distribution is very concentrated. e.g. M-H becomes an uphill step
-% thing, emcee becomes something like the Simplex method, Hamiltonian MCMC
-% becomes steepest descent...MCMC and optimization are closely related. You may
-% want some discussion of that (but then, it might be too highfalutin).
+is good at one thing, and one thing only: Sampling ill-normalized (or
+otherwise hard to sample) pdfs.
 
 \section{What is M--H MCMC?}
 
@@ -227,7 +202,6 @@ pdf!
 % Hamiltonian, slice sampling (maybe skip the latter)
 % ii) would include things like annealing and Nested Sampling
 
-
 \section{stretch move and other variants}
 
 ...How does the stretch move work?
@@ -242,10 +216,8 @@ pdf!
 
 ...So you have a chain output, what do you do with it?
 
-...What is the number and error bar?  What is an upper limit?
-% Do you mean the error bar on the parameter or the error
-% bar induced by the sampling?
-
+...What should you report as the inferred parameter value and
+associated uncertainty (error bar)?  What is an upper limit?
 
 ...What figures should you make to check the chain?
 
@@ -300,6 +272,9 @@ package \emph{afterwards}.
 % "Diminishing adaptations" is an idea that is quite easy
 % to explain. There are other ways to break Markov-ness but
 % this probably covers enough of them for an intro document
+% ***** Hogg
+% I was going to say you should NEVER break Markov-ness
+% unless you REALLY understand what you are doing.
 
 ...Initialization and burn-in advice we haven't addressed earlier?
 
