@@ -13,6 +13,7 @@
 % - [LaTeX] newline after every full stop for proper git diffing
 % - [LaTeX] eqnarray not equation
 % - pdf not PDF
+% - is it ``a MCMC sampling'' or ``an MCMC sampling''?
 
 \documentclass[12pt,twoside,pdftex]{article}
 \usepackage{styles/dar_endnotes}
@@ -126,7 +127,7 @@ setting of a huge blob of parameters\note{Again, the parameter
 % beliefs about what the data are going to be*. </Wild Subjective Bayesian>
 % ************* Hogg
 % That comment should go in the ``What is a Model?'' Chapter.
-And say you also can write down some kind of informative or
+Furthermore, say you also can write down some kind of informative or
 vague prior pdf $p(\pars)$ for the parameter blob.
 If all these things are true, then---even if you can't compute
 anything else---in principle a trivial-to-implement MCMC can give you
@@ -214,7 +215,22 @@ pdf!
 
 \section{Results, error bars, and figures}
 
-...So you have a chain output, what do you do with it?
+For a committed probabilistic scientist---frequentist or
+bayesian---there is no ``answer'', there are only probability density
+functions.  Any time in a paper or in an email or in a conversation
+we say what ``the answer is''---even if we say it with an error
+bar---we have departed the probabilistic program.  There are many
+principled ways to depart the program; in another \documentname, we
+discuss the economic explanation of how we can make hard decisions in
+the context of probabilistic reasoning\note{CITE DECISION DOCUMENT}.
+But without going into the economic model, it is fair to say that a
+substantial problem with being a committed probabilist is that when we
+\emph{publish}, we are not permitted (not now, at least) to publish a
+\emph{probability distribution over pubications}; we have to publish
+\emph{one single, deterministic text}; we have to \emph{decide} what
+to write in the title, the abstract, the tables, figures, and results
+section.  Given a MCMC sampling of the posterior pdf, what do we
+report as our \emph{results}?
 
 ...What should you report as the inferred parameter value and
 associated uncertainty (error bar)?  What is an upper limit?
