@@ -179,9 +179,36 @@ otherwise hard to sample) pdfs.
 
 \section{What is a sampling?}
 
-...What is a sampling, heurstically?..
+...What is a sampling, heurstically?.. Along the way, what is a pdf?..
 
-...What is the expectation integral in the sampling approximation?  Why is that a good idea?..
+If there is a pdf $p(x)$ for some quantity $x$, which can be a scalar
+or a multi-element vector or list or blob, we can define
+\emph{expectation values} $E[x]$ for $x$ or for any quantity that can
+be expressed as a function $q(x)$ of $x$:
+\begin{eqnarray}
+E[x] &\equiv& \int x\,p(x)\,\dd x
+\\
+E[q] &\equiv& \int q(x)\,p(x)\,\dd x
+\quad ,
+\end{eqnarray}
+where the integrals are implicitly definite integrals over the domain
+of $x$ (all the parts of $x$ space in which $p(x)$ is finite) and the
+integrals are multi-dimensional if $x$ is multi-dimensional.  These
+expectation values are the mean values of $x$ and $q(x)$ under the
+pdf.  A good sampling---really the definition of a good
+sampling---makes the sampling approximation to these integrals
+accurate.  With a good sampling $\setofall{x_k}_{k=1}^K$ the integrals
+get replaced with sums over samples $x_k$:
+\begin{eqnarray}
+E[x] &\approx& \frac{1}{K}\,\sum_{k=1}^K x_k
+\\
+E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(x_k)
+\quad .
+\end{eqnarray}
+That is, a sampling is good when any expectation value of interest is
+accurately computed via the sampling approximation.  Your conditions
+on your sampling will depend on the expectations you want to compute,
+and the accuracies you need.
 
 ...How is the sampling of the marginalized pdf trivially constructed from the full sampling?..
 
