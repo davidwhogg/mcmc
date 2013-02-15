@@ -215,9 +215,11 @@ and the accuracies you need.
 ...Is there any way to reconstruct $p(x)$ from the samples
 $\setofall{x_k}$?  In short, no, but in many cases of interest, sort-of!..
 
-...You can't sample the likelihood!  You can only sample a posterior
-pdf!.. why not?.. Give a sense of the difficulties you get into if you
-fail here; like discussion with Sven Kreiss on 2013-02-14...
+...You can't sample a likelihood!  You can only sample a posterior
+pdf!..
+why not?..
+Give a sense of the difficulties you get into if you fail here; like
+discussion with Sven Kreiss on 2013-02-14...
 
 \section{What is M--H MCMC?}
 
@@ -226,10 +228,6 @@ fail here; like discussion with Sven Kreiss on 2013-02-14...
 ...Why does it work (briefly)?
 
 ...What is a typical proposal distribution?
-
-% *********** BJB
-% YES!!!! Although you can sample the likelihood if your samples are in
-% data space. :)
 
 % *********** BJB
 % I suggest partitioning the discussion of different methods into the following
@@ -324,20 +322,25 @@ second half of the chain, or indeed as any substantial subset.
 
 ...What plot should you make?  Make plots that demonstrate a non-converged and a converged chain.
 
-...Autocorrelation time is the premier tool.  It is not a panacea, and why?
+...Autocorrelation time is the premier tool.
+How is Autocorrelation time defined?..
+How is Autocorrelation time measured?..
+Why is it is not a panacea?..
 
 \section{Tuning}
 
-...How do you make it run fast?
+...How do you make it run fast?..
 
-...Acceptance ratio and ESJD and etc.
+...Acceptance ratio...
+
+...ESJD and etc...
 
 % BJB
 % Please suggest mixtures of scales for M-H proposals.
 % You can mimic the properties of slice sampling but with
 % much easier code.
 
-...Gibbs sampling and interior marginalizations
+...Gibbs sampling and interior marginalizations...
 
 \section{Initialization and burn-in}
 
