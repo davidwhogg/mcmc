@@ -213,7 +213,11 @@ and the accuracies you need.
 ...How is the sampling of the marginalized pdf trivially constructed from the full sampling?..
 
 ...Is there any way to reconstruct $p(x)$ from the samples
-$\setofall{x_k}$?  In short, no, but in many cases of interest, yes!..
+$\setofall{x_k}$?  In short, no, but in many cases of interest, sort-of!..
+
+...You can't sample the likelihood!  You can only sample a posterior
+pdf!.. why not?.. Give a sense of the difficulties you get into if you
+fail here; like discussion with Sven Kreiss on 2013-02-14...
 
 \section{What is M--H MCMC?}
 
@@ -223,8 +227,6 @@ $\setofall{x_k}$?  In short, no, but in many cases of interest, yes!..
 
 ...What is a typical proposal distribution?
 
-...You can't sample the likelihood!  You can only sample a posterior
-pdf!
 % *********** BJB
 % YES!!!! Although you can sample the likelihood if your samples are in
 % data space. :)
