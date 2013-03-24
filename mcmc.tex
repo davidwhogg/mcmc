@@ -135,7 +135,7 @@ a fair sampling of the posterior pdf.
 That is, you can run MCMC (for a very long time\note{Sometimes a very,
   very long time; we will return to that below.})  and you will be
 left with a set of $K$ parameter-blob settings $\pars_k$ such that the
-full set $\setofall{\pars_k}_{k=1}^K$ constitutes a fair sampling from
+full set $\setof{\pars_k}_{k=1}^K$ constitutes a fair sampling from
 the posterior pdf $p(\pars\given\data$).
 % ************* BJB
 % Notions of "sampling" and "Monte Carlo" are interesting. You might like to
@@ -179,12 +179,28 @@ otherwise hard to sample) pdfs.
 
 \section{What is a sampling?}
 
-...What is a sampling, heurstically?.. Along the way, what is a pdf?..
+Heuristically, a sampling $\setof{x_k}_{k=1}^K$ from some pdf $p(x)$
+is a set of $K$ values $x_k$ that are independent draws from the pdf.
+Not being mathematicians, we don't know the precise definition of a
+pdf\note{Seriously.  We don't.}, but for our purposes here a pdf is
+any single-valued (scalar) function that is non-negative everywhere
+(the entire domain of $x$), and obeys a normalization condition
+\begin{eqnarray}
+0 &\leq& p(x) \quad \mbox{for all $x$}
+\\
+1 &=& \int p(x)\,\dd x
+\quad ,
+\end{eqnarray}
+where, implicitly, the integral is over the full domain of $x$.
+Importantly, although $p(x)$ is single-valued, $x$ can be a scalar or
+a multi-element vector or list or blob; it can be arbitrarily large
+and complicated.
+In data-analysis contexts, $x$ will often be the full blob of free
+parameters in the model.
 
-If there is a pdf $p(x)$ for some quantity $x$, which can be a scalar
-or a multi-element vector or list or blob, we can define
-\emph{expectation values} $E[x]$ for $x$ or for any quantity that can
-be expressed as a function $q(x)$ of $x$:
+Given this pdf $p(x)$, we can define \emph{expectation values} $E[x]$
+for $x$ or for any quantity that can be expressed as a function $q(x)$
+of $x$:
 \begin{eqnarray}
 E[x] &\equiv& \int x\,p(x)\,\dd x
 \\
@@ -197,7 +213,7 @@ integrals are multi-dimensional if $x$ is multi-dimensional.  These
 expectation values are the mean values of $x$ and $q(x)$ under the
 pdf.  A good sampling---really the definition of a good
 sampling---makes the sampling approximation to these integrals
-accurate.  With a good sampling $\setofall{x_k}_{k=1}^K$ the integrals
+accurate.  With a good sampling $\setof{x_k}_{k=1}^K$ the integrals
 get replaced with sums over samples $x_k$:
 \begin{eqnarray}
 E[x] &\approx& \frac{1}{K}\,\sum_{k=1}^K x_k
@@ -206,14 +222,57 @@ E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(x_k)
 \quad .
 \end{eqnarray}
 That is, a sampling is good when any expectation value of interest is
-accurately computed via the sampling approximation.  Your conditions
-on your sampling will depend on the expectations you want to compute,
-and the accuracies you need.
+accurately computed via the sampling approximation.  The word
+``accurately'' here translates into some kinds of theorems about
+limiting behavior; the general idea is that the sampling approximation
+becomes exact as $K$ goes to infinity.  The size $K$ of the sampling
+you need \emph{in practice} will depend on the expectations you want
+to compute, and the accuracies you need.
+
+As we noted above, in the context of MCMC, we are often sampling or
+using some \emph{badly normalized} function $f(x)$.
+This function is just the pdf $p(x)$ multiplied by some unknown and
+hard-to-compute scalar.
+In this case, for our purposes, the conditions on $f(x)$ are that it
+be non-negative everywhere and have \emph{finite} integral $Z$
+\begin{eqnarray}
+0 &\leq& f(x) \quad \mbox{for all $x$}
+\\
+Z &=& \int f(x)\,\dd x
+\quad .
+\end{eqnarray}
+
+When the sampling $\setof{x_k}_{k=1}^K$ is of one of these badly
+normalized functions $f(z)$---as it usually will be---the
+sampling-approximation expectation values are the expectation values
+under the properly-normalized corresponding pdf, even though you might
+never \emph{learn that normalization}.
+When we run MCMC sampling on $f(x)$, a function which differs from a
+pdf $p(x)$ by some unknown normalization constant, then the sampling
+permits computation of the following kinds of quantities:
+\begin{eqnarray}
+E[q] &\equiv& \frac{\int q(x)\,f(x)\,\dd x}{\int f(x)\,\dd x}
+\\
+E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(x_k)
+\quad .
+\end{eqnarray}
+That is, the sampling can be constructed (as we will show below) from
+$f(x)$ directly, and it permits you to compute expectation values
+without ever requiring you to integrate either the numerator or the
+denominator integrals, both of which are generally intractable.\note{As
+  we will
+  see, the intractability comes from various directions, but one is
+  that the dimension of $x$ gets large in most realistic situations.
+  Another is that the support of $p(x)$ tends to be, in normal
+  inference situations, \emph{far smaller} than the full domain of
+  $x$.
+  That is, the pdf is at or very close to zero over all but some tiny
+  and very hard-to-find part of the space.}
 
 ...How is the sampling of the marginalized pdf trivially constructed from the full sampling?..
 
 ...Is there any way to reconstruct $p(x)$ from the samples
-$\setofall{x_k}$?  In short, no, but in many cases of interest, sort-of!..
+$\setof{x_k}$?  In short, no, but in many cases of interest, sort-of!..
 
 ...You can't sample a likelihood!  You can only sample a posterior
 pdf!..
