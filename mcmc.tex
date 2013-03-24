@@ -207,14 +207,16 @@ E[x] &\equiv& \int x\,p(x)\,\dd x
 E[q] &\equiv& \int q(x)\,p(x)\,\dd x
 \quad ,
 \end{eqnarray}
-where the integrals are implicitly definite integrals over the domain
+where again the integrals are implicitly definite integrals over the
+entire domain
 of $x$ (all the parts of $x$ space in which $p(x)$ is finite) and the
-integrals are multi-dimensional if $x$ is multi-dimensional.  These
-expectation values are the mean values of $x$ and $q(x)$ under the
-pdf.  A good sampling---really the definition of a good
+integrals are multi-dimensional if $x$ is multi-dimensional.
+These expectation values are the mean values of $x$ and $q(x)$ under
+the pdf.  A good sampling---really the definition of a good
 sampling---makes the sampling approximation to these integrals
-accurate.  With a good sampling $\setof{x_k}_{k=1}^K$ the integrals
-get replaced with sums over samples $x_k$:
+accurate.
+With a good sampling $\setof{x_k}_{k=1}^K$ the integrals get replaced
+with sums over samples $x_k$:
 \begin{eqnarray}
 E[x] &\approx& \frac{1}{K}\,\sum_{k=1}^K x_k
 \\
@@ -222,12 +224,12 @@ E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(x_k)
 \quad .
 \end{eqnarray}
 That is, a sampling is good when any expectation value of interest is
-accurately computed via the sampling approximation.  The word
-``accurately'' here translates into some kinds of theorems about
-limiting behavior; the general idea is that the sampling approximation
-becomes exact as $K$ goes to infinity.  The size $K$ of the sampling
-you need \emph{in practice} will depend on the expectations you want
-to compute, and the accuracies you need.
+accurately computed via the sampling approximation.
+The word ``accurately'' here translates into some kinds of theorems
+about limiting behavior; the general idea is that the sampling
+approximation becomes exact as $K$ goes to infinity.
+The size $K$ of the sampling you need \emph{in practice} will depend
+on the expectations you want to compute, and the accuracies you need.
 
 As we noted above, in the context of MCMC, we are often sampling or
 using some \emph{badly normalized} function $f(x)$.
