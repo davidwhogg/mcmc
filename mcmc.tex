@@ -452,6 +452,12 @@ package \emph{afterwards}.
 % I was going to say you should NEVER break Markov-ness
 % unless you REALLY understand what you are doing.
 
+...Priors: If you describe your priors in one parameterization but
+then perform sampling in a different space, it is easy to make
+mistakes.  For example: Flat prior in amplitude and phase, sample in
+$A\,\cos\phi$ and $A\,\sin\phi$.  There are many ways to do this
+wrong.
+
 ...Initialization and burn-in advice we haven't addressed earlier?
 
 ...The Bayes integral / evidence integral?
