@@ -280,11 +280,21 @@ intractable.\note{As we will
 ...Is there any way to reconstruct $p(x)$ from the samples
 $\setof{x_k}$?  In short, no, but in many cases of interest, sort-of!..
 
+\section{Likelihoods and priors}
+
 ...You can't sample a likelihood!  You can only sample a posterior
 pdf!..
 why not?..
 Give a sense of the difficulties you get into if you fail here; like
 discussion with Sven Kreiss on 2013-02-14...
+
+...It is a good idea to have proper priors.
+It is a good test of your priors that you can sample with a ``null'' likelihood function.
+You can often have your priors wrong despite having beautiful code.
+
+...You must describe your priors in the same parameterization that you ``step'' in.
+That is, if you change your parameters, you \emph{must} change your priors correspondingly.
+Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
 \section{What is M--H MCMC?}
 
@@ -452,7 +462,8 @@ package \emph{afterwards}.
 % I was going to say you should NEVER break Markov-ness
 % unless you REALLY understand what you are doing.
 
-...Priors: If you describe your priors in one parameterization but
+...Priors: Once again:
+If you describe your priors in one parameterization but
 then perform sampling in a different space, it is easy to make
 mistakes.  For example: Flat prior in amplitude and phase, sample in
 $A\,\cos\phi$ and $A\,\sin\phi$.  There are many ways to do this
