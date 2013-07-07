@@ -450,7 +450,7 @@ That is, MCMC can only sample a posterior (or prior) pdf for the parameters.
 
 Despite all this, in many cases,
   data analysts believe they are sampling the likelihood.
-This is because (we presume) they have put a likeilihood function
+This is because (we presume) they have put a likelihood function
   (or log-likelihood function)
   in as the input to the MCMC code, where the probability function
   (or log-probability function) should go.
@@ -479,6 +479,8 @@ package \emph{afterwards}.
 % ***** BJB
 % I AGREE WHOLEHEARTEDLY. That's how to learn.
 
+...Simple problems where the outputs are analytic.  Functional testing.
+
 ...breaking Markov-ness.
 % ***** BJB
 % "Diminishing adaptations" is an idea that is quite easy
@@ -494,6 +496,8 @@ then perform sampling in a different space, it is easy to make
 mistakes.  For example: Flat prior in amplitude and phase, sample in
 $A\,\cos\phi$ and $A\,\sin\phi$.  There are many ways to do this
 wrong.
+
+...Sample the prior (likelihood set to unity) to check priors and parameterization (another functional test).
 
 ...Posteriors: On the other hand, you can do anything you like (within
 reason) to the output samples and be sampling the posterior in that
