@@ -280,64 +280,6 @@ intractable.\note{As we will
 ...Is there any way to reconstruct $p(x)$ from the samples
 $\setof{x_k}$?  In short, no, but in many cases of interest, sort-of!..
 
-\section{Likelihoods and priors}
-
-MCMC is used to obtain samples $x_k$ from PDF $p(x)$,
-  or a badly normalized all-positive function $f(x)$
-  that is different from the PDF by an unknown factor $Z$.
-In the context of data analysis,
-  MCMC is usually being used to obtain samples
-  that are \emph{parameter values} for a probabilistic model of some data.
-
-THIS IS ALL A REPEAT OF THE BEGINNING; NEED TO FIX.
-
-That is, for the purposes of this \documentname, we will imagine that
-  there is some (possibly large block of) data $D$,
-  and there are parameters $\theta$ of a \emph{likelihood function}
-  $p(D\given\theta)$.%
-\note{...something here about the definition of a model, for our purposes...}
-  The likelihood function is used to compute the probability (density) at any
-  particular observed data set, given any parameter setting.%
-\note{...strictly this is only correctly called the ``likelihood'' when the data are treated as fixed...}
-In standard probabilistic inference,
-  the likelihood is used to update beliefs about the parameters.%
-\note{...something here about us being Bayesian;
-   if you aren't Bayesian, why are you considering MCMC for your data analysis?..
-   probabilities are representations of beliefs not frequencies...
-   beliefs can be thought of as subjective or ``official''...
-   etc...}
-In particular, if you started with prior probabilistic beliefs
-  represented by a prior PDF $p(\theta)$,
-  your posterior beliefs can be represented by a posterior PDF
-  $p(\theta\given D)$, created via Bayes's rule:
-\begin{eqnarray}
-p(\theta\given D) = \frac{1}{Z}\,p(D\given\theta)\,p(\theta)
-\quad,
-\end{eqnarray}
-  where $Z$ is a normalization constant.
-MCMC is used in the context of data analysis
-  (and hence the context of this \documentname)
-  to sample posterior PDFs.
-
-Importantly, \emph{you can't use MCMC to draw samples $\theta_k$ from the likelihood $p(D\given\theta)$!}
-Why not?
-Because $p(D\given\theta)$ is a PDF for the \emph{data} $D$ not a PDF for the \emph{parameters} $\theta$.
-Many times data analysts believe they are sampling the likelihood,
-  when in fact they are sampling a posterior PDF but with implicit priors.
-
-...Give a sense of the difficulties you get into if you fail here; like
-discussion with Sven Kreiss on 2013-02-14...
-
-...Explain how your code \emph{should look} with a prior function and a likelihood function...
-
-...It is a good idea to have proper priors.
-It is a good test of your priors that you can sample with a ``null'' likelihood function.
-You can often have your priors wrong despite having beautiful code.
-
-...You must describe your priors in the same parameterization that you ``step'' in.
-That is, if you change your parameters, you \emph{must} change your priors correspondingly.
-Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
-
 \section{What is M--H MCMC?}
 
 ...The algorithm
@@ -487,6 +429,48 @@ Why is it is not a panacea?..
 % for DIAGNOSING a problem as multimodal but it's
 % terrible for quantifying the modes. Explain why,
 % it's a good teaching point.
+
+\section{Likelihoods and priors}
+
+MCMC is used to obtain samples $x_k$ from pdf $p(x)$,
+  or a badly normalized all-positive function $f(x)$
+  that is different from the pdf by an unknown factor $Z$.
+In the context of data analysis,
+  MCMC is usually being used to obtain samples
+  that are \emph{parameter values} for a probabilistic model of some data.
+That is, MCMC is sampling a pdf \emph{for the parameters}.
+If it is returning parameter values, then it is not sampling a pdf for the data.
+That is, MCMC can only sample a posterior (or prior) pdf for the parameters.
+\emph{It cannot sample a likelihood.}%
+\note{Well, technically, MCMC \emph{can} be used to sample a likelihood function,
+  but the samples would be samples of possible \emph{data} not possible \emph{parameters}.
+  The purist might say that even this is not sampling a likelihood function,
+  because you should only call it a ``likelihood function'' in contexts in which you are
+  treating the data as fixed (at the true data values) and the parameters as variable.}
+
+Despite all this, in many cases,
+  data analysts believe they are sampling the likelihood.
+This is because (we presume) they have put a likeilihood function
+  (or log-likelihood function)
+  in as the input to the MCMC code, where the probability function
+  (or log-probability function) should go.
+Then is it the likelihood that is being sampled?
+No, not really;
+it is a posterior probability that is directly proportional to the likelihood function.
+That is, it is a posterior probability for some implicit (and improper) ``flat'' priors.
+
+...Give a sense of the difficulties you get into if you fail here; like
+discussion with Sven Kreiss on 2013-02-14...
+
+...Explain how your code \emph{should look} with a prior function and a likelihood function...
+
+...It is a good idea to have proper priors.
+It is a good test of your priors that you can sample with a ``null'' likelihood function.
+You can often have your priors wrong despite having beautiful code.
+
+...You must describe your priors in the same parameterization that you ``step'' in.
+That is, if you change your parameters, you \emph{must} change your priors correspondingly.
+Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
 \section{Advice and discussion}
 
