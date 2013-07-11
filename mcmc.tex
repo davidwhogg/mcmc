@@ -474,18 +474,35 @@ Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
 \section{Troubleshooting}
 
+\paragraph{functional testing:}
 ...Run on standard distributons.
 
 ...Set likelihood to 1 and check that you sample your prior pdf.
 
-...Low acceptance fraction?  Reducing step size \emph{must} increase fraction.
+\paragraph{low acceptance fraction:}
+If you find that you are getting low acceptance fraction
+  (in standard M-H MCMC or other varieties for which there is such a concept)
+  you can simply reduce the sizes of the steps you consider to increase the fraction that are accepted.
+This means decreasing the variance of the proposal distribution,
+  or whatever parameter or parameters control the width of that distribution.
+If reducing the variance of the proposal distribution does \emph{not} increase the acceptance fraction,
+  then \emph{you have a bug}.
+You must find that bug by auditing your code or else returning to the functional tests listed above.
 
+Similarly for high acceptance fraction:
+If you are finding a high acceptance fraction,
+  then increasing the variance of the proposal distributon \emph{must} decrease the acceptance fraction.
+If it does \emph{not}, then \emph{you have a bug}.
+
+\paragraph{sticky chains:}
 ...Appearance of good and bad chains (show examples).
 
+\paragraph{initialization-dependence:}
 ...Different initializations leading to different posterior samplings?
 
 ...Jammed ensemble sampler?
 
+\paragraph{parameterization problems:}
 ...Degeneracies and duplications in parameter space; reparameterizations.
 
 \section{Advice and discussion}
