@@ -472,6 +472,22 @@ You can often have your priors wrong despite having beautiful code.
 That is, if you change your parameters, you \emph{must} change your priors correspondingly.
 Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
+\section{Troubleshooting}
+
+...Run on standard distributons.
+
+...Set likelihood to 1 and check that you sample your prior pdf.
+
+...Low acceptance fraction?  Reducing step size \emph{must} increase fraction.
+
+...Appearance of good and bad chains (show examples).
+
+...Different initializations leading to different posterior samplings?
+
+...Jammed ensemble sampler?
+
+...Degeneracies and duplications in parameter space; reparameterizations.
+
 \section{Advice and discussion}
 
 ...Write and debug your own M--H sampler and then download a real
@@ -502,6 +518,10 @@ wrong.
 ...Posteriors: On the other hand, you can do anything you like (within
 reason) to the output samples and be sampling the posterior in that
 transformed quantity.
+
+...How to deal with forbidden regions in prior, or sharp prior boundaries?
+
+...How to deal with constraints that pin you to a subspace of the parameter space?  Method-dependent.
 
 ...Initialization and burn-in advice we haven't addressed earlier?
 
