@@ -377,9 +377,23 @@ the other mode.
 Any test of convergence would be passed, but in fact the sampling
 would be incomplete and not representative.
 That is, knowing that you have a complete and representative sampling
-is nearly impossible.
+is effectively impossible.
 
-Heuristically, however, you have sampled long enough when you can see
+In this context,
+  it is \emph{simply not fair} to require an MCMC run to have fully and completely
+  sampled the posterior pdf,
+  at least not in any provable sense.
+The question of whether a sampling is converged to a representative sampling
+  of the posterior pdf is actually outside the domain of science,
+  because the domain of science is the domain of questions answerable by scientists.
+That is, you can \emph{never know} that you have correctly sampled the posterior pdf,
+  despite many statements in the literature to the contrary.%
+  \note{Give example statements... Mention cases in which you \emph{might} be able to claim this...}
+The upshot of this is that we don't and can't require any kind of absolute convergence;
+  indeed, it would be impossible even to test for it.
+
+In this pragmatic situation---the Real World, as it is called---we have to rely on heuristics.
+Heuristically, you have sampled long enough when you can see
 that the (or each) walker has traversed the high-probability parts of
 the parameter space many times in the length of the chain.
 Or, equivalently, you have sampled long enough when the first half of
