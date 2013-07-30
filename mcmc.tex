@@ -277,6 +277,8 @@ intractable.\note{As we will
 
 ...How is the sampling of the marginalized pdf trivially constructed from the full sampling?..
 
+...Why is it that the sampling is only really useful for computing integrals.  More on this below...
+
 ...Is there any way to reconstruct $p(x)$ from the samples
 $\setof{x_k}$?  In short, no, but in many cases of interest, sort-of!..
 
@@ -335,6 +337,10 @@ substantial problem with being a committed probabilist is that when we
 to write in the title, the abstract, the tables, figures, and results
 section.  Given a MCMC sampling of the posterior pdf, what do we
 report as our \emph{results}?
+
+...Reminder that a sampling is good for computing integrals (see above).
+Therefore we should endeavor to use outputs that are based on integrals computed with the sampling.
+This includes expectations and quantiles, but not optima...
 
 ...What should you report as the inferred parameter value and
 associated uncertainty (error bar)?  What is an upper limit?  Do this
@@ -520,6 +526,12 @@ If it does \emph{not}, then \emph{you have a bug}.
 
 \paragraph{parameterization problems:}
 ...Degeneracies and duplications in parameter space; reparameterizations.
+
+\paragraph{model checking:}
+...Beyond the scope of this document...
+Something about cross-validation and posterior predictive checks...
+Something about plotting models (drawn from posterior) on data, where appropriate...
+How could you possibly know that your sampling really represents your \emph{real} posterior PDF?..
 
 \section{Advice and discussion}
 
