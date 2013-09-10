@@ -275,12 +275,25 @@ intractable.\note{As we will
   That is, the pdf is at or very close to zero over all but some tiny
   and very hard-to-find part of the space.}
 
+The ``correctness'' of a sampling is defined (above) in terms of its use in
+  performing integrals or approximate computation of integrals.
+In a deep sense, the \emph{only} thing a sampling is good for is
+  computing integrals.
+There are many uses of the MCMC sampling, some of them good and some of them bad.
+Most of the good or sensible uses will somehow involve integration.
+
+For example, one magical property of a sampling (in a $d$-dimensional space)
+  is that a \emph{histogram} (a $d$-dimensional histogram) of the samples
+  (divided, if you like, by the number of samples in each bin and the bin width\note{something about units and normalization})
+  looks very much like the pdf from which the samples were drawn.
+This is a way to ``reconstruct'' the pdf from the sampling:
+Make a histogram from the samples.
+Even in this case, the sampling is being used to do \emph{integrals};
+  the (possibly odd) idea is that the approximate or effective value of the pdf in each bin
+  of the histogram is an average over the bin.
+That average is obtained by performing an integral.
+
 ...How is the sampling of the marginalized pdf trivially constructed from the full sampling?..
-
-...Why is it that the sampling is only really useful for computing integrals.  More on this below...
-
-...Is there any way to reconstruct $p(x)$ from the samples
-$\setof{x_k}$?  In short, no, but in many cases of interest, sort-of!..
 
 \section{What is M--H MCMC?}
 
