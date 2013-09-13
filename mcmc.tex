@@ -303,7 +303,10 @@ Finally---and perhaps most importantly---another magical propert of a sampling
   the sampling in the full $d$-space is trivially converted into a sampling in the subspace of interest:
 You just drop from each $x_k$ vector (or blob or list) the dimensions of no interest!
 That is, the projection of the sampling to the subspace of interest produces
-  a sampling of the marginalized pdf, marginalizing (or projecting) out the nuisance parameters.
+  a sampling of the marginalized pdf, marginalizing (or projecting) out the nuisance parameters.%
+  \note{This point about marginalization is, once again, a use of the sampling to perform an \emph{integral};
+        the marginalized pdf is obtained from the full pdf by an integration.
+        The sampling performs this integration automatically.}
 That is extremely important for inference,
   where there are always parameters with very different levels of importance to the scientific conclusions.
 This point will return again below, either explicitly or implicitly. % does it?
