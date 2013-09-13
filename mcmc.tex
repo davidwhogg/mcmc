@@ -282,6 +282,8 @@ In a deep sense, the \emph{only} thing a sampling is good for is
 There are many uses of the MCMC sampling, some of them good and some of them bad.
 Most of the good or sensible uses will somehow involve integration.
 
+% in the next paragraph I adopt $d$ to be the dimensionality of the space
+
 For example, one magical property of a sampling (in a $d$-dimensional space)
   is that a \emph{histogram} (a $d$-dimensional histogram) of the samples
   (divided, if you like, by the number of samples in each bin and the bin width\note{something about units and normalization})
@@ -293,7 +295,18 @@ Even in this case, the sampling is being used to do \emph{integrals};
   of the histogram is an average over the bin.
 That average is obtained by performing an integral.
 
-...How is the sampling of the marginalized pdf trivially constructed from the full sampling?..
+Finally---and perhaps most importantly---another magical propert of a sampling
+  (in a $d$-dimensional space)
+  is that if some of your $d$ dimensions are totally uninteresting
+  (nuisance parameters, if you will)
+  and some of your $d$ dimensions are of great interest,
+  the sampling in the full $d$-space is trivially converted into a sampling in the subspace of interest:
+You just drop from each $x_k$ vector (or blob or list) the dimensions of no interest!
+That is, the projection of the sampling to the subspace of interest produces
+  a sampling of the marginalized pdf, marginalizing (or projecting) out the nuisance parameters.
+That is extremely important for inference,
+  where there are always parameters with very different levels of importance to the scientific conclusions.
+This point will return again below, either explicitly or implicitly. % does it?
 
 \section{What is M--H MCMC?}
 
