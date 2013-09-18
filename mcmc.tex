@@ -321,6 +321,8 @@ This point will return again below, either explicitly or implicitly. % does it?
 
 ...Why everyone reading this document should stop here and JUST FREAKIN' CODE THIS UP.
 
+\section{Ensembles, Hamiltonians, and other variants}
+
 % *********** BJB talking:
 % I suggest partitioning the discussion of different methods into the following
 % two categories:
@@ -333,8 +335,6 @@ This point will return again below, either explicitly or implicitly. % does it?
 % Hamiltonian, slice sampling (maybe skip the latter)
 % ii) would include things like annealing and Nested Sampling
 
-\section{Ensembles, Hamiltonians, and other variants}
-
 %%%% Hogg talking:
 % DFM: In this section, I think we should just summarize the other
 % methods, not describe them in detail.  Then we can cite the relevant
@@ -342,7 +342,11 @@ This point will return again below, either explicitly or implicitly. % does it?
 
 ...What, briefly, is the stretch move, and why is it useful?
 
+...What, briefly, is importance sampling?
+
 ...What, briefly, is nested sampling, and why is it good?
+
+...What, briefly, is tempering?
 
 ...What, briefly, is hamiltonian, and why is it good?
 
@@ -352,28 +356,76 @@ This point will return again below, either explicitly or implicitly. % does it?
 
 For a committed probabilistic scientist---frequentist or
 bayesian---there is no ``answer'', there are only probability density
-functions.  Any time in a paper or in an email or in a conversation
+functions (pdfs).  Any time in a paper or in an email or in a conversation
 we say what ``the answer is''---even if we say it with an error
 bar---we have departed the probabilistic program.  There are many
 principled ways to depart the program; in another \documentname, we
 discuss the economic explanation of how we can make hard decisions in
 the context of probabilistic reasoning\note{CITE DECISION DOCUMENT}.
-But without going into the economic model, it is fair to say that a
+But without going into that ``economic'' model, it is fair to say that a
 substantial problem with being a committed probabilist is that when we
 \emph{publish}, we are not permitted (not now, at least) to publish a
 \emph{probability distribution over pubications}; we have to publish
-\emph{one single, deterministic text}; we have to \emph{decide} what
+\emph{one single, deterministic text}; we have to make a decision about what
 to write in the title, the abstract, the tables, figures, and results
 section.  Given a MCMC sampling of the posterior pdf, what do we
 report as our \emph{results}?
 
-...Reminder that a sampling is good for computing integrals (see above).
-Therefore we should endeavor to use outputs that are based on integrals computed with the sampling.
-This includes expectations and quantiles, but not optima...
+One thing we can keep in mind to guide us in this is what we said above,
+  which is that samplings are good for doing \emph{integrals}.
+We should endeavor to use as our ``results'' outputs from the MCMC
+  that are based on integrals computed with the sampling.
+This includes expectations, medians, quantiles, one-dimensional histograms,
+  and multi-dimensional histograms.
+This does \emph{not} include the ``best'' sample or a mode or optimum.
+The latter things are not necessarily illegitimate outputs of the MCMC,
+  but they do not make best use of the fact that the sampling is a tool for integration,
+  and we do not recommend them.
 
-...What should you report as the inferred parameter value and
-associated uncertainty (error bar)?  What is an upper limit?  Do this
-all for ONE DIMENSION.
+Imagine that you are in the simplest case:
+You have a model with a small number of parameters (say three-ish),
+  and only one of them is of great interest.
+What are your options for the ``measurement'' of this parameter?
+The only simple integral-based options are the posterior mean
+  or posterior median value for the parameter.
+\\HOGG CHOOSE NOTATION AND GIVE FORMULAE HERE.
+
+What are your best options for the ``uncertainty'' or ``limits'' on this parameter?
+The only simple integral-based options are posterior quantiles.
+That is, the ``one-sigma'' error bar can be the size of the central (or smallest%
+  \note{HOGG shizzle about choosing quantiles}) interval of the parameter that contains 68 percent of the posterior samples.
+\\HOGG GIVE FORMULA HERE.\\
+The ``two-sigma'' error bar would be the same but for the 95-percent interval.
+
+One amusing thing is that if you choose the 68-percent interval sensibly,
+  but use as the ``measurement'' the posterior mean,
+  you can get pathological situations in which the posterior mean measurement
+  is actually \emph{outside} the one-sigma confidence interval.
+For this reason (and others), we usually recommend as a default behavior%
+  ---in the one-dimensional case---%
+  to choose the \emph{median} of sampling as the measurement value,
+  the 16-percent quantile as the lower error bar,
+  and the 84-percent quantile as the upper error bar.
+This has pathologies in higher dimensions (as we are about to see),
+  but is pretty safe for one-dimensional answers.
+
+The conservative scientist would show not just 68-percent error bars,
+  but also 95-percent
+  (to help readers visualize the skew of the posterior pdf.
+The very conservative scientist would also show a histogram
+  of the posterior samples,
+  with the relvant quantiles (2.5, 16, 50, 84, and 97.5~percent) indicated.
+
+As we mentioned above, scientists often like to report the ``best sample'';
+  that is, the sample with the highest posterior pdf value.
+This is not usually a good idea.
+For one, MCMC is a sampling algorithm, not an optimization algorithm;
+  there are no guarantees that it will find the optimum of the posterior pdf in reasonable time.
+For two, the closeness of the best sample to the posterior mode is a strong function of sample size.
+For three, if you just want an optimum, use an optimizer!\note{HOGG, something?}
+That is, we \emph{strongly advise against} reporting,
+  as the measurement or among the results,
+  the parameter value or values for the best sample.
 
 ...Now for multiple dimensions...return to the marginalization point
 from above...
