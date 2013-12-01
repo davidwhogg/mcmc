@@ -23,6 +23,8 @@
 
 \newcommand{\data}{D}
 \newcommand{\pars}{\theta}
+\newcommand{\best}{{\mathrm{(best)}}}
+\newcommand{\better}{{\mathrm{(better)}}}
 
 \begin{document}
 
@@ -420,12 +422,42 @@ As we mentioned above, scientists often like to report the ``best sample'';
   that is, the sample with the highest posterior pdf value.
 This is not usually a good idea.
 For one, MCMC is a sampling algorithm, not an optimization algorithm;
-  there are no guarantees that it will find the optimum of the posterior pdf in reasonable time.
-For two, the closeness of the best sample to the posterior mode is a strong function of sample size.
-For three, if you just want an optimum, use an optimizer!\note{HOGG, something?}
+  there are no guarantees that it will find the optimum of the posterior pdf in reasonable time.%
+  \note{The sampler samples the pdf fairly.
+    The tallest peak in the posterior is not guaranteed to be---%
+    and in general is not---%
+    also the peak with the greatest posterior ``mass''.
+    That is, the samples in a fair sampling will not necessarily come
+    predominantly from the \emph{tallest} peak in the posterior pdf.
+    They will come from the peak with the greatest total integral
+    of the likelihood over the prior.
+    These issues might sound ``academic'',
+    but when the number of parameters gets large (greater than, say, 10),
+    many normal intuitions one might have (if any) about what is reasonably likely in a pdf
+    are regularly violated.}
+For two, the closeness of the best sample to the posterior mode is a strong function of sample size,
+  and with very bad scaling.%
+  \note{If you have a $K$-point sampling in a $d$-dimensional parameter space,
+    there is some best sample $\pars_k^{\best}$.  Now imagine that you want to make
+    that best sample 10 times better---that is, you want to find a point $\pars^{\better}$
+    that is ten times closer to the true optimum.  How many more samples do you need to take?
+    In the limit that $K$ is large, on average, you have to take $10^d$ more samples!
+    Most sensible optimizers are far, far better than this.}
+For three, if you just want an optimum, use an optimizer!%
+  \note{HOGG, something?}
 That is, we \emph{strongly advise against} reporting,
-  as the measurement or among the results,
+  as ``the'' measurement or ``the result'',
   the parameter value or values for the best sample.
+Giving some posterior samples is a good idea (see below).
+If you feel drawn to give the best sample,
+  instead give the parameter values found by optimizing the posterior PDF,
+  starting at the best sample as an initialization
+  (and sacrifice your probabilism\note{something}).
+This optimal-posterior parameter value is called the
+  ``maximum \foreign{a posterior}'' or ``MAP'' value for the parameters;
+  it is like a maximum-likelihood value but regularized by the prior.
+It is an estimator with some good (and some bad) properties, but it is not the point of MCMC,
+  and therefore outside the scope of this \documentname.
 
 ...Now for multiple dimensions...return to the marginalization point
 from above...
