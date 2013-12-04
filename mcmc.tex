@@ -6,6 +6,7 @@
 %   - Lang
 %   - Rix
 %   - Bovy
+%   - Brewer
 % - post on arXiv
 
 % style notes
@@ -471,8 +472,9 @@ do here?
 
 ...What figures should you make to display the chain?
 
-...If you are really good, you will pass forward a sampling.  How big
-should it be?  Refer to Mackay here.
+...If you are really good, you will pass forward a sampling.
+...How big should it be? Refer to Mackay here.
+...Usefulness of a big sampling for hierarchical inferences; concept of interim prior?
 
 \section{Convergence}
 
@@ -526,24 +528,129 @@ How is Autocorrelation time measured?..
 Why is it is not a panacea?..
 
 ...What plots should you make?
-Make plots that demonstrate a non-converged and a converged chain...
+...Plots showing individual walkers going through the space.
+...(now show plots that demonstrate a non-converged and a converged chain)...
 
 \section{Tuning}
-
-...Return here to the proposal distribution, which exists for most methods...
-
-...How do you make it run fast?..
-
-...Acceptance ratio...
-
-...ESJD and etc...
 
 % BJB
 % Please suggest mixtures of scales for M-H proposals.
 % You can mimic the properties of slice sampling but with
 % much easier code.
 
-...Gibbs sampling and interior marginalizations...
+Most MCMC methods
+  (though not all\note{We are promoters of an ensemble method that has a
+  nearly-fixed proposal distribution and requires no tuning (CITE EMCEE).})
+  make use of something like a ``proposal distribution''
+  which determines what kinds of steps the walker can take
+  as it random-walks through the parameter space.
+The user generally has a lot of control over what this proposal distribution might be,
+  and how to choose the parameters.
+For example, in a $d$-dimensional parameter space, %do we consistently use d here?
+  a zero-mean but anisotropic Gaussian (normal distribution)
+  is often used to draw offsets for the walker to take from point to point.
+Even within this choice (which is of one function among many possibilities),
+  there are $d\,(d+1)/2$ parameters in the $d\times d$ symmetric, positive definite covariance matrix
+  to set ``by hand''.
+How to choose this function and set these parameters?
+
+The key idea here is that if the proposal distribution is too narrow---%
+  it proposes steps too small---%
+  almost all steps will be accepted (REFERENCE ALGORITHM HERE),
+  but it will take a long time to move anywhere because of timidity.
+If the propsoal distribution is too wide---%
+  it proposes steps too large---%
+  the moves will cover parameter space easily,
+  but almost no steps will be accepted;
+  it will tend to jump to much lower probability regions.
+There is a Goldilocks step size (proposal distribution root-variance) that is ``just right''.
+In one dimension this might be easy to find,
+  but, as we say, in large numbers of dimensions,
+  there is a lot of freedom in choosing the parameters of the distribution.
+  
+In a deep sense, the only scalar that makes sense to optimize,
+  when choosing proposal distribution (or, loosely speaking, step size),
+  is the autocorrelation time, described above.
+The optimal step size is the step size that makes for the shortest autocorrelation time.
+This is easy to state, but hard to use in practice;
+  being a second-order statistic of the MCMC chain,
+  the autocorrelation time is a hard thing to measure without a lot of data,
+  so it is hard to quickly estimate it and adjust,
+  much less put it into some kind of optimization loop.
+We usually use proxies for this of various kinds.
+
+The simplest proxy for autocorrelation time optimization is the \emph{acceptance fraction}.
+If you are accepting almost all proposed steps, your step sizes are too small on average.
+If you are accepting almost none, your step sizes are too large.
+The Goldilocks value is around a half,
+  with a strong argument floating around that it should be 0.234 for best performance\note{CITE GELMAN}.
+In the burn-in phase (discussed below) of an MCMC run,
+  it makes sense to track the acceptance ratio,
+  and adjust the proposal distribution variance as you get acceptance ratios
+  that are far from the Goldilocks ratio.
+This process can be automated easily;
+  such automation is part of many projects that use MCMC.
+
+A very common---%
+  and very useful---%
+  kind of proposal distribution is one that cycles through parameters,
+  taking a random step in just one parameter at a time.
+Aside from involving some persistence of state,
+  this kind of proposal distribution can be valuable,
+  in part because it reduces the (almost impossible) $d$-dimensional tuning problem
+  to $d$ one-dimensional problems:
+In this form of proposal distrubution,
+  it is possible to track a separate acceptance fraction for every parameter.
+Code can be built that uses the burn-in phase to tune all $d$ proposal variances
+  such that each of them, individually,
+  obtains acceptance at the same Goldilocks ratio.
+
+One very important note to make here,
+  because it is relevant to tuning,
+  is that tuning can \emph{only} take place during the burn-in phase;
+  you cannot tune \emph{while} you run your final MCMC run.
+Why not?
+Because tuning the proposal distribution based on the past history of the chain
+  violates the ``Markov'' property
+  that each step depends \emph{only} on the state at the previous step.
+Violating the Markov property can be very bad;
+  when you violate it,
+  you lose all the provable properties of MCMC
+  on which all our righteous power is based.
+
+Another proxy for autocorrelation time is the
+  Expected Squared Jump Distance.\note{(CITE GELMAN)}
+This is the mean squared distance the walker moves, per step.
+It is maximized when the acceptance ratio is reasonable
+  and the step size is large;
+  it is large when the exploration of the space is fast.
+This proxy is easy to measure and use for tuning,
+  and more directly related to autocorrelation time than the acceptance ratio.
+We recommend using it for tuning, though we have never used it ourselves.
+Like the acceptance fraction, it can also be used to tune
+  in the case that the proposal distribution loops over parameters;
+  once again, the user gets (in this case) $d$ one-dimensional tunings.
+
+When sampling really gets very slow,
+  there are various tricks and tips to work through.
+One is to see if any of the parameters has a conditional posterior
+  probability that is guaranteed to be Gaussian
+  (this is true for some linear parameters in least-square problems
+  when the priors are Gaussian, for example).
+These dimensions can often be sampled \emph{exactly},
+  outside of the MCCM framework;
+  the algorithm looks like:
+Take an MCMC step in the hard parameters,
+  then take an exact step in the easy parameters,
+  repeat.
+Another related trick is to analytically marginalize,
+  rather than sample,
+  easy nuisance parameters.
+The huge bag of possible tricks is so large,
+  it goes way beyond the scope of this introductory \documentname.
+In our experience, it is valuable to make friends with at least one statistician,
+  one applied mathematician, and one computer scientist.
+Between them, they ought to span the literature.
 
 \section{Initialization and burn-in}
 
