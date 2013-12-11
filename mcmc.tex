@@ -396,7 +396,8 @@ The only simple integral-based options are the posterior mean
 What are your best options for the ``uncertainty'' or ``limits'' on this parameter?
 The only simple integral-based options are posterior quantiles.
 That is, the ``one-sigma'' error bar can be the size of the central (or smallest%
-  \note{HOGG shizzle about choosing quantiles}) interval of the parameter that contains 68 percent of the posterior samples.
+  \note{HOGG shizzle about choosing quantiles}) interval of the parameter
+  that contains 68 percent of the posterior samples.
 \\HOGG GIVE FORMULA HERE.\\
 The ``two-sigma'' error bar would be the same but for the 95-percent interval.
 
@@ -654,10 +655,24 @@ Between them, they ought to span the literature.
 
 \section{Initialization and burn-in}
 
-...Precede with optimization
-% BJB
-% If applicable. Bad idea in high dimension/underconstrained
-% problem.
+Just as most (though not all) MCMC methods require a choice of proposal distribution,
+  most (though not all) require a choice about initialization:
+The walker needs (or walkers need) to be started somewhere in the parameter space.
+In many use cases for MCMC,
+  the investigator wants to use it to obtain uncertainty information about
+  or propagate uncertainty into parameter estimates.
+In these cases, it makes sense to initialize the walker or walkers at sensible parameter estimates,
+  found by optimizing a likelihood or a posterior PDF in advance of sampling.
+In extremely high dimensions (large numbers of parameters), this can be a bad idea,
+  since the optimal parameters are not necessarily near typical posterior samples,
+  but in low dimensions (few to tens) this is often sensible.
+
+In other use cases,
+  the investigator wants to use MCMC to search all of parameter space
+  for good models, and also sample.
+In this case, it makes sense to be more catholic with initialization...
+
+...but note that MCMC is not the ideal search algorithm for any parameter space.
 
 ...Start from different locations
 % BJB
