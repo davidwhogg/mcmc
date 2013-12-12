@@ -664,7 +664,7 @@ In many use cases for MCMC,
 In these cases, it makes sense to initialize the walker or walkers at sensible parameter estimates,
   found by optimizing a likelihood or a posterior PDF in advance of sampling.
 In extremely high dimensions (large numbers of parameters), this can be a bad idea,
-  since the optimal parameters are not necessarily near typical posterior samples,
+  since the optimal parameters are not necessarily near typical posterior samples\note{Make the counterintuitive point.},
   but in low dimensions (few to tens) this is often sensible.
 
 In other use cases,
@@ -731,10 +731,45 @@ Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
 \section{Troubleshooting}
 
+When issues arise with MCMC sampling,
+  they are sometimes difficult to diagnose:
+Is it the MCMC code, the priors, the likelihood function,
+  the initialization, the tuning, or something else?
+
 \paragraph{functional testing:}
-...Run on standard distributons.
+In addition to a full set of unit tests for every part of your code
+  (yeah right!\note{If you aren't unit testing, you are probably making some very big mistakes.}),
+  we recommend building some end-to-end functional tests that permit you to perform MCMC
+  runs with output that must meet certain expectations.
+The simplest kind of functional test is to sample a known distribution,
+  and check that the sampling has the moments you expect (to within tolerances).
+For example, you can sample a $d$-dimensional Gaussian distribution with known non-trivial covariance,
+  and check that the empirical covariance comes out as expected.
+This is an easy test to fail, so a success builds confidence in any MCMC code.
+
+In the most extreme form of this test,
+  for a Gaussian in $d$ dimensions,
+  build the covariance matrix input to the Gaussian distribution
+  by taking the sum of the outer product of $d+1$ randomly generated vectors.
+Then, before sampling, get the eigenvalues and eigenvectors of the matrix.
+Set up the MCMC sampler with the Gaussian function with this covariance matrix
+  as the probability function (or the log of it as the log-probability function).
+Sample for many autocorrelation times,
+  or until you are confident you are getting good samples.
+Check that the empirical $d$-dimensional covariance of the samples
+  has the same (or similar) eigenvectors and eigenvlues to the input matrix.
+Also check that the individual one-dimensional samplings
+  (along each axis or any projection in the $d$-space)
+  look Gaussian and have nearly vanishing skew and kurtosis.
+It takes some thinking and some calculating to see ``how well'' these things all ought to match
+  expectations, but one thing that can be said with confidence is that agreement should improve
+  as the sampling proceeds.
+If it doesn't, it is likely that there is something broken about the sampler itself.
 
 ...Set likelihood to 1 and check that you sample your prior pdf.
+...Checks properness of priors.
+...Checks for think-os about parameterization.
+...Make triangle plots.
 
 \paragraph{low acceptance fraction:}
 If you find that you are getting low acceptance fraction
