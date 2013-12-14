@@ -1,7 +1,8 @@
 % to-do
 % -----
-% - write zeroth draft
-% - write first draft
+% - where to put comments about how to structure code ln_likelihood(pars, data, I) and ln_prior(pars, I)
+% - need to mention case where there is an MC integral INSIDE the likelihood function
+% - need to mention testing the likelihood function
 % - send to friendlies for comments
 %   - Lang
 %   - Rix
@@ -322,6 +323,22 @@ This point will return again below, either explicitly or implicitly. % does it?
 
 ...What is a typical proposal distribution?
 
+One note to make here
+  is that you must \emph{propose}
+  in the same coordinates (parameterization or transformation of parameters)
+  as that in which your priors are \emph{specified},
+  or else multiply in a (possibly nasty) Jacobian.
+That is, if your prior is ``flat in $x$''
+  but you find it easier to run your sampler by proposing steps in $\ln x$,
+  if you don't modify your acceptance fraction by the Jacobian,
+  your \emph{real} prior won't be flat in $x$.
+These think-os can get subtle;
+  the best way to avoid them
+  is to write your code and your likelihood function
+  and your prior pdf function and your proposal distribution
+  all in precisely the same parameterization.
+We will return to this point below in our comments on functional testing.
+
 ...Why everyone reading this document should stop here and JUST FREAKIN' CODE THIS UP.
 
 \section{Ensembles, Hamiltonians, and other variants}
@@ -606,8 +623,8 @@ Code can be built that uses the burn-in phase to tune all $d$ proposal variances
   such that each of them, individually,
   obtains acceptance at the same Goldilocks ratio.
 
-One very important note to make here,
-  because it is relevant to tuning,
+One note to make here---%
+  because it is relevant to tuning---%
   is that tuning can \emph{only} take place during the burn-in phase;
   you cannot tune \emph{while} you run your final MCMC run.
 Why not?
@@ -738,7 +755,7 @@ Is it the MCMC code, the priors, the likelihood function,
 
 \paragraph{functional testing:}
 In addition to a full set of unit tests for every part of your code
-  (yeah right!\note{If you aren't unit testing, you are probably making some very big mistakes.}),
+  (yeah \emph{right}\note{If you aren't unit testing, you are probably making some very big mistakes.}),
   we recommend building some end-to-end functional tests that permit you to perform MCMC
   runs with output that must meet certain expectations.
 The simplest kind of functional test is to sample a known distribution,
@@ -766,10 +783,53 @@ It takes some thinking and some calculating to see ``how well'' these things all
   as the sampling proceeds.
 If it doesn't, it is likely that there is something broken about the sampler itself.
 
-...Set likelihood to 1 and check that you sample your prior pdf.
-...Checks properness of priors.
-...Checks for think-os about parameterization.
-...Make triangle plots.
+Another important functional test is to \emph{sample the prior pdf}.
+This tests the sampler,
+  tests that your priors really are what you think they are
+  (and there are so many ways for them \emph{not} to be\note{HOGG}),
+  and tests that your prior pdfs are proper
+  (functions that can be normalized).
+This test is most effective as a true end-to-end test of your model
+  if you structure your code such that the log probability function \code{lnprob}
+  input to the MCMC scheme
+  is set up as a sum of a log likelihood function \code{lnlikelihood}
+  and a prior function \code{lnprior}.
+The sampler can be switched to sampling the prior by a simple replacement
+  of the \code{lnlikelihood} function
+  with a trivial function that always returns zero.
+
+
+MCMC should run well in this flat-likelihood case (priors are usually easy to sample)
+  and the output sample histograms should look like what you expect
+  given the prior pdfs you coded.
+If the walkers run off to positive or negative infinity,
+  and nothing seems to converge,
+  your priors are probably not proper.
+If the priors don't look as you expect,
+  you either have a bug in your code,
+  or else a think-o about how your priors ought to look.
+Either way, diagnosis in order.
+
+...Make triangle plots.  Great value!
+
+Finally, if you pass the above tests but things are still incomprehensible,
+  it is often a problem with the likelihood function.
+Things to check include the following:
+When you re-call the likelihood function with the same parameters,
+  do you get \emph{exactly} the same answer?
+If you don't, your likelihood function effectively depends on some random numbers;
+  WE DISCUSS THIS WHERE?
+When you call the likelihood function on a grid in each parameter
+  (with the others fixed, say, to reasonable values),
+  is the likelihood function a smooth function of the parameter,
+  or at least as smooth as you expect?
+Things like numerical integration,
+  truncated expansions,
+  or adaptive approximations
+  inside likelihood functions
+  can make the function noisy or jagged at small scales in parameter space.
+These problems hurt optimizers more than samplers,
+  but they usually point to code issues.
 
 \paragraph{low acceptance fraction:}
 If you find that you are getting low acceptance fraction
