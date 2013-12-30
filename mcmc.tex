@@ -131,6 +131,7 @@ setting of a huge blob of parameters\note{Again, the parameter
 % beliefs about what the data are going to be*. </Wild Subjective Bayesian>
 % ************* Hogg
 % That comment should go in the ``What is a Model?'' Chapter.
+% (Or a \note{} right here.)
 Furthermore, say you also can write down some kind of informative or
 vague prior pdf $p(\pars)$ for the parameter blob.
 If all these things are true, then---even if you can't compute
@@ -429,15 +430,45 @@ You have a model with a small number of parameters (say three-ish),
 What are your options for the ``measurement'' of this parameter?
 The only simple integral-based options are the posterior mean
   or posterior median value for the parameter.
-\\HOGG CHOOSE NOTATION AND GIVE FORMULAE HERE.
+
+For example,
+  imagine that by MCMC you have generated
+  $K$ samples $\pars_k$ of a parameter vector $\pars$.
+Now you have a scalar function $q(\theta)$ which takes the parameter vector
+  and returns a scalar value%
+  \note{For the median-of-sampling value, $q(\theta)$ needs to return a scalar,
+  but technically, for the mean-of-sampling, $q(\theta)$ can be a vector or something high-dimensional.}
+  which could be as simple as a single component of the parameter vector
+  (one parameter from the list),
+  or something more complex.
+The mean-of-sampling value $\mean{q}$ is just
+\begin{eqnarray}
+\mean{q} &\leftarrow& \frac{1}{K}\,\sum_{k=1}^K q(\theta_k)
+\quad ,
+\end{eqnarray}
+  and the median-of-sampling value is just the $[K/2]$th value of $q(\theta_k)$
+  when the $q(\theta_k)$ have been ordered (sorted).
+These are both produced by integrals;
+  the first is the value returned by the expectation integral estimate,
+  the second is the value past which half of the integrated pdf lies.
 
 What are your best options for the ``uncertainty'' or ``limits'' on this parameter?
 The only simple integral-based options are posterior quantiles.
 That is, the ``one-sigma'' error bar can be the size of the central (or smallest%
   \note{HOGG shizzle about choosing quantiles}) interval of the parameter
   that contains 68 percent of the posterior samples.
-\\HOGG GIVE FORMULA HERE.\\
 The ``two-sigma'' error bar would be the same but for the 95-percent interval.
+Again, these limits can be estimated%
+  \note{One amusing thing about samplings,
+  which are so beloved of us probabilistic (Bayesian) reasoners,
+  is that anything we \emph{do} with a sampling,
+  like estimate an integral or a quantile,
+  is just an old-school frequentist estimator.
+  A frequentist estimator of a Bayesian quantity, to be sure, but a frequentist estimator nonetheless.}
+  by ordering the $q(\theta_k)$ values,
+  and finding the $\theta$ values such that some fraction (0.68 or 0.95)y
+  of the samples lie between them.
+Again, to form these limits, $q(\theta)$ must be a scalar function (so sorting is well defined).
 
 One amusing thing is that if you choose the 68-percent interval sensibly,
   but use as the ``measurement'' the posterior mean,
@@ -446,8 +477,8 @@ One amusing thing is that if you choose the 68-percent interval sensibly,
 For this reason (and others), we usually recommend as a default behavior%
   ---in the one-dimensional case---%
   to choose the \emph{median} of sampling as the measurement value,
-  the 16-percent quantile as the lower error bar,
-  and the 84-percent quantile as the upper error bar.
+  the 16-percent quantile as the lower one-sigma error bar,
+  and the 84-percent quantile as the upper one-sigma error bar.
 This has pathologies in higher dimensions (as we are about to see),
   but is pretty safe for one-dimensional answers.
 
@@ -657,7 +688,7 @@ Violating the Markov property can be very bad;
   you lose all the provable properties of MCMC
   on which all our righteous power is based.
 
-Another proxy for autocorrelation time is the
+Another proxy for autocorrelation time useful for tuning is the
   Expected Squared Jump Distance.\note{(CITE GELMAN)}
 This is the mean squared distance the walker moves, per step.
 It is maximized when the acceptance ratio is reasonable
@@ -741,7 +772,9 @@ That is, MCMC can only sample a posterior (or prior) pdf for the parameters.
   but the samples would be samples of possible \emph{data} not possible \emph{parameters}.
   The purist might say that even this is not sampling a likelihood function,
   because you should only call it a ``likelihood function'' in contexts in which you are
-  treating the data as fixed (at the true data values) and the parameters as variable.}
+  treating the data as fixed (at the true data values) and the parameters as variable.
+  In this context, the likelihood function is \emph{not} a pdf for the parameters,
+  so it can't be sampled.}
 
 Despite all this, in many cases,
   data analysts believe they are sampling the likelihood.
@@ -751,7 +784,7 @@ This is because (we presume) they have put a likelihood function
   (or log-probability function) should go.
 Then is it the likelihood that is being sampled?
 No, not really;
-it is a posterior probability that is directly proportional to the likelihood function.
+  it is a posterior probability that is directly proportional to the likelihood function.
 That is, it is a posterior probability for some implicit (and improper) ``flat'' priors.
 
 ...Give a sense of the difficulties you get into if you fail here; like
@@ -946,12 +979,14 @@ For example, if there is an angle $\phi$ in your problem,
   a little bit of probability leaking below $0$ plus the prior cutoffs plus mod-$2\pi$ symmetry
   makes an intrinsically unimodal problem multimodal!
 In these cases, we usually advise reparameterization from a (say) amplitude $A$ and angle $\phi$
-  to two vector components $A\,\cos\phi$ and $A\,\sin\phi$.
+  to two vector components $a\equiv A\,\cos\phi$ and $b\equiv A\,\sin\phi$.
 Of course this re-parameterization changes significantly the \emph{form} of the prior PDF
   (the transformation brings in a Jacobian);
   it has to be adjusted with care.
 
 DFM: SHOULD WE DO THIS ALL EXPLICITLY HERE IN MATH?
+Choose a $p(A)$ and a $p(\phi) = [2\pi]^{-1}$,
+   and then transform to $p(a, b)$.
 
 %% ...Priors: Once again:
 %% If you describe your priors in one parameterization but
@@ -984,8 +1019,6 @@ How could you possibly know that your sampling really represents your \emph{real
 %% HOGG DELETED / COMMENTED OUT THE BELOW
 %% - make sure everything below is discussed somewhere above and then delete it below.
 
-%% \section{Advice and discussion}
-
 %% ...breaking Markov-ness.
 %% % ***** BJB
 %% % "Diminishing adaptations" is an idea that is quite easy
@@ -995,9 +1028,7 @@ How could you possibly know that your sampling really represents your \emph{real
 %% % I was going to say you should NEVER break Markov-ness
 %% % unless you REALLY understand what you are doing.
 
-%% ...Sample the prior (likelihood set to unity) to check priors and parameterization (another functional test).
-
-%% ...Posteriors: On the other hand, you can do anything you like (within
+%% ...Posteriors:  You can do anything you like (within
 %% reason) to the output samples and be sampling the posterior in that
 %% transformed quantity.
 
