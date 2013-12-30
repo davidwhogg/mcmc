@@ -339,7 +339,27 @@ These think-os can get subtle;
   all in precisely the same parameterization.
 We will return to this point below in our comments on functional testing.
 
-...Why everyone reading this document should stop here and JUST FREAKIN' CODE THIS UP.
+As we mention below,
+  there are many MCMC methods more advanced than M--H.
+However, they all share characteristics with M--H,
+  such that it is very valuable to understand M--H well before using anything more advanced.
+Furthermore, a scientist new to MCMC benefits enormously from
+  building, tuning, and using her or his own MCMC software.
+One piece of advice we give then,
+  to the new user of MCMC,
+  is to code up, tune, and use a M--H MCMC sampler for a scientific project.
+A huge amount is learned in doing this,
+  and it is very often the case that the home-built M--H MCMC does everything needed;
+  you often don't need any more advanced tool.
+Only after you have concluded that your home-built M--H MCMC sampler
+  is not suited to your project
+  (or not developed properly into a properly versatile software package)
+  should you download and start to use any professionally developed alternative.
+That is, even if---in the end---%
+  you want to leave the sampling code to the experts and run an industrial-strength code,
+  it is still valuable to build your own,
+  given the simplicity of the algorithm,
+  and given the intuition you gain by doing it (at least once) yourself.
 
 \section{Ensembles, Hamiltonians, and other variants}
 
