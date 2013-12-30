@@ -767,7 +767,7 @@ You can often have your priors wrong despite having beautiful code.
 That is, if you change your parameters, you \emph{must} change your priors correspondingly.
 Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
-\section{Troubleshooting}
+\section{Troubleshooting and advice}
 
 When issues arise with MCMC sampling,
   they are sometimes difficult to diagnose:
@@ -819,7 +819,6 @@ The sampler can be switched to sampling the prior by a simple replacement
   of the \code{lnlikelihood} function
   with a trivial function that always returns zero.
 
-
 MCMC should run well in this flat-likelihood case (priors are usually easy to sample)
   and the output sample histograms should look like what you expect
   given the prior pdfs you coded.
@@ -831,19 +830,35 @@ If the priors don't look as you expect,
   or else a think-o about how your priors ought to look.
 Either way, diagnosis in order.
 
-...Make triangle plots.  Great value!
+\paragraph{visualization:}
+...Make triangle plots.  Great value!...  Show example here.
 
-Finally, if you pass the above tests but things are still incomprehensible,
-  it is often a problem with the likelihood function.
-Things to check include the following:
-When you re-call the likelihood function with the same parameters,
+\paragraph{likelihood issues:}
+Sometimes there can be problems with the likelihood function itself.
+For example,
+  when you re-call the likelihood function with the same parameters,
   do you get \emph{exactly} the same answer?
 If you don't, your likelihood function effectively depends on some random numbers;
-  WE DISCUSS THIS WHERE?
+  maybe it includes within it an integral performed by Monte Carlo method?
+In general, you want to change your likelihood function such that,
+  even if it includes a numerical or stochastic integral,
+  it is designed such that it produces \emph{precisely} the same
+  value when it returns to the same point in parameter space.
+One way to make this happen is to choose the random numbers
+  (those used for any internal integration inside the likelihood function)
+  in advance and re-use them on every likelihood call.
+This provides the same integral according to the same approximation,
+  but both speeds up the code (no re-generation of random numbers)
+  and also makes the likelihood function single valued.
+Even better is to replace internal Monte Carlo integrals with
+  deterministic numerical (or even better analytic) integrals.
+
+If things are giving trouble and you suspect the likelihood function,
+  another important test is to visualize slices through parameter space.
 When you call the likelihood function on a grid in each parameter
   (with the others fixed, say, to reasonable values),
-  is the likelihood function a smooth function of the parameter,
-  or at least as smooth as you expect?
+  you should see a likelihood value that is a smooth function of each parameter,
+  or at least as smooth as you expect.
 Things like numerical integration,
   truncated expansions,
   or adaptive approximations
@@ -851,6 +866,10 @@ Things like numerical integration,
   can make the function noisy or jagged at small scales in parameter space.
 These problems hurt optimizers more than samplers,
   but they usually point to code issues.
+In general, plotting the likelihood function as a function of parameter along
+  slices in parameter space often reveals bugs or think-os.
+
+SHOW EXAMPLES?
 
 \paragraph{low acceptance fraction:}
 If you find that you are getting low acceptance fraction
@@ -868,15 +887,89 @@ If you are finding a high acceptance fraction,
 If it does \emph{not}, then \emph{you have a bug}.
 
 \paragraph{sticky chains:}
-...Appearance of good and bad chains (show examples).
+If you are concerned about acceptance fraction or convergence,
+  it makes sense to plot parameter values as a function of ``step number'' or iteration number.
+That is, plot the ordered chain in each parameter dimension.
+These plots will have long horizontal patches if the chain is getting stuck;
+  a converged chain will show the walker traversing the parameter space in every dimension fully many times
+  over the length of the run.
+Not a few times; many times.
+If you are using an ensemble sampler\note{CITE EMCEE},
+  make plots showing all $M$ walkers, each a different color.
+A converged run for an ensemble sampler will show every single walker traversing the parameter space
+  in every dimension many times.
+
+SHOW EXAMPLES OF GOOD AND BAD?
 
 \paragraph{initialization-dependence:}
-...Different initializations leading to different posterior samplings?
+If you initialize your MCMC runs in different places in parameter space,
+  do you get the same (or very similar) final parameter samplings,
+  in mean and variance?
+If you don't,
+  then your posterior PDF is badly multi-modal;
+  trivial MCMC methods probably won't fix your problem.
+Not to put too fine a point on it:
+If your results are initialization-dependent,
+  then your MCMC runs \emph{are not converged}.
 
-...Jammed ensemble sampler?
+You either have to go to a method that tries to explore the posterior
+  more liberally, such as nested sampling or simulated tempering,
+  or else split your ``model'' up into several sub-models,
+  each of which contains different posterior modes.
+In general, this problem is hard to fix;
+  as we mentioned above, it is provably impossible
+  to explore all of parameter space if the posterior PDF is
+  complex in morphology.
+We don't have very useful advice here, except to
+  spend time learning about the multiple modes in the posterior PDF
+  and what each ``means'' or corresponds to,
+  and to do your best to express in your results the multiple optima.
+One of the miracles of MCMC is that if you \emph{can} fairly sample
+  as complex posterior PDF,
+  the fraction of samples in each mode
+  tends to the relative total integrated posterior probability inside each mode,
+  as the sampling converges.
+
+Ensemble samplers react to multiple modes
+  by obtaining very low acceptance ratio,
+  because the samplers in the different modes are not easily able to ``help one another''
+  move efficiently.
+Again, if the acceptance ratio is low and there appear to be multiple modes,
+  it is likely that the sampling will also be initialization dependent,
+  and it is very unlikely that your sampling is going to be converged.
 
 \paragraph{parameterization problems:}
-...Degeneracies and duplications in parameter space; reparameterizations.
+It helps to think carefully about how to parameterize.
+For example, if there is an angle $\phi$ in your problem,
+  and your prior requires it to be between $0$ and $2\pi$,
+  and the posterior mode is very near $0$,
+  a little bit of probability leaking below $0$ plus the prior cutoffs plus mod-$2\pi$ symmetry
+  makes an intrinsically unimodal problem multimodal!
+In these cases, we usually advise reparameterization from a (say) amplitude $A$ and angle $\phi$
+  to two vector components $A\,\cos\phi$ and $A\,\sin\phi$.
+Of course this re-parameterization changes significantly the \emph{form} of the prior PDF
+  (the transformation brings in a Jacobian);
+  it has to be adjusted with care.
+
+DFM: SHOULD WE DO THIS ALL EXPLICITLY HERE IN MATH?
+
+%% ...Priors: Once again:
+%% If you describe your priors in one parameterization but
+%% then perform sampling in a different space, it is easy to make
+%% mistakes.  For example: Flat prior in amplitude and phase, sample in
+%% $A\,\cos\phi$ and $A\,\sin\phi$.  There are many ways to do this
+%% wrong.
+
+For another example, sometimes there is almost an exact degeneracy between two parameters,
+  say $a$ and $b$.  Then it makes sense to switch to parameters $a+b$ and $a-b$,
+  or some other linear combinations where correlations or near-degeneracies are likely to be reduced.
+Again, such transformations require also prior transformations, which must be made with care.
+There are some affine invariant samplers\note{CITE EMCEE AGAIN HERE} that are invariant to such transformations,
+  but if you aren't using such a sampler,
+  it is worth getting out ahead of these problems.
+They can be found by performing an exploratory sampling,
+  making a triangle plot as described above,
+  and looking for narrow diagonal lines in the two-dimentional scatter plots.
 
 \paragraph{model checking:}
 ...Beyond the scope of this document...
@@ -884,56 +977,45 @@ Something about cross-validation and posterior predictive checks...
 Something about plotting models (drawn from posterior) on data, where appropriate...
 How could you possibly know that your sampling really represents your \emph{real} posterior PDF?..
 
-\section{Advice and discussion}
-
-...Write and debug your own M--H sampler and then download a real
-package \emph{afterwards}.
-% ***** BJB
-% I AGREE WHOLEHEARTEDLY. That's how to learn.
-
-...Simple problems where the outputs are analytic.  Functional testing.
-
-...breaking Markov-ness.
-% ***** BJB
-% "Diminishing adaptations" is an idea that is quite easy
-% to explain. There are other ways to break Markov-ness but
-% this probably covers enough of them for an intro document
-% ***** Hogg
-% I was going to say you should NEVER break Markov-ness
-% unless you REALLY understand what you are doing.
-
-...Priors: Once again:
-If you describe your priors in one parameterization but
-then perform sampling in a different space, it is easy to make
-mistakes.  For example: Flat prior in amplitude and phase, sample in
-$A\,\cos\phi$ and $A\,\sin\phi$.  There are many ways to do this
-wrong.
-
-...Sample the prior (likelihood set to unity) to check priors and parameterization (another functional test).
-
-...Posteriors: On the other hand, you can do anything you like (within
-reason) to the output samples and be sampling the posterior in that
-transformed quantity.
-
-...How to deal with forbidden regions in prior, or sharp prior boundaries?
-
-...How to deal with constraints that pin you to a subspace of the parameter space?  Method-dependent.
-
-...Initialization and burn-in advice we haven't addressed earlier?
-
 ...The Bayes integral / evidence integral?
 
 ...Posterior predictive checks?
 
-...Finally, to repeat: You can't sample the likelihood!  You can only
-sample a posterior pdf!
+%% HOGG DELETED / COMMENTED OUT THE BELOW
+%% - make sure everything below is discussed somewhere above and then delete it below.
 
-% \begin{figure}[htbp]
-% \exampleplot{ex17}
-% \caption{Partial solution to \problemname~\ref{prob:bayesintrinsic}:
-% The marginalized posterior probability distribution for the intrinsic
-% variance.}\label{fig:bayesintrinsic}
-% \end{figure}
+%% \section{Advice and discussion}
+
+%% ...breaking Markov-ness.
+%% % ***** BJB
+%% % "Diminishing adaptations" is an idea that is quite easy
+%% % to explain. There are other ways to break Markov-ness but
+%% % this probably covers enough of them for an intro document
+%% % ***** Hogg
+%% % I was going to say you should NEVER break Markov-ness
+%% % unless you REALLY understand what you are doing.
+
+%% ...Sample the prior (likelihood set to unity) to check priors and parameterization (another functional test).
+
+%% ...Posteriors: On the other hand, you can do anything you like (within
+%% reason) to the output samples and be sampling the posterior in that
+%% transformed quantity.
+
+%% ...How to deal with forbidden regions in prior, or sharp prior boundaries?
+
+%% ...How to deal with constraints that pin you to a subspace of the parameter space?  Method-dependent.
+
+%% ...Initialization and burn-in advice we haven't addressed earlier?
+
+%% ...Finally, to repeat: You can't sample the likelihood!  You can only
+%% sample a posterior pdf!
+
+%% % \begin{figure}[htbp]
+%% % \exampleplot{ex17}
+%% % \caption{Partial solution to \problemname~\ref{prob:bayesintrinsic}:
+%% % The marginalized posterior probability distribution for the intrinsic
+%% % variance.}\label{fig:bayesintrinsic}
+%% % \end{figure}
 
 \clearpage
 \markright{Notes}\theendnotes
