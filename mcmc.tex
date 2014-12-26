@@ -24,6 +24,7 @@
 % - \note{} right after word if you are endnoting a phrase,
 %   but after the full stop if endnoting the sentence or paragraph.
 % - do we work in $x$ or $\pars$?  I am confused...
+% - should we use the word ``walker'' anywhere, everywhere, or never?
 
 \documentclass[12pt,twoside,pdftex]{article}
 \usepackage{styles/dar_endnotes}
@@ -38,7 +39,7 @@
 
 \begin{document}
 
-\thispagestyle{plain}\raggedbottom
+\thispagestyle{plain}\sloppy\sloppypar\raggedbottom
 \section*{Data analysis recipes:\\ \this\footnotemark}
 
 \footnotetext{%
@@ -470,7 +471,41 @@ That is, even if---in the end---%
   given the simplicity of the algorithm,
   and given the intuition you gain by doing it (at least once) yourself.
 
-\section{Gibbs, Ensembles, Hamiltonians, and other variants}
+\section{Gibbs, ensemble, Hamiltonian, and so on}
+
+MCMC methods are proven to be correct ``in the limit''; that is, when
+an infinite number of samples have been taken.
+When the function $f(\pars)$ has challenging properties, the results
+can approach this limit very slowly (or not at all\note{HOGG: discuss
+  situations in which MCMC will not work---related to support.}).
+For this reason, in the finite duration of a scientific project, most
+users of MCMC have one of two (related) problems:
+Either it is taking too long---they have take too many steps or
+execute too many calls of the function $f(\pars)$---or it is not
+exploring the full parameter space---there are local optima (or bad
+local geometry around those optima) ``trapping'' the algorithm.
+
+There is no general, problem-independent solution for either of these
+problems.
+Indeed, there are many different strategies that work well or badly
+for different functions $f(\pars)$.
+In this \sectionname, we will try to guide the reader towards methods
+that might help in different circumstances.
+We will not give a full description of all the MCMC algorithms out
+there, but just provide some field notes and pointers to references.
+New MCMC methods are being developed all the time, so a reader with a
+serious problem would do well to consult with the applied-mathematics
+or statistics literature.\note{HOGG: Your best interface to these
+  literatures is via a colleague.  Break down those walls!}
+The different methods to which we refer here are (in general) very
+different in their difficulty of implementation.
+We won't help with that either, except to say that there are more and
+more open-source or distributed packages every year.
+We will try to name some current implementations in the notes, but any
+list compiled today will be incomplete tomorrow.
+The spaces of MCMC methods and MCMC method implementations are both
+growing rapidly, in part because MCMC has become such a core
+technology in the empirical sciences.
 
 % *********** BJB talking:
 % I suggest partitioning the discussion of different methods into the following
@@ -489,7 +524,9 @@ That is, even if---in the end---%
 % methods, not describe them in detail.  Then we can cite the relevant
 % papers for the enthusiastic.
 
-...What, briefly, is the stretch move, and why is it useful?
+...Gibbs!  Every parameter is differently difficult to sample in?
+
+...What, briefly, is the stretch move, and why is it useful?  Every parameter treated identically---almost opposite to gibbs.
 
 ...What, briefly, is importance sampling?
 
