@@ -364,8 +364,8 @@ To generate the next sample $\pars_{k+1}$ do the following:
       otherwise $\pars_{k+1} \leftarrow \pars_k$.
 \end{itemize}
 That is, at each step, either a new proposed position in the parameter
-  space gets accepted or else the prior position in the parameter space
-  gets repeated.
+  space gets accepted into the list of samples or else the prior sample
+  in the parameter space gets repeated.
 The algorithm can be iterated a large number $K$ of times to produce $K$ samples.
 
 ...The algorithm is a biased random walk; nearby samples are covariant...etc.
