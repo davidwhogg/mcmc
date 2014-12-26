@@ -1,3 +1,7 @@
+% This file is part of the MCMC project,
+%   which is part of the Data Analysis Recipes project
+% Copyright 2013, 2014 David W. Hogg (NYU) and Dan Foreman-Mackey (NYU).
+
 % to-do
 % -----
 % - where to put comments about how to structure code ln_likelihood(pars, data, I) and ln_prior(pars, I)
@@ -8,6 +12,7 @@
 %   - Rix
 %   - Bovy
 %   - Brewer
+%   - Hill
 % - post on arXiv
 
 % style notes
@@ -16,6 +21,8 @@
 % - [LaTeX] eqnarray not equation
 % - pdf not PDF
 % - is it ``a MCMC sampling'' or ``an MCMC sampling''?
+% - \note{} right after word if you are endnoting a phrase,
+%   but after the full stop if endnoting the sentence or paragraph.
 
 \documentclass[12pt,twoside,pdftex]{article}
 \usepackage{styles/dar_endnotes}
@@ -36,7 +43,7 @@
 \footnotetext{%
     The notes begin on page~\pageref{note:first}, including the
     license\note{\label{note:first}
-        Copyright 2013 by the authors. This work is licensed under a
+        Copyright 2013, 2014 by the authors. This work is licensed under a
         \href{http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en\_US}{%
             Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported
             License}.}
@@ -53,11 +60,13 @@
 \noindent
 Dan~Foreman-Mackey\\
 \affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,
-       New York University}\\[1ex]
+       New~York~University}\\[1ex]
 David~W.~Hogg\\
 \affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,
-       New York University}\\
-\affil{Max-Planck-Institut f\"ur Astronomie, Heidelberg}
+       New~York~University}\\
+\affil{Center~for~Data~Science,
+       New~York~University}\\
+\affil{Max-Planck-Institut~f\"ur~Astronomie, Heidelberg}
 
 \begin{abstract}
 Markov Chain Monte Carlo (MCMC) methods for sampling probability
@@ -191,12 +200,12 @@ in a finely binned $x$-space histogram, the histogram would look---up
 to a total normalization---just like the original function $p(x)$.
 
 Not being mathematicians, we don't know the precise definition of a
-pdf\note{Seriously.  We don't.}, but for our purposes here a pdf is
+pdf\note{Seriously.  We don't.  It has something to do with measure theory.}, but for our purposes here a pdf is
 any single-valued (scalar) function that is non-negative everywhere
 (the entire domain of $x$), and obeys a normalization condition
 \begin{eqnarray}
 0 &\leq& p(x) \quad \mbox{for all $x$}
-\\
+\\ \label{eq:normp}
 1 &=& \int p(x)\,\dd x
 \quad ,
 \end{eqnarray}
@@ -206,6 +215,12 @@ a multi-element vector or list or blob; it can be arbitrarily large
 and complicated.
 In data-analysis contexts, $x$ will often be the full blob of free
 parameters in the model.
+Implicitly, the integral in \equationname~(\ref{eq:normp}) is high-dimensional; it
+has as many dimensions as there are elements or entries or components of $x$.
+Also, if there are elements or entries or components of $x$ that are discrete
+(that is, take on only integer values or equivalent),
+then along those dimensions the integral becomes a discrete sum.
+This latter is a detail to which we return below.
 
 Given this pdf $p(x)$, we can define \emph{expectation values} $E[x]$
 for $x$ or for any quantity that can be expressed as a function $q(x)$
@@ -316,7 +331,15 @@ That is extremely important for inference,
   where there are always parameters with very different levels of importance to the scientific conclusions.
 This point will return again below, either explicitly or implicitly. % does it?
 
-\section{What is M--H MCMC?}
+\section{What is Metropolis--Hastings MCMC?}
+
+The simplest algorithm for MCMC is the Metropolis--Hastings algorithm.\note{%
+  HOGG put here some short discussion of the name of the algorithm and the original reference.}
+It is so simple, that we recommend that any reader of this document
+who has not previously implemented the algorithm take a break at the end
+of this \sectionname\ and implement it forthwith, in a short piece of computer code,
+in the context of some simple problem.\note{%
+  HOGG put reference to fitting a line here and point inside to the simple problem suggestion.}
 
 ...The algorithm
 
@@ -1007,6 +1030,8 @@ There are some affine invariant samplers\note{CITE EMCEE AGAIN HERE} that are in
 They can be found by performing an exploratory sampling,
   making a triangle plot as described above,
   and looking for narrow diagonal lines in the two-dimentional scatter plots.
+
+HOGG:  How to deal with discrete or integer or binary parameters?
 
 \paragraph{model checking:}
 ...Beyond the scope of this document...
