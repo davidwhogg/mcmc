@@ -18,7 +18,7 @@
 % style notes
 % -----------
 % - [LaTeX] newline after every full stop for proper git diffing
-% - [LaTeX] eqnarray not equation
+% - [LaTeX] \eqnarray not \equation
 % - pdf not PDF
 % - is it ``a MCMC sampling'' or ``an MCMC sampling''?
 % - \note{} right after word if you are endnoting a phrase,
@@ -316,7 +316,15 @@ Even in this case, the sampling is being used to do \emph{integrals};
   of the histogram is an average over the bin.
 That average is obtained by performing an integral.
 
-Finally---and perhaps most importantly---another magical property of a sampling
+Integrals are also involved in finding the mean, median, and any quantiles
+  of a pdf.
+They are not involved in finding the \emph{mode} of a pdf.
+For this reason (and others), in what follows, when we talk about what to report
+  about the outcome of your MCMC sampling,
+  we will advise in favor of mean, median, and quantiles,
+  and we will advise against modes.
+
+Finally---and perhaps most importantly---a magical property of a sampling
   (in a $d$-dimensional space)
   is that if some of your $d$ dimensions are totally uninteresting
   (nuisance parameters, if you will)
@@ -348,35 +356,76 @@ The first is a handle to the function $f(\pars)$ that is the function to be samp
 In data-analysis contexts,
   this function would be the prior $p(\pars)$ times the likelihood $p(\data\given\pars)$
   evaluated at the observed data $\data$.
-The second input is a proposal function $p(\pars'\given\pars)$,
+The second input is a proposal pdf $q(\pars'\given\pars)$ that can be sampled,
   such that the algorithm can draw a new position $\pars'$ in the parameter space
   given an ``old'' position $\pars$.
-This second function must meet some symmetry requirements we discuss further below.
+This second function must meet a symmetry requirement (detailed
+  balance) we discuss further below.
 It permits us to random-walk around the parameter space in a fair way.
 
-The M--H MCMC algorithm is the following:
+The algorithm is the following:
 We have generated some set of samples, the most recent of which is $\pars_k$
 To generate the next sample $\pars_{k+1}$ do the following:
 \begin{itemize}
-\item Draw a proposal $\pars'$ from the proposal disribution $p(\pars'\given\pars_k)$.
+\item Draw a proposal $\pars'$ from the proposal pdf $q(\pars'\given\pars_k)$.
 \item Draw a random number $0<r<1$ from the uniform distribution.
-\item If $p(\pars') / p(\pars_k) > r$ then $\pars_{k+1} \leftarrow \pars'$;
+\item If $f(\pars') / f(\pars_k) > r$ then $\pars_{k+1} \leftarrow \pars'$;
       otherwise $\pars_{k+1} \leftarrow \pars_k$.
 \end{itemize}
 That is, at each step, either a new proposed position in the parameter
-  space gets accepted into the list of samples or else the prior sample
+  space gets accepted into the list of samples or else the previous sample
   in the parameter space gets repeated.
 The algorithm can be iterated a large number $K$ of times to produce $K$ samples.
 
-...The algorithm is a biased random walk; nearby samples are covariant...etc.
+This algorithm---and indeed any MCMC algorithm---produces a
+  \emph{biased random walk} through parameter space.
+It is a random walk for the same reason that it is ``Markov'':
+The step it makes to position $\pars_{k+1}$ depends only on the state
+  of the sampler at position $\pars_k$ (and no previous state).
+It is a biased random walk, biased by the acceptance algorithm
+  involving the ratios of function values; this acceptance rule biases
+  the random walk such that the amount of time spent in the neighborhood
+  of location $\pars$ is proportional to $f(\pars)$.
 
-...Why does it work (briefly)?
+The principal user-settable knob in M--H MCMC is the proposal
+  pdf $q(\pars'\given\pars)$.
+A typical choice is a multi-variate Gaussian distribution for $\pars'$
+  centered on $\pars$ with some simple (diagonal, perhaps) variance
+  tensor.
+We will discuss the choice and tuning of this proposal distribution
+  below.
 
-...What is a typical proposal distribution?
+Importantly---for the algorithm given above to work correctly---the
+  proposal pdf must satisfy a ``detailed balance'' condition; it
+  must have the property that
+\begin{eqnarray}
+q(\pars'\given\pars) &=& q(\pars\given\pars')
+\quad ;
+\end{eqnarray}
+that is, it must be just as easy to go one way in the parameter space
+  as the other.
+You can break this property, if you like, and then adjust the
+  acceptance condition accordingly, but we \emph{do not recommend this}
+  except under the supervision of a trained professional.\note{Actually,
+  our own favorite method, \project{emcee}, has a proposal pdf that does
+  violate detailed balance in this way and has a compensated
+  acceptance ratio.  Read the paper [HOGG CITE] for more details.}
+If the detailed balance condition frightens you (as it frightens us),
+  then just stick with pdfs that are symmetric in $\pars'$ and $\pars$,
+  like the Gaussian, or a centered uniform distribution and forget about
+  it.
 
-...How to avoid violating detailed balance (without deeply understanding it)?
+In what follows, when we discuss tuning of the proposal pdf, we will
+  often cycle through the parameter blob components and propose changes
+  in only one dimension or element or component at a time.
+That is, at step $k+1$ you might only propose a one-dimensional move
+  in the $i$th dimension, not in all $d$ dimensions of the parameter
+  space.
+That won't change anything significant; but if you are implementing
+  this right now you might want to do that.
+It will help us tune the proposal pdf and diagnose problems.
 
-...Cycling through parameters??  Mention here?
+...Why does M--H MCMC work (briefly)? ...Or put this in a note on an earlier paragraph?
 
 One note to make here
   is that you must \emph{propose}
