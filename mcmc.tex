@@ -23,6 +23,7 @@
 % - is it ``a MCMC sampling'' or ``an MCMC sampling''?
 % - \note{} right after word if you are endnoting a phrase,
 %   but after the full stop if endnoting the sentence or paragraph.
+% - do we work in $x$ or $\pars$?  I am confused...
 
 \documentclass[12pt,twoside,pdftex]{article}
 \usepackage{styles/dar_endnotes}
@@ -333,21 +334,49 @@ This point will return again below, either explicitly or implicitly. % does it?
 
 \section{What is Metropolis--Hastings MCMC?}
 
-The simplest algorithm for MCMC is the Metropolis--Hastings algorithm.\note{%
+The simplest algorithm for MCMC is the Metropolis--Hastings algorithm (M--H MCMC).\note{%
   HOGG put here some short discussion of the name of the algorithm and the original reference.}
-It is so simple, that we recommend that any reader of this document
-who has not previously implemented the algorithm take a break at the end
-of this \sectionname\ and implement it forthwith, in a short piece of computer code,
-in the context of some simple problem.\note{%
-  HOGG put reference to fitting a line here and point inside to the simple problem suggestion.}
+It is so simple that we recommend that any reader of this document
+  who has not previously implemented the algorithm take a break at the end
+  of this \sectionname\ and implement it forthwith, in a short piece of computer code,
+  in the context of some simple problem.\note{%
+    HOGG put reference to fitting a line here and point inside to the simple problem suggestion.}
 
-...The algorithm
+The M--H MCMC algorithm requires two inputs.
+The first is a handle to the function $f(\pars)$ that is the function to be sampled,
+  such that the algorithm can evaluate $f(\pars)$ for any value of the parameters $\pars$.
+In data-analysis contexts,
+  this function would be the prior $p(\pars)$ times the likelihood $p(\data\given\pars)$
+  evaluated at the observed data $\data$.
+The second input is a proposal function $p(\pars'\given\pars)$,
+  such that the algorithm can draw a new position $\pars'$ in the parameter space
+  given an ``old'' position $\pars$.
+This second function must meet some symmetry requirements we discuss further below.
+It permits us to random-walk around the parameter space in a fair way.
+
+The M--H MCMC algorithm is the following:
+We have generated some set of samples, the most recent of which is $\pars_k$
+To generate the next sample $\pars_{k+1}$ do the following:
+\begin{itemize}
+\item Draw a proposal $\pars'$ from the proposal disribution $p(\pars'\given\pars_k)$.
+\item Draw a random number $0<r<1$ from the uniform distribution.
+\item If $p(\pars') / p(\pars_k) > r$ then $\pars_{k+1} \leftarrow \pars'$;
+      otherwise $\pars_{k+1} \leftarrow \pars_k$.
+\end{itemize}
+That is, at each step, either a new proposed position in the parameter
+  space gets accepted or else the prior position in the parameter space
+  gets repeated.
+The algorithm can be iterated a large number $K$ of times to produce $K$ samples.
+
+...The algorithm is a biased random walk; nearby samples are covariant...etc.
 
 ...Why does it work (briefly)?
 
 ...What is a typical proposal distribution?
 
 ...How to avoid violating detailed balance (without deeply understanding it)?
+
+...Cycling through parameters??  Mention here?
 
 One note to make here
   is that you must \emph{propose}
@@ -388,7 +417,7 @@ That is, even if---in the end---%
   given the simplicity of the algorithm,
   and given the intuition you gain by doing it (at least once) yourself.
 
-\section{Ensembles, Hamiltonians, and other variants}
+\section{Gibbs, Ensembles, Hamiltonians, and other variants}
 
 % *********** BJB talking:
 % I suggest partitioning the discussion of different methods into the following
@@ -459,20 +488,20 @@ The only simple integral-based options are the posterior mean
 For example,
   imagine that by MCMC you have generated
   $K$ samples $\pars_k$ of a parameter vector $\pars$.
-Now you have a scalar function $q(\theta)$ which takes the parameter vector
+Now you have a scalar function $q(\pars)$ which takes the parameter vector
   and returns a scalar value%
-  \note{For the median-of-sampling value, $q(\theta)$ needs to return a scalar,
-  but technically, for the mean-of-sampling, $q(\theta)$ can be a vector or something high-dimensional.}
+  \note{For the median-of-sampling value, $q(\pars)$ needs to return a scalar,
+  but technically, for the mean-of-sampling, $q(\pars)$ can be a vector or something high-dimensional.}
   which could be as simple as a single component of the parameter vector
   (one parameter from the list),
   or something more complex.
 The mean-of-sampling value $\mean{q}$ is just
 \begin{eqnarray}
-\mean{q} &\leftarrow& \frac{1}{K}\,\sum_{k=1}^K q(\theta_k)
+\mean{q} &\leftarrow& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
 \quad ,
 \end{eqnarray}
-  and the median-of-sampling value is just the $[K/2]$th value of $q(\theta_k)$
-  when the $q(\theta_k)$ have been ordered (sorted).
+  and the median-of-sampling value is just the $[K/2]$th value of $q(\pars_k)$
+  when the $q(\pars_k)$ have been ordered (sorted).
 These are both produced by integrals;
   the first is the value returned by the expectation integral estimate,
   the second is the value past which half of the integrated pdf lies.
@@ -490,10 +519,10 @@ Again, these limits can be estimated%
   like estimate an integral or a quantile,
   is just an old-school frequentist estimator.
   A frequentist estimator of a Bayesian quantity, to be sure, but a frequentist estimator nonetheless.}
-  by ordering the $q(\theta_k)$ values,
-  and finding the $\theta$ values such that some fraction (0.68 or 0.95)y
+  by ordering the $q(\pars_k)$ values,
+  and finding the $\pars$ values such that some fraction (0.68 or 0.95)y
   of the samples lie between them.
-Again, to form these limits, $q(\theta)$ must be a scalar function (so sorting is well defined).
+Again, to form these limits, $q(\pars)$ must be a scalar function (so sorting is well defined).
 
 One amusing thing is that if you choose the 68-percent interval sensibly,
   but use as the ``measurement'' the posterior mean,
