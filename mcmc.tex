@@ -386,6 +386,10 @@ It is a biased random walk, biased by the acceptance algorithm
   involving the ratios of function values; this acceptance rule biases
   the random walk such that the amount of time spent in the neighborhood
   of location $\pars$ is proportional to $f(\pars)$.
+Because of this local (Markov) property, the nearby samples are not
+  independent; the algorithm only produces fair samples in the limit of
+  arbitrary run time, and two samples are only independent when they are
+  sufficiently separated in the chain (more on this below).
 
 The principal user-settable knob in M--H MCMC is the proposal
   pdf $q(\pars'\given\pars)$.
