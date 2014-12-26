@@ -473,6 +473,8 @@ That is, even if---in the end---%
 
 \section{Gibbs, ensemble, Hamiltonian, and so on}
 
+[SHOULD THIS SECTION MOVE TO AFTER THE DEFINITION OF AUTOCORRELATION TIME AND DISCUSSION OF CONVERGENCE?]
+
 MCMC methods are proven to be correct ``in the limit''; that is, when
 an infinite number of samples have been taken.
 When the function $f(\pars)$ has challenging properties, the results
@@ -480,8 +482,8 @@ can approach this limit very slowly (or not at all\note{HOGG: discuss
   situations in which MCMC will not work---related to support.}).
 For this reason, in the finite duration of a scientific project, most
 users of MCMC have one of two (related) problems:
-Either it is taking too long---they have take too many steps or
-execute too many calls of the function $f(\pars)$---or it is not
+Either \textsl{(1)}~it is taking too long---it is taking too many steps or
+executing too many calls of the function $f(\pars)$ to get independent samples---or \textsl{(2)}~it is not
 exploring the full parameter space---there are local optima (or bad
 local geometry around those optima) ``trapping'' the algorithm.
 
@@ -496,7 +498,7 @@ there, but just provide some field notes and pointers to references.
 New MCMC methods are being developed all the time, so a reader with a
 serious problem would do well to consult with the applied-mathematics
 or statistics literature.\note{HOGG: Your best interface to these
-  literatures is via a colleague.  Break down those walls!}
+  literatures is a colleague in another department.  Break down those walls!}
 The different methods to which we refer here are (in general) very
 different in their difficulty of implementation.
 We won't help with that either, except to say that there are more and
@@ -506,6 +508,75 @@ list compiled today will be incomplete tomorrow.
 The spaces of MCMC methods and MCMC method implementations are both
 growing rapidly, in part because MCMC has become such a core
 technology in the empirical sciences.
+
+...Note a good general reference here?  MacKay?
+
+\paragraph{Ensembles:}
+As we discuss more below, one of the critical challenges in the use of
+MCMC is tuning the proposal pdf $q(\pars'\given\pars)$.
+In problems in which all of the parameters (all of the components or entries of $\pars$) are somehow ``equivalent'',
+or the parameters can be seen as components of a vector in a vector
+space, there are \emph{ensemble methods} that make use of not just one
+random-walker but instead many walkers to automatically generate a properly tuned
+proposal distribution.
+These methods make use of the distribution of a set of independent
+walkers in the parameter space ($\pars$-space) to gauge the typical step-sizes and
+directions at which new proposals should be made, obviating or greatly
+reducing the tuning requirements.
+We are co-authors on one of these methods, \project{emcee}\note{HOGG:
+  ref emcee}, which is popular in the astrophysical sciences.
+Because ensemble methods are updating independent MCMC chains, they
+are often easy to parallelize to make use of multiple cores.
+
+\paragraph{Gibbs:}
+In many problems, the parameters---the components or entries of the
+blob $\pars$---are not equivalent at all.
+Some are global parameters, which touch or have an effect on every
+sub-part of the data blob $\data$, while others are local parameteres,
+which only touch a small subset of the data.
+Or, in another use case, some parameters are linear parameters
+that---at fixed values of the other parameters---will have a Gaussian
+likelihood or posterior pdf.
+In these problems, there are some directions in parameter space that
+are hard to move in (they require complete re-calculation of the full
+non-linear function $f(\pars)$, and other directions that are very
+easy to move in (they require only partial re-calculations or the
+sampling could even be analytic and exact).
+For problems with these structures, Gibbs samplers are ideal, and
+there are good implementations.\note{HOGG cite JAGS}
+
+A trivial kind of Gibbs sampling was mentioned above in the
+discussion of M--H MCMC:
+Even when running vanilla M--H MCMC, it is often useful to update only
+one parameter at a time; that is, do only axis-aligned moves in the
+$\pars$-space, cycling through axes as you go from step to step.
+This helps with tuning and diagnosis, but it also permits a good
+implementation to capitalize on simpler calculations for the simpler
+parameter directions.
+
+Gibbs sampling can be very good for exploiting multiprocessing:
+Global parameter updates might require a serial re-calculation of the
+full likelihood, but local parameter updates can be done in parallel,
+with each local parameter working on its local bit of data all at the
+same time.
+This kind of structure is common in hierarchical inference, where
+local parameters touch only individual objects in some population,
+say, and global parameters are parameters \emph{of} that population as
+a whole.
+Parallelization is built in to some Gibbs implementations.\note{HOGG}
+
+\paragraph{Hamiltonian:}
+[HOGG: THIS HAS SOME OTHER NAME; WHAT?]
+In many cases of interest, the function $f(\pars)$ can be analytically
+differentiated, such that it is possible to quickly execute a gradient
+$\dd f/\dd\pars$ evaluation.
+Indeed, in the modern world of computing, there are even
+auto-differentiation systems that deliver automatically code that
+produces the gradient of any function you can write.\note{HOGG cite
+  autodiff systems}
+There is a class of MCMC methods that make use of gradient information
+to effectively inform the proposal distribution and thus speed sampling.
+... HOGG more here!
 
 % *********** BJB talking:
 % I suggest partitioning the discussion of different methods into the following
@@ -524,19 +595,15 @@ technology in the empirical sciences.
 % methods, not describe them in detail.  Then we can cite the relevant
 % papers for the enthusiastic.
 
-...Gibbs!  Every parameter is differently difficult to sample in?
+\paragraph{Importance:}
 
-...What, briefly, is the stretch move, and why is it useful?  Every parameter treated identically---almost opposite to gibbs.
+\paragraph{Tempering:}
 
-...What, briefly, is importance sampling?
+\paragraph{Nested:}
 
-...What, briefly, is nested sampling, and why is it good?
-
-...What, briefly, is tempering?
-
-...What, briefly, is hamiltonian, and why is it good?
-
-...What, briefly, is reversible-jump, and why is it useful?
+\paragraph{Reversible-jump:}
+Finally, there are some problems that \emph{cannot be done} without
+additional proposal technology...
 
 \section{Results, error bars, and figures}
 
