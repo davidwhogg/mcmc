@@ -664,8 +664,9 @@ These are both produced by integrals;
   the second is the value past which half of the integrated pdf lies.
 
 What are your best options for the ``uncertainty'' or ``limits'' on this parameter?
-The only simple integral-based options are posterior quantiles.
-That is, the ``one-sigma'' error bar can be the size of the central (or smallest%
+The only simple integral-based options are either variances or else posterior quantiles.
+We usually use quantiles.
+That is, the ``one-sigma'' error bar can be taken to be the half-size of the central (or smallest%
   \note{HOGG shizzle about choosing quantiles}) interval of the parameter
   that contains 68 percent of the posterior samples.
 The ``two-sigma'' error bar would be the same but for the 95-percent interval.
@@ -677,7 +678,7 @@ Again, these limits can be estimated%
   is just an old-school frequentist estimator.
   A frequentist estimator of a Bayesian quantity, to be sure, but a frequentist estimator nonetheless.}
   by ordering the $q(\pars_k)$ values,
-  and finding the $\pars$ values such that some fraction (0.68 or 0.95)y
+  and finding the $\pars$ values such that some fraction (0.68 or 0.95)
   of the samples lie between them.
 Again, to form these limits, $q(\pars)$ must be a scalar function (so sorting is well defined).
 
