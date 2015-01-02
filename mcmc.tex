@@ -511,6 +511,23 @@ technology in the empirical sciences.
 
 ...Note a good general reference here?  MacKay?
 
+% *********** BJB talking:
+% I suggest partitioning the discussion of different methods into the following
+% two categories:
+%
+%  i) Methods for getting around the target distribution
+% ii) Methods that change the target distribution to something
+% other than the posterior pdf, to help the sampling somehow
+%
+% i) Would include things like M-H, the stretch move,
+% Hamiltonian, slice sampling (maybe skip the latter)
+% ii) would include things like annealing and Nested Sampling
+
+%%%% Hogg talking:
+% DFM: In this section, I think we should just summarize the other
+% methods, not describe them in detail.  Then we can cite the relevant
+% papers for the enthusiastic.
+
 \paragraph{Ensembles:}
 As we discuss more below, one of the critical challenges in the use of
 MCMC is tuning the proposal pdf $q(\pars'\given\pars)$.
@@ -577,23 +594,6 @@ produces the gradient of any function you can write.\note{HOGG cite
 There is a class of MCMC methods that make use of gradient information
 to effectively inform the proposal distribution and thus speed sampling.
 ... HOGG more here!
-
-% *********** BJB talking:
-% I suggest partitioning the discussion of different methods into the following
-% two categories:
-%
-%  i) Methods for getting around the target distribution
-% ii) Methods that change the target distribution to something
-% other than the posterior pdf, to help the sampling somehow
-%
-% i) Would include things like M-H, the stretch move,
-% Hamiltonian, slice sampling (maybe skip the latter)
-% ii) would include things like annealing and Nested Sampling
-
-%%%% Hogg talking:
-% DFM: In this section, I think we should just summarize the other
-% methods, not describe them in detail.  Then we can cite the relevant
-% papers for the enthusiastic.
 
 \paragraph{Importance:}
 
