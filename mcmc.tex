@@ -1,6 +1,6 @@
 % This file is part of the MCMC project,
 %   which is part of the Data Analysis Recipes project
-% Copyright 2013, 2014 David W. Hogg (NYU) and Dan Foreman-Mackey (NYU).
+% Copyright 2013, 2014, 2015 David W. Hogg (NYU) and Dan Foreman-Mackey (NYU).
 
 % to-do
 % -----
@@ -743,21 +743,70 @@ This optimal-posterior parameter value is called the
 It is an estimator with some good (and some bad) properties, but it is not the point of MCMC,
   and therefore outside the scope of this \documentname.
 
-...Now for multiple dimensions...return to the marginalization point
-from above...
+The parameter space $\pars$ is usually multi-dimensional, and more
+than one of those parameters is of interest.
+In this case, the mean or median of sampling can be produced for each
+dimension.
+Because the sampling projected onto any dimension is a marginalization
+of the posterior pdf, any such one-dimensional mean or median is the
+mean or median of the marginalized posterior pdf.
 
-...What do you do in high-dimensional spaces?  Note the issue
-that---even in a unimodal posterior PDF---the most probable model
-might not be at the set of parameter values that are reported if you
-compute the parameter values to report in one-dimensional projections
-of the posterior pdf.  This requires a figure to demonstrate.  What to
-do here?
+There is one oddity to note here, as it catches many investigators by
+surprise:
+Even if the model is good and the posterior pdf is unimodal and well-behaved,
+the median (or even mean) of the posterior pdf for each of parameters,
+when taken together as a ``best-fit'' parameter vector $\theta^\ast$,
+will not itself necessarily be a good fit to the data!
+If there is substantial ``curvature'' to the pdf in the parameter
+space, the mean or median of sampling does not necessarily lie at a
+high-probability location of parameter space.
+This may seem counterintuitive, but it is easy to see in the case of a
+``banana-shaped'' posterior pdf.
+This all relates to the fact that MCMC is not an optimizer, it is a
+sampler.
+It is important, when reporting the output of an MCMC run by giving
+means or medians of the posterior PDF to remind the reder or user of
+that output that it does not necessarily represent (collectively) a
+good fit to the data; these outputs only give information that is
+useful one parameter at a time.
 
-...What figures should you make to display the chain?
+In principle the only output from the sampling that safely gives both
+probabilistic information about the result of the inference and also
+good-fitting models is a few---randomly chosen---example samples.
+We strongly recommend this\note{HOGG:  And we do this WHERE? Citation!};
+in particular this is a better thing to do
+than to give the ``best sample'', which isn't even guaranteed to be
+near the bulk of the posterior pdf or the samples therefrom.
 
-...If you are really good, you will pass forward a sampling.
-...How big should it be? Refer to Mackay here.
-...Usefulness of a big sampling for hierarchical inferences; concept of interim prior?
+If you \emph{do} return posterior samples to your audience, how many
+should you return?
+There are only heuristic answers to this, but a guideline is that, if
+you only care about a single (one-dimensional) parameter, you don't
+need many samples; a dozen suffices to give you a reasonable posterior
+pdf mean and variance.\note{HOGG cite Mackay.}
+If you care about $K$ parameters or dimensions of the parameter space,
+in general the need for samples grows exponentially (or perhaps even
+factorially!) with the number of dimensions.\note{HOGG cite something.}
+So if you have a ten-dimensional space, expect to be publishing your
+samples in an electronic table on the web!
+If you \emph{do} publish sufficient numbers of posterior samples, you
+might find users who want to make serious use of them.\note{HOGG cite
+  our importance-sampling papers with some explanation here.}
+
+Of course figures are always better than tables, at least in the
+printed form of scientific publications.
+In a $D$-dimensional parameter space, we recommend plotting all $D$
+one-dimensional sample histograms, on a pretty fine binning, and all
+$D$-choose-2 two-dimensional histograms (scatter plots) to show the
+low-level covariances and non-linearities.
+If you are clever, all these plots can be arranged into a lovely and
+informative triangle.\note{HOGG cite triangle.py and put an example in
+  the note!}
+These two-dimensional plots do not in any sense contain all the
+information in the sampling!  However, they are remarkable for
+locating expected and unexpected parameter relationships, and often
+invaluable for suggesting re-parameterizations and transformations
+that simplify your problem.
 
 \section{Convergence}
 
