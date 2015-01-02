@@ -597,10 +597,13 @@ to effectively inform the proposal distribution and thus speed sampling.
 ... HOGG more here!
 
 \paragraph{Importance:}
+... HOGG
 
 \paragraph{Tempering:}
+... HOGG
 
 \paragraph{Nested:}
+... HOGG
 
 \paragraph{Reversible-jump:}
 Finally, there are some problems that \emph{cannot be done} without
@@ -853,22 +856,17 @@ Or, equivalently, you have sampled long enough when the first half of
 the chain shows very much the same posterior pdf morphology as the
 second half of the chain, or indeed as any substantial subset.
 
-Making this heuristic condition more precise...
-Autocorrelation time is the premier tool...
-How is Autocorrelation time defined?..
-How is Autocorrelation time measured?..
-Why is it is not a panacea?..
+...Making this heuristic condition more precise
+...Autocorrelation time is the premier tool
+...How is Autocorrelation time defined?
+...How is Autocorrelation time measured?
+...Why is it is not a panacea? ...estimators ...getting stuck in one mode
 
 ...What plots should you make?
 ...Plots showing individual walkers going through the space.
 ...(now show plots that demonstrate a non-converged and a converged chain)...
 
 \section{Tuning}
-
-% BJB
-% Please suggest mixtures of scales for M-H proposals.
-% You can mimic the properties of slice sampling but with
-% much easier code.
 
 Most MCMC methods
   (though not all\note{We are promoters of an ensemble method that has a
@@ -900,6 +898,11 @@ In one dimension this might be easy to find,
   but, as we say, in large numbers of dimensions,
   there is a lot of freedom in choosing the parameters of the distribution.
   
+% BJB
+% Please suggest mixtures of scales for M-H proposals.
+% You can mimic the properties of slice sampling but with
+% much easier code.
+
 In a deep sense, the only scalar that makes sense to optimize,
   when choosing proposal distribution (or, loosely speaking, step size),
   is the autocorrelation time, described above.
@@ -911,11 +914,12 @@ This is easy to state, but hard to use in practice;
   much less put it into some kind of optimization loop.
 We usually use proxies for this of various kinds.
 
-The simplest proxy for autocorrelation time optimization is the \emph{acceptance fraction}.
+The simplest heuristic proxy statistic for tuning is the \emph{acceptance fraction}.
 If you are accepting almost all proposed steps, your step sizes are too small on average.
 If you are accepting almost none, your step sizes are too large.
-The Goldilocks value is around a half,
-  with a strong argument floating around that it should be 0.234 for best performance\note{CITE GELMAN}.
+The Goldilocks value is around a quarter,
+  with an argument floating around that it should be 0.234 for best performance\note{CITE GELMAN}
+  (though you could never tune it precisely enough to warrant that third digit of accuracy).
 In the burn-in phase (discussed below) of an MCMC run,
   it makes sense to track the acceptance ratio,
   and adjust the proposal distribution variance as you get acceptance ratios
