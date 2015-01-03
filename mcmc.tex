@@ -340,7 +340,27 @@ That is, the projection of the sampling to the subspace of interest produces
         The sampling performs this integration automatically.}
 That is extremely important for inference,
   where there are always parameters with very different levels of importance to the scientific conclusions.
-This point will return again below, either explicitly or implicitly. % does it?
+This point will return again below, either explicitly or implicitly. % HOGG: does it?
+
+Although the discussion in this \documentname\ is general, the most
+common use of MCMC sampling (for us, anyway) is in probabilistic
+inference.
+For this reason, we will often refer to the function $f(\pars)$
+colloquially as ``the posterior pdf''\note{We will also sometimes
+  refer to expectations under $f(\pars)$ as posterior means, and
+  medians as median-of-posterior values, and so on.} even though it is
+implicitly ill-normalized and might not be a posterior pdf in any
+sense.
+We will also occasionally assume---just because it is true in
+inference---that the function $f(\theta)$ is the product of two
+functions, one called ``the prior pdf'' and one called ``the
+likelihood''.
+Again, this usage is colloquial and is only strictly correct in
+inference contexts with proper inputs.
+That the function $f(\theta)$ can be thought of as a product of a
+prior pdf and a likelihood is only necessary for what follows in
+the context of advanced sampling techniques like tempering or
+nested sampling, both mentioned briefly below.
 
 \section{What is Metropolis--Hastings MCMC?}
 
@@ -597,14 +617,45 @@ to effectively inform the proposal distribution and thus speed sampling.
 
 ... HOGG more here!
 
+\paragraph{Slice:}
+... DFM, can you help here?
+
 \paragraph{Importance:}
-... HOGG
+Sometimes it is possible to sample efficiently from a distribution
+that is close to the target function $f(\pars)$ you care about but
+hard to sample efficiently with MCMC.
+An example is a problem that has a simple (Gaussian, say) likelihood
+function times a non-trivial prior:
+It is easy to sample from a Gaussian likelihood times a Gaussian
+prior, even without MCMC, but it might be hard to do the same sampling
+under a more complex prior.
+Importance sampling is a direct sampling method (not really an MCMC
+method at all):
+You take a sampling from the approximate function (which by assumption
+was easy) and then you re-weight the sampling (or do a subsequent
+rejection of samples) using the ratio of the true function to the
+approximate function as a weight or probability.
+We use this quite a bit in our hierarchical inferences.\note{HOGG:
+  Citations}
+
+The only significant technical details for importance sampling are the
+following:
+The approximate function must have the same (or greater) support as
+the true function, and the method degrades in efficiency as the two
+functions diverge.
+If the ratio of the true function to the approximate function is to be
+used as a probability for rejection of samples, then the true function
+must be greater than or equal to the approximate function everywhere!
 
 \paragraph{Tempering:}
 ... HOGG
 
 \paragraph{Nested:}
-... HOGG
+Similar to tempering are a class of methods called ``nested''
+samplings, which also smoothly change the target distribution.
+In the nested case, instead of increasing the temperature, the
+samplings are of a censored version of the prior, censored by the
+value of the likelihoood function.
 
 \paragraph{Reversible-jump:}
 Finally, there are some problems that \emph{cannot be done} without
