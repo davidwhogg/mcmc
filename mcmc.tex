@@ -648,18 +648,63 @@ used as a probability for rejection of samples, then the true function
 must be greater than or equal to the approximate function everywhere!
 
 \paragraph{Tempering:}
-... HOGG
+A huge problem for MCMC samplers---which make local moves based on
+local positioning in the parameter space---is that there can be
+multiple modes in the function $f(\pars)$, separated by valleys of
+zero or near-zero density.
+A vanilla MCMC method cannot easily cross such valleys with local
+moves.
+The idea behind simulated tempering and related methods is to ``smooth
+out'' the function $f(\pars)$ or reduce its dynamic range, to make the
+peaks less tall and the valleys less deep, to permit the MCMC random
+walk to cross the valleys.
+The standard method is to introduce a ``temperature'' variable and,
+while sampling, take the likelihood function to the power of the
+inverse temperature (or, if working in the logarithm, multiply the log
+likelihood by the inverse temperature).
+When the temperature is high, this reduces the influence of the
+likelihood function relative to the prior pdf, and (assuming that the
+prior pdf is easy to sample) makes movement in the parameter space
+easier.
+At each step, when the temperature has moved away from unity, the
+distribution being sampled is not exactly $f(\pars)$, but the results
+of the sampling are only kept for those samples taken at unit
+temperature; these in the end make a fair sampling.
 
 \paragraph{Nested:}
-Similar to tempering are a class of methods called ``nested''
-samplings, which also smoothly change the target distribution.
+Similar to tempering-like methods are a class of methods called ``nested''
+samplers, which also smoothly change the target distribution away from $f(\pars)$.
 In the nested case, instead of increasing the temperature, the
 samplings are of a censored version of the prior, censored by the
 value of the likelihoood function.
+When the likelihood censoring is strong, only the most high-likelihood
+parts of the prior get sampled; when the likelihood censoring is weak,
+almost all of the prior gets sampled.
+The idea behind nested sampling---like tempering---is that it is
+designed to be a good method for exploring the full parameter space or
+searching for all of the modes of the posterior pdf.
+It is also designed such that it produces not just a sampling but also
+an estimate of the integral $Z$ of the likelihood times the prior
+(the Bayes factor or fully marginalized likelihood).
 
 \paragraph{Reversible-jump:}
-Finally, there are some problems that \emph{cannot be done} without
-additional proposal technology...
+Finally, there are some extreme problems in which it is not just hard
+to sample in the parameter space, but the parameter space itself is
+not of fixed dimension.
+For example, if you are modeling an astronomical image with a
+collection of stars, and you don't know how many stars to use; in this
+case the number of stars itself is a parameter, so the number of
+parameters is itself a function of the parameters.\note{HOGG Cite
+  Brewer et al}
+In these cases you can only use certain kinds of samplers (though M--H
+MCMC is one you can choose), and, in addition, you need to make
+special kinds of proposals that permit the system to jump from one
+parameter space to another that has different dimensionality.
+In these cases, the concept of detailed balance becomes non-trivial,
+but there are criteria for creating reversible-jump proposals between
+the parameter spaces.
+These methods are best built and operated under the supervision of a
+trained professional.
 
 \section{Results, error bars, and figures}
 
