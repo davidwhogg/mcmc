@@ -4,6 +4,7 @@
 
 % to-do
 % -----
+% - mention JAGS and STAN in methods section
 % - perhaps re-order to m-h, convergence, reporting results, other methods ??
 % - where to put comments about how to structure code ln_likelihood(pars, data, I) and ln_prior(pars, I)
 % - need to mention case where there is an MC integral INSIDE the likelihood function
@@ -638,7 +639,7 @@ approximate function as a weight or probability.
 We use this quite a bit in our hierarchical inferences.\note{HOGG:
   Citations}
 
-The only significant technical details for importance sampling are the
+Two of the significant technical details for importance sampling are the
 following:
 The approximate function must have the same (or greater) support as
 the true function, and the method degrades in efficiency as the two
@@ -686,6 +687,9 @@ searching for all of the modes of the posterior pdf.
 It is also designed such that it produces not just a sampling but also
 an estimate of the integral $Z$ of the likelihood times the prior
 (the Bayes factor or fully marginalized likelihood).
+
+\paragraph{Data augmentation:}
+...HOGG?
 
 \paragraph{Reversible-jump:}
 Finally, there are some extreme problems in which it is not just hard
