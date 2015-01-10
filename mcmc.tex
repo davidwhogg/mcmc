@@ -116,14 +116,14 @@ the ``Bayes integral'' and ``prior predictive probability'', and is usually
   probability of the data.
   Of course it is only the probability of the data within the model
   space under consideration!
-  We discuss this object and these issues [MORE ELSEWHERE; CITE].
+  We discuss this object and these issues elsewhere (HOGG CITE).
   The factor $Z$ is often hugely difficult to compute, because the
   likelihood (or the prior) can have extremely complex structure,
   with multiple arbitrarily compact modes, arbitrarily positioned
   in the (presumably high dimensional) parameter space $\pars$.
-  Elsewhere, we discuss the computation of this object (cite Fengji)
+  Elsewhere, we discuss the computation of this object (HOGG cite Fengji)
   and---perhaps more importantly---why you probably never really
-  \emph{want} to compute it.
+  \emph{want} to compute it (HOGG CITE).
   The computation of $Z$ is outside the scope of this \documentname,
   but suffice it to say:
   If the computation of $Z$ is in your travel plans, you will need to
@@ -148,21 +148,18 @@ list or heterogeneous collection of observations\note{In general in
   containing not just a value but some huge arbitrarily structured set
   of values in matrix, vector, or more complex form.}).
 You also have a model sophisticated enough---a probabilistic,
-generative model, if you will\note{For our definition of a
-  \emph{model}, see [SOME OTHER NOTE] in this series.}---that, given a
+generative model, if you will\note{For more discussion
+  of our definition of a \emph{model}, see [HOGG SOME OTHER NOTE] in
+  this series.
+  Briefly, a model is a likelihood function (a pdf for the data given
+  model parameters), and a prior pdf over the parameters.
+}---that, given a
 setting of a huge blob of parameters\note{Again, the parameter
   blob $\pars$ should also be thought of as an immense, arbitrarily
   structured set or list of parameters, possibly even with no fixed
   dimension!} $\pars$, you can compute a pdf for data (or likelihood\note{We
   bash the terminology ``likelihood'' in [SOME OTHER NOTE] in this
   series.}) $p(\data\given\pars)$.
-% ************* BJB
-% <Wild Subjective Bayesian>
-% The "generative model" is a probabilistic description of your *prior
-% beliefs about what the data are going to be*. </Wild Subjective Bayesian>
-% ************* Hogg
-% That comment should go in the ``What is a Model?'' Chapter.
-% (Or a \note{} right here.)
 Furthermore, say you also can write down some kind of informative or
 vague prior pdf $p(\pars)$ for the parameter blob.
 If all these things are true, then---even if you can't compute
