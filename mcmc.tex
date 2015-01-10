@@ -19,6 +19,7 @@
 
 % style notes
 % -----------
+% - These documents are ``Chapters'', no?
 % - [LaTeX] newline after every full stop for proper git diffing
 % - [LaTeX] eqnarray not equation
 % - pdf not PDF
@@ -151,8 +152,13 @@ You also have a model sophisticated enough---a probabilistic,
 generative model, if you will\note{For more discussion
   of our definition of a \emph{model}, see [HOGG SOME OTHER NOTE] in
   this series.
-  Briefly, a model is a likelihood function (a pdf for the data given
+  Briefly, a ``model'' for us is a likelihood function (a pdf for the data given
   model parameters), and a prior pdf over the parameters.
+  Because, under this definition, the model can always generate (by
+  sampling, say) parameters and parameters can generate (again by
+  sampling, say) data, the model is effectively (or actually, if you
+  are a true subjective Bayesian) a probability distribution (pdf)
+  over all possible data.
 }---that, given a
 setting of a huge blob of parameters\note{Again, the parameter
   blob $\pars$ should also be thought of as an immense, arbitrarily
@@ -165,9 +171,9 @@ vague prior pdf $p(\pars)$ for the parameter blob.
 If all these things are true, then---even if you can't compute
 anything else---in principle a trivial-to-implement MCMC can give you
 a fair sampling of the posterior pdf.
-That is, you can run MCMC (for a very long time\note{Sometimes a very,
-  very long time; we will return to that below.})  and you will be
-left with a set of $K$ parameter-blob settings $\pars_k$ such that the
+That is, you can run MCMC
+(for a very long time---see \sectionname~\ref{sec:convergence} for how long)
+and you will be left with a set of $K$ parameter-blob settings $\pars_k$ such that the
 full set $\setof{\pars_k}_{k=1}^K$ constitutes a fair sampling from
 the posterior pdf $p(\pars\given\data$).
 % ************* BJB
@@ -176,7 +182,7 @@ the posterior pdf $p(\pars\given\data$).
 % Unsound" by Tony O'Hagan.
 
 All that said, and adhering to the traditions of the \project{Data
-  Analysis Recipes} project\note{Every chapter in the \project{Data
+  Analysis Recipes} project\note{Every \documentname\ in the \project{Data
     Analysis Recipes} series begins with a rant in which we argue that
   most uses of the methods in question are not appropriate!}, we are
 compelled to note that MCMC is in fact \emph{over-used}.
@@ -509,7 +515,7 @@ That is, even if---in the end---%
   given the simplicity of the algorithm,
   and given the intuition you gain by doing it (at least once) yourself.
 
-\section{Convergence}
+\section{Convergence}\label{sec:convergence}
 
 A key question for an MCMC operator---\emph{the} key question in some
 sense---is \emph{how long to run} to be sure of having reliable
