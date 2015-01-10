@@ -353,12 +353,12 @@ colloquially as ``the posterior pdf''\note{We will also sometimes
 implicitly ill-normalized and might not be a posterior pdf in any
 sense.
 We will also occasionally assume---just because it is true in
-inference---that the function $f(\theta)$ is the product of two
+inference---that the function $f(\pars)$ is the product of two
 functions, one called ``the prior pdf'' and one called ``the
 likelihood''.
 Again, this usage is colloquial and is only strictly correct in
 inference contexts with proper inputs.
-That the function $f(\theta)$ can be thought of as a product of a
+That the function $f(\pars)$ can be thought of as a product of a
 prior pdf and a likelihood is only necessary for what follows in
 the context of advanced sampling techniques like tempering or
 nested sampling, both mentioned briefly below.
@@ -470,7 +470,7 @@ These think-os can get subtle;
   all in precisely the same parameterization.
 We will return to this point below in our comments on functional testing.
 
-As we mention below,
+As we discuss briefly below in \sectionname~\ref{sec:methods},
   there are many MCMC methods more advanced than M--H.
 However, they all share characteristics with M--H
   (initialization, tuning, judging convergence),
@@ -493,9 +493,62 @@ That is, even if---in the end---%
   given the simplicity of the algorithm,
   and given the intuition you gain by doing it (at least once) yourself.
 
-\section{Gibbs, ensemble, Hamiltonian, and so on}
+\section{Convergence}
 
-[SHOULD THIS SECTION MOVE TO AFTER THE DEFINITION OF AUTOCORRELATION TIME AND DISCUSSION OF CONVERGENCE?]
+A key question for an MCMC operator---\emph{the} key question in some
+sense---is \emph{how long to run} to be sure of having reliable
+results.
+It is disappointing and annoying to many that there is no extremely
+simple and reliable answer to this question.
+
+The reason that there is no simple answer is that you can't really
+ever know that you have sampled the full posterior pdf, and the reason
+for \emph{that} is that if you \emph{could} know that, you would also
+be able to solve the famously difficult discrete optimization
+problem.\note{explain this remark and cite something here}
+Another way to put it is that you might have two modes---two separated
+regions of substantial total probability---in the posterior pdf that
+are both important but separated by a large region of low probability.
+If you are using a simple sampler, you could sample one of these modes
+very well but the sampler will take effectively infinite time to find
+the other mode.
+Any test of convergence would be passed, but in fact the sampling
+would be incomplete and not representative.
+That is, knowing that you have a complete and representative sampling
+is effectively impossible.
+
+In this context,
+  it is \emph{simply not fair} to require an MCMC run to have fully and completely
+  sampled the posterior pdf,
+  at least not in any provable sense.
+The question of whether a sampling is converged to a representative sampling
+  of the posterior pdf is actually outside the domain of science,
+  because the domain of science is the domain of questions answerable by scientists.
+That is, you can \emph{never know} that you have correctly sampled the posterior pdf,
+  despite many statements in the literature to the contrary.%
+  \note{Give example statements... Mention cases in which you \emph{might} be able to claim this...}
+The upshot of this is that we don't and can't require any kind of absolute convergence;
+  indeed, it would be impossible even to test for it.
+
+In this pragmatic situation---the Real World, as it is called---we have to rely on heuristics.
+Heuristically, you have sampled long enough when you can see
+that the (or each) walker has traversed the high-probability parts of
+the parameter space many times in the length of the chain.
+Or, equivalently, you have sampled long enough when the first half of
+the chain shows very much the same posterior pdf morphology as the
+second half of the chain, or indeed as any substantial subset.
+
+...Making this heuristic condition more precise
+...Autocorrelation time is the premier tool
+...How is Autocorrelation time defined?
+...How is Autocorrelation time measured?
+...Why is it is not a panacea? ...estimators ...getting stuck in one mode
+
+...What plots should you make?
+...Plots showing individual walkers going through the space.
+...(now show plots that demonstrate a non-converged and a converged chain)...
+
+\section{Gibbs, ensemble, Hamiltonian, and so on}\label{sec:methods}
 
 MCMC methods are proven to be correct ``in the limit''; that is, when
 an infinite number of samples have been taken.
@@ -618,9 +671,6 @@ to effectively inform the proposal distribution and thus speed sampling.
 
 ... HOGG more here!
 
-\paragraph{Slice:}
-... DFM, can you help here?
-
 \paragraph{Importance:}
 Sometimes it is possible to sample efficiently from a distribution
 that is close to the target function $f(\pars)$ you care about but
@@ -647,6 +697,29 @@ functions diverge.
 If the ratio of the true function to the approximate function is to be
 used as a probability for rejection of samples, then the true function
 must be greater than or equal to the approximate function everywhere!
+
+\paragraph{Slice:}
+... When is slice sampling a good idea?  DFM, can you help here?
+
+Slice sampling makes use of the point that (in one dimension) a fair
+sampling of $f(\pars)$ is a projection onto the $\pars$ axis of a
+uniform sampling of the two-dimensional region under the
+two-dimensional plot of $f(\pars)$ \vs\ $\pars$.
+The $D$-dimensional generalization is that a fair sampling of
+$f(\pars)$ is a projection onto the $\pars$ $D$-dimensional
+hypersurface of $\pars$ of a uniform sampling of the $D+1$-dimensional
+hypervolume under the hypersurface $f(\pars)$ in a hypothetical plot
+of $f(\pars)$ over the whole parameter space.
+Thinking in terms of the two-dimensional case (for simplicity), slice
+samplers make both ``horizontal'' moves in the $\pars$ direction at
+fixed $f(\pars)$ and also ``vertical'' moves in the $f(\pars)$
+direction.
+Because the sampling in the higher-dimensional space is uniform, it is
+easy to make moves to very different parts of parameter space, or
+different peaks or modes in the function $f(\pars)$.
+In our own research, we use a variant of slice sampling for problems
+involving samplings governed by Gaussian Processes.\note{DFM: Cite us
+  and Murray here.}
 
 \paragraph{Tempering:}
 A huge problem for MCMC samplers---which make local moves based on
@@ -859,7 +932,7 @@ There is one oddity to note here, as it catches many investigators by
 surprise:
 Even if the model is good and the posterior pdf is unimodal and well-behaved,
 the median (or even mean) of the posterior pdf for each of parameters,
-when taken together as a ``best-fit'' parameter vector $\theta^\ast$,
+when taken together as a ``best-fit'' parameter vector $\pars^\ast$,
 will not itself necessarily be a good fit to the data!
 If there is substantial ``curvature'' to the pdf in the parameter
 space, the mean or median of sampling does not necessarily lie at a
@@ -911,61 +984,6 @@ information in the sampling!  However, they are remarkable for
 locating expected and unexpected parameter relationships, and often
 invaluable for suggesting re-parameterizations and transformations
 that simplify your problem.
-
-\section{Convergence}
-
-A key question for an MCMC operator---\emph{the} key question in some
-sense---is \emph{how long to run} to be sure of having reliable
-results.
-It is disappointing and annoying to many that there is no extremely
-simple and reliable answer to this question.
-
-The reason that there is no simple answer is that you can't really
-ever know that you have sampled the full posterior pdf, and the reason
-for \emph{that} is that if you \emph{could} know that, you would also
-be able to solve the famously difficult discrete optimization
-problem.\note{explain this remark and cite something here}
-Another way to put it is that you might have two modes---two separated
-regions of substantial total probability---in the posterior pdf that
-are both important but separated by a large region of low probability.
-If you are using a simple sampler, you could sample one of these modes
-very well but the sampler will take effectively infinite time to find
-the other mode.
-Any test of convergence would be passed, but in fact the sampling
-would be incomplete and not representative.
-That is, knowing that you have a complete and representative sampling
-is effectively impossible.
-
-In this context,
-  it is \emph{simply not fair} to require an MCMC run to have fully and completely
-  sampled the posterior pdf,
-  at least not in any provable sense.
-The question of whether a sampling is converged to a representative sampling
-  of the posterior pdf is actually outside the domain of science,
-  because the domain of science is the domain of questions answerable by scientists.
-That is, you can \emph{never know} that you have correctly sampled the posterior pdf,
-  despite many statements in the literature to the contrary.%
-  \note{Give example statements... Mention cases in which you \emph{might} be able to claim this...}
-The upshot of this is that we don't and can't require any kind of absolute convergence;
-  indeed, it would be impossible even to test for it.
-
-In this pragmatic situation---the Real World, as it is called---we have to rely on heuristics.
-Heuristically, you have sampled long enough when you can see
-that the (or each) walker has traversed the high-probability parts of
-the parameter space many times in the length of the chain.
-Or, equivalently, you have sampled long enough when the first half of
-the chain shows very much the same posterior pdf morphology as the
-second half of the chain, or indeed as any substantial subset.
-
-...Making this heuristic condition more precise
-...Autocorrelation time is the premier tool
-...How is Autocorrelation time defined?
-...How is Autocorrelation time measured?
-...Why is it is not a panacea? ...estimators ...getting stuck in one mode
-
-...What plots should you make?
-...Plots showing individual walkers going through the space.
-...(now show plots that demonstrate a non-converged and a converged chain)...
 
 \section{Tuning}
 
