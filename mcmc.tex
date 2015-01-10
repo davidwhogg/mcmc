@@ -104,14 +104,32 @@ data given the parameters, and the prior pdf $p(\pars)$ for the
 parameters by what's often known as ``Bayes rule'',
 \begin{eqnarray}
 p(\pars\given\data) &=& \frac{1}{Z}\,p(\data\given\pars)\,p(\pars)
-\quad .
+\label{eq:bayes}\quad .
 \end{eqnarray}
 In these contexts, the constant $Z$, sometimes written as
 $p(\data)$, is known by the names ``evidence'', ``marginal likelihood''
 the ``Bayes integral'' and ``prior predictive probability'', and is usually
 \emph{extremely hard to
-  calculate}.\note{Say words about why we call it $Z$ not $p(\data)$
-  and why it is extremely hard to calculate.}
+  calculate}.\note{Some would call
+  the factor $Z$ in \equationname~(\ref{eq:bayes}) something like
+  ``$p(\data)$'' or ``the marginal likelihood'' or the 
+  probability of the data.
+  Of course it is only the probability of the data within the model
+  space under consideration!
+  We discuss this object and these issues [MORE ELSEWHERE; CITE].
+  The factor $Z$ is often hugely difficult to compute, because the
+  likelihood (or the prior) can have extremely complex structure,
+  with multiple arbitrarily compact modes, arbitrarily positioned
+  in the (presumably high dimensional) parameter space $\pars$.
+  Elsewhere, we discuss the computation of this object (cite Fengji)
+  and---perhaps more importantly---why you probably never really
+  \emph{want} to compute it.
+  The computation of $Z$ is outside the scope of this \documentname,
+  but suffice it to say:
+  If the computation of $Z$ is in your travel plans, you will need to
+  think about implementing some non-trivial integrating or sampling
+  technology; we will give some brief description of options in
+  \sectionname~\ref{sec:methods}.}
 That is, you often know the function $p(\pars\given\data)$ up to a
 constant factor; you can compute ratios of the pdf at pairs of points,
 but not the precise value at any individual point.
@@ -451,7 +469,7 @@ That is, at step $k+1$ you might only propose a one-dimensional move
 That won't change anything significant; but if you are implementing
   this right now you might want to do that.
 It will help us tune the proposal pdf (\sectionname~\ref{sec:tuning})
-and diagnose problems (\sectionname~\ref{sec:troubleshooting}.
+and diagnose problems (\sectionname~\ref{sec:troubleshooting}).
 
 ...Why does M--H MCMC work (briefly)? ...Or put this in a note on an earlier paragraph?
 
