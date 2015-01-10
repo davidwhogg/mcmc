@@ -450,7 +450,8 @@ That is, at step $k+1$ you might only propose a one-dimensional move
   space.
 That won't change anything significant; but if you are implementing
   this right now you might want to do that.
-It will help us tune the proposal pdf and diagnose problems.
+It will help us tune the proposal pdf (\sectionname~\ref{sec:tuning})
+and diagnose problems (\sectionname~\ref{sec:troubleshooting}.
 
 ...Why does M--H MCMC work (briefly)? ...Or put this in a note on an earlier paragraph?
 
@@ -985,7 +986,7 @@ locating expected and unexpected parameter relationships, and often
 invaluable for suggesting re-parameterizations and transformations
 that simplify your problem.
 
-\section{Tuning}
+\section{Tuning}\label{sec:tuning}
 
 Most MCMC methods
   (though not all\note{We are promoters of an ensemble method that has a
@@ -1187,7 +1188,7 @@ You can often have your priors wrong despite having beautiful code.
 That is, if you change your parameters, you \emph{must} change your priors correspondingly.
 Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
-\section{Troubleshooting and advice}
+\section{Troubleshooting and advice}\label{sec:troubleshooting}
 
 When issues arise with MCMC sampling,
   they are sometimes difficult to diagnose:
