@@ -216,6 +216,29 @@ space, you should use a \emph{search algorithm}, not a sampler.  MCMC
 is good at one thing, and one thing only: Sampling ill-normalized (or
 otherwise hard to sample) pdfs.
 
+In what follows, we are going to provide a kind of ``user manual'' or
+advice document or folklore capture regarding the use of MCMC for
+data analysis.
+This will not be a detailed description of multiple MCMC methods
+(indeed, we will only explain one method in detail), and it will not
+be about the mathematical properties or structure of the method or
+methods.
+It will be about how to use MCMC, including diagnosis and
+trouble-shooting.
+
+The first couple of \sectionname s will describe what a sampling is, and how
+the simplest MCMC method, the Metropolis-Hastings algorithm, can
+provide one.
+The next few \sectionname s will provide ideas about how to
+initialize, tune and operate MCMC methods for good performance.
+The last few \sectionname s will provide advice for making decisions
+among the myriad MCMC methods implementations, how to implement a good
+likelihood function and prior pdf function for inference, and how to
+trouble-shoot standard kinds of problems that arise in operating MCMC
+methods on real problems.
+We will leave parenthetical and philosophical matters to the end-notes,
+which appear after the main text.
+
 \section{What is a sampling?}
 
 Heuristically, a sampling $\setof{x_k}_{k=1}^K$ from some pdf $p(x)$
@@ -643,9 +666,369 @@ crossed the domain of $\pars$ fully many times during the MCMC run.
 Often some parameter directions are much worse than others; it is
 worth looking at the chain in all parameter directions.
 
+\section{Tuning}\label{sec:tuning}
+
+Most MCMC methods
+  (though not all\note{We are promoters of an ensemble method that has a
+  nearly-fixed proposal distribution and requires no tuning (CITE EMCEE).})
+  make use of something like a ``proposal distribution''
+  which determines what kinds of steps the walker can take
+  as it random-walks through the parameter space.
+The user generally has a lot of control over what this proposal distribution might be,
+  and how to choose the parameters.
+For example, in a $d$-dimensional parameter space, %do we consistently use d here?
+  a zero-mean but anisotropic Gaussian (normal distribution)
+  is often used to draw offsets for the walker to take from point to point.
+Even within this choice (which is of one function among many possibilities),
+  there are $d\,(d+1)/2$ parameters in the $d\times d$ symmetric, positive definite covariance matrix
+  to set ``by hand''.
+How to choose this function and set these parameters?
+
+The key idea here is that if the proposal distribution is too narrow---%
+  it proposes steps too small---%
+  almost all steps will be accepted (REFERENCE ALGORITHM HERE),
+  but it will take a long time to move anywhere because of timidity.
+If the propsoal distribution is too wide---%
+  it proposes steps too large---%
+  the moves will cover parameter space easily,
+  but almost no steps will be accepted;
+  it will tend to jump to much lower probability regions.
+There is a Goldilocks step size (proposal distribution root-variance) that is ``just right''.
+In one dimension this might be easy to find,
+  but, as we say, in large numbers of dimensions,
+  there is a lot of freedom in choosing the parameters of the distribution.
+  
+% BJB
+% Please suggest mixtures of scales for M-H proposals.
+% You can mimic the properties of slice sampling but with
+% much easier code.
+
+In a deep sense, the only scalar that makes sense to optimize,
+  when choosing proposal distribution (or, loosely speaking, step size),
+  is the autocorrelation time, described above.
+The optimal step size is the step size that makes for the shortest autocorrelation time.
+This is easy to state, but hard to use in practice;
+  being a second-order statistic of the MCMC chain,
+  the autocorrelation time is a hard thing to measure without a lot of data,
+  so it is hard to quickly estimate it and adjust,
+  much less put it into some kind of optimization loop.
+We usually use proxies for this of various kinds.
+
+The simplest heuristic proxy statistic for tuning is the \emph{acceptance fraction}.
+If you are accepting almost all proposed steps, your step sizes are too small on average.
+If you are accepting almost none, your step sizes are too large.
+The Goldilocks value is around a quarter,
+  with an argument floating around that it should be 0.234 for best performance\note{CITE GELMAN}
+  (though you could never tune it precisely enough to warrant that third digit of accuracy).
+In the burn-in phase (discussed below) of an MCMC run,
+  it makes sense to track the acceptance ratio,
+  and adjust the proposal distribution variance as you get acceptance ratios
+  that are far from the Goldilocks ratio.
+This process can be automated easily;
+  such automation is part of many projects that use MCMC.
+
+% HOGG:  Is the following a repeat from previously and/or does it mesh with what's earlier?
+
+A very common---%
+  and very useful---%
+  kind of proposal distribution is one that cycles through parameters,
+  taking a random step in just one parameter at a time.
+Aside from involving some persistence of state,
+  this kind of proposal distribution can be valuable,
+  in part because it reduces the (almost impossible) $d$-dimensional tuning problem
+  to $d$ one-dimensional problems:
+In this form of proposal distrubution,
+  it is possible to track a separate acceptance fraction for every parameter.
+Code can be built that uses the burn-in phase to tune all $d$ proposal variances
+  such that each of them, individually,
+  obtains acceptance at the same Goldilocks ratio.
+
+One note to make here---%
+  because it is relevant to tuning---%
+  is that tuning can \emph{only} take place during the burn-in phase;
+  you cannot tune \emph{while} you run your final MCMC run.
+Why not?
+Because tuning the proposal distribution based on the past history of the chain
+  violates the ``Markov'' property
+  that each step depends \emph{only} on the state at the previous step.
+Violating the Markov property can be very bad;
+  when you violate it,
+  you lose all the provable properties of MCMC
+  on which all our righteous power is based.
+
+Another proxy for autocorrelation time useful for tuning is the
+  Expected Squared Jump Distance.\note{(CITE GELMAN)}
+This is the mean squared distance the walker moves, per step.
+It is maximized when the acceptance ratio is reasonable
+  and the step size is large;
+  it is large when the exploration of the space is fast.
+This proxy is easy to measure and use for tuning,
+  and more directly related to autocorrelation time than the acceptance ratio.
+We recommend using it for tuning, though we have never used it ourselves.
+Like the acceptance fraction, it can also be used to tune
+  in the case that the proposal distribution loops over parameters;
+  once again, the user gets (in this case) $d$ one-dimensional tunings.
+
+When sampling really gets very slow,
+  there are various tricks and tips to work through.
+One is to see if any of the parameters has a conditional posterior
+  probability that is guaranteed to be Gaussian
+  (this is true for some linear parameters in least-square problems
+  when the priors are Gaussian, for example).
+These dimensions can often be sampled \emph{exactly},
+  outside of the MCCM framework;
+  the algorithm looks like:
+Take an MCMC step in the hard parameters,
+  then take an exact step in the easy parameters,
+  repeat.
+Another related trick is to analytically marginalize,
+  rather than sample,
+  easy nuisance parameters.
+The huge bag of possible tricks is so large,
+  it goes way beyond the scope of this introductory \documentname.
+In our experience, it is valuable to make friends with at least one statistician,
+  one applied mathematician, and one computer scientist.
+Between them, they ought to span the literature.
+
+\section{Initialization and burn-in}
+
+Just as most (though not all) MCMC methods require a choice of proposal distribution,
+  most (though not all) require a choice about initialization:
+The walker needs (or walkers need) to be started somewhere in the parameter space.
+In many use cases for MCMC,
+  the investigator wants to use it to obtain uncertainty information about
+  or propagate uncertainty into parameter estimates.
+In these cases, it makes sense to initialize the walker or walkers at sensible parameter estimates,
+  found by optimizing a likelihood or a posterior PDF in advance of sampling.
+In extremely high dimensions (large numbers of parameters), this can be a bad idea,
+  since the optimal parameters are not necessarily near typical posterior samples\note{Make the counterintuitive point.},
+  but in low dimensions (few to tens) this is often sensible.
+
+In other use cases,
+  the investigator wants to use MCMC to search all of parameter space
+  for good models, and also sample.
+In this case, it makes sense to be more catholic with initialization...
+
+...but note that MCMC is not the ideal search algorithm for any parameter space.
+
+...Start from different locations
+% BJB
+% What different locations?
+% Drawn from the prior can be useful. Then you can
+% look at the chains and see which ones "made it" and
+% which ones "got stuck" and delete the latter
+
+...Dealing with multi-modal problems
+% Starting from different locations is good
+% for DIAGNOSING a problem as multimodal but it's
+% terrible for quantifying the modes. Explain why,
+% it's a good teaching point.
+
+\section{Results, error bars, and figures}
+
+For a committed probabilistic scientist---frequentist or
+Bayesian---there is no ``answer'', there are only probability density
+functions (pdfs).  Any time in a paper or in an email or in a conversation
+we say what ``the answer is''---even if we say it with an error
+bar---we have departed the probabilistic program.  There are many
+principled ways to depart the program; in another \documentname, we
+discuss the economic explanation of how we can make hard decisions in
+the context of probabilistic reasoning\note{CITE DECISION DOCUMENT}.
+But without going into that ``economic'' model, it is fair to say that a
+substantial problem with being a committed probabilist is that when we
+\emph{publish}, we are not permitted (not now, at least) to publish a
+\emph{probability distribution over pubications}; we have to publish
+\emph{one single, deterministic text}; we have to make a decision about what
+to write in the title, the abstract, the tables, figures, and results
+section.  Given a MCMC sampling of the posterior pdf, what do we
+report as our \emph{results}?
+
+One thing we can keep in mind to guide us in this is what we said above,
+  which is that samplings are good for doing \emph{integrals}.
+We should endeavor to use as our ``results'' outputs from the MCMC
+  that are based on integrals computed with the sampling.
+This includes expectations, medians, quantiles, one-dimensional histograms,
+  and multi-dimensional histograms.
+This does \emph{not} include the ``best'' sample or a mode or optimum.
+The latter things are not necessarily illegitimate outputs of the MCMC,
+  but they do not make best use of the fact that the sampling is a tool for integration,
+  and we do not recommend them.
+
+Imagine that you are in the simplest case:
+You have a model with a small number of parameters (say three-ish),
+  and only one of them is of great interest.
+What are your options for the ``measurement'' of this parameter?
+The only simple integral-based options are the posterior mean
+  or posterior median value for the parameter.
+
+For example,
+  imagine that by MCMC you have generated
+  $K$ samples $\pars_k$ of a parameter vector $\pars$.
+Now you have a scalar function $q(\pars)$ which takes the parameter vector
+  and returns a scalar value%
+  \note{For the median-of-sampling value, $q(\pars)$ needs to return a scalar,
+  but technically, for the mean-of-sampling, $q(\pars)$ can be a vector or something high-dimensional.}
+  which could be as simple as a single component of the parameter vector
+  (one parameter from the list),
+  or something more complex.
+The mean-of-sampling value $\mean{q}$ is just
+\begin{eqnarray}
+\mean{q} &\leftarrow& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
+\quad ,
+\end{eqnarray}
+  and the median-of-sampling value is just the $[K/2]$th value of $q(\pars_k)$
+  when the $q(\pars_k)$ have been ordered (sorted).
+These are both produced by integrals;
+  the first is the value returned by the expectation integral estimate,
+  the second is the value past which half of the integrated pdf lies.
+
+What are your best options for the ``uncertainty'' or ``limits'' on this parameter?
+The only simple integral-based options are either variances or else posterior quantiles.
+We usually use quantiles.
+That is, the ``one-sigma'' error bar can be taken to be the half-size of the central (or smallest%
+  \note{HOGG shizzle about choosing quantiles}) interval of the parameter
+  that contains 68 percent of the posterior samples.
+The ``two-sigma'' error bar would be the same but for the 95-percent interval.
+Again, these limits can be estimated%
+  \note{One amusing thing about samplings,
+  which are so beloved of us probabilistic (Bayesian) reasoners,
+  is that anything we \emph{do} with a sampling,
+  like estimate an integral or a quantile,
+  is just an old-school frequentist estimator.
+  A frequentist estimator of a Bayesian quantity, to be sure, but a frequentist estimator nonetheless.}
+  by ordering the $q(\pars_k)$ values,
+  and finding the $\pars$ values such that some fraction (0.68 or 0.95)
+  of the samples lie between them.
+Again, to form these limits, $q(\pars)$ must be a scalar function (so sorting is well defined).
+
+One amusing thing is that if you choose the 68-percent interval sensibly,
+  but use as the ``measurement'' the posterior mean,
+  you can get pathological situations in which the posterior mean measurement
+  is actually \emph{outside} the one-sigma confidence interval.
+For this reason (and others), we usually recommend as a default behavior%
+  ---in the one-dimensional case---%
+  to choose the \emph{median} of sampling as the measurement value,
+  the 16-percent quantile as the lower one-sigma error bar,
+  and the 84-percent quantile as the upper one-sigma error bar.
+This has pathologies in higher dimensions (as we are about to see),
+  but is pretty safe for one-dimensional answers.
+
+The conservative scientist would show not just 68-percent error bars,
+  but also 95-percent
+  (to help readers visualize the skew of the posterior pdf).
+The very conservative scientist would also show a histogram
+  of the posterior samples,
+  with the relvant quantiles (2.5, 16, 50, 84, and 97.5~percent) indicated.
+
+As we mentioned above, scientists often like to report the ``best sample'';
+  that is, the sample with the highest posterior pdf value.
+This is not usually a good idea.
+For one, MCMC is a sampling algorithm, not an optimization algorithm;
+  there are no guarantees that it will find the optimum of the posterior pdf in reasonable time.%
+  \note{The sampler samples the pdf fairly.
+    The tallest peak in the posterior is not guaranteed to be---%
+    and in general is not---%
+    also the peak with the greatest posterior ``mass''.
+    That is, the samples in a fair sampling will not necessarily come
+    predominantly from the \emph{tallest} peak in the posterior pdf.
+    They will come from the peak with the greatest total integral
+    of the likelihood over the prior.
+    These issues might sound ``academic'',
+    but when the number of parameters gets large (greater than, say, 10),
+    many normal intuitions one might have (if any) about what is reasonably likely in a pdf
+    are regularly violated.}
+For two, the closeness of the best sample to the posterior mode is a strong function of sample size,
+  and with very bad scaling.%
+  \note{If you have a $K$-point sampling in a $d$-dimensional parameter space,
+    there is some best sample $\pars_k^{\best}$.  Now imagine that you want to make
+    that best sample 10 times better---that is, you want to find a point $\pars^{\better}$
+    that is ten times closer to the true optimum.  How many more samples do you need to take?
+    In the limit that $K$ is large, on average, you have to take $10^d$ more samples!
+    Most sensible optimizers are far, far better than this.}
+For three, if you just want an optimum, use an optimizer!%
+  \note{HOGG, something?}
+That is, we \emph{strongly advise against} reporting,
+  as ``the'' measurement or ``the result'',
+  the parameter value or values for the best sample.
+Giving some posterior samples is a good idea (see below).
+If you feel drawn to give the best sample,
+  instead give the parameter values found by optimizing the posterior PDF,
+  starting at the best sample as an initialization
+  (and sacrifice your probabilism\note{something}).
+This optimal-posterior parameter value is called the
+  ``maximum \foreign{a posteriori}'' or ``MAP'' value for the parameters;
+  it is like a maximum-likelihood value but regularized by the prior.
+It is an estimator with some good (and some bad) properties, but it is not the point of MCMC,
+  and therefore outside the scope of this \documentname.
+
+The parameter space $\pars$ is usually multi-dimensional, and more
+than one of those parameters is of interest.
+In this case, the mean or median of sampling can be produced for each
+dimension.
+Because the sampling projected onto any dimension is a marginalization
+of the posterior pdf, any such one-dimensional mean or median is the
+mean or median of the marginalized posterior pdf.
+
+There is one oddity to note here, as it catches many investigators by
+surprise:
+Even if the model is good and the posterior pdf is unimodal and well-behaved,
+the median (or even mean) of the posterior pdf for each of parameters,
+when taken together as a ``best-fit'' parameter vector $\pars^\ast$,
+will not itself necessarily be a good fit to the data!
+If there is substantial ``curvature'' to the pdf in the parameter
+space, the mean or median of sampling does not necessarily lie at a
+high-probability location of parameter space.
+This may seem counterintuitive, but it is easy to see in the case of a
+``banana-shaped'' posterior pdf.
+This all relates to the fact that MCMC is not an optimizer, it is a
+sampler.
+It is important, when reporting the output of an MCMC run by giving
+means or medians of the posterior PDF to remind the reder or user of
+that output that it does not necessarily represent (collectively) a
+good fit to the data; these outputs only give information that is
+useful one parameter at a time.
+
+In principle the only output from the sampling that safely gives both
+probabilistic information about the result of the inference and also
+good-fitting models is a few---randomly chosen---example samples.
+We strongly recommend this\note{HOGG:  And we do this WHERE? Citation!};
+in particular this is a better thing to do
+than to give the ``best sample'', which isn't even guaranteed to be
+near the bulk of the posterior pdf or the samples therefrom.
+
+If you \emph{do} return posterior samples to your audience, how many
+should you return?
+There are only heuristic answers to this, but a guideline is that, if
+you only care about a single (one-dimensional) parameter, you don't
+need many samples; a dozen suffices to give you a reasonable posterior
+pdf mean and variance.\note{HOGG cite Mackay.}
+If you care about $K$ parameters or dimensions of the parameter space,
+in general the need for samples grows exponentially (or perhaps even
+factorially!) with the number of dimensions.\note{HOGG cite something.}
+So if you have a ten-dimensional space, expect to be publishing your
+samples in an electronic table on the web!
+If you \emph{do} publish sufficient numbers of posterior samples, you
+might find users who want to make serious use of them.\note{HOGG cite
+  our importance-sampling papers with some explanation here.}
+
+Of course figures are always better than tables, at least in the
+printed form of scientific publications.
+In a $D$-dimensional parameter space, we recommend plotting all $D$
+one-dimensional sample histograms, on a pretty fine binning, and all
+$D$-choose-2 two-dimensional histograms (scatter plots) to show the
+low-level covariances and non-linearities.
+If you are clever, all these plots can be arranged into a lovely and
+informative triangle.\note{HOGG cite triangle.py and put an example in
+  the note!}
+These two-dimensional plots do not in any sense contain all the
+information in the sampling!  However, they are remarkable for
+locating expected and unexpected parameter relationships, and often
+invaluable for suggesting re-parameterizations and transformations
+that simplify your problem.
+
 \section{Gibbs, ensemble, Hamiltonian, and so on}\label{sec:methods}
 
-MCMC methods are proven to be correct ``in the limit''; that is, when
+As we have discussed above, MCMC methods are proven to be correct ``in the limit''; that is, when
 an infinite number of samples have been taken.
 When the function $f(\pars)$ has challenging properties, the results
 can approach this limit very slowly (or not at all\note{HOGG: discuss
@@ -877,366 +1260,6 @@ but there are criteria for creating reversible-jump proposals between
 the parameter spaces.
 These methods are best built and operated under the supervision of a
 trained professional.
-
-\section{Results, error bars, and figures}
-
-For a committed probabilistic scientist---frequentist or
-Bayesian---there is no ``answer'', there are only probability density
-functions (pdfs).  Any time in a paper or in an email or in a conversation
-we say what ``the answer is''---even if we say it with an error
-bar---we have departed the probabilistic program.  There are many
-principled ways to depart the program; in another \documentname, we
-discuss the economic explanation of how we can make hard decisions in
-the context of probabilistic reasoning\note{CITE DECISION DOCUMENT}.
-But without going into that ``economic'' model, it is fair to say that a
-substantial problem with being a committed probabilist is that when we
-\emph{publish}, we are not permitted (not now, at least) to publish a
-\emph{probability distribution over pubications}; we have to publish
-\emph{one single, deterministic text}; we have to make a decision about what
-to write in the title, the abstract, the tables, figures, and results
-section.  Given a MCMC sampling of the posterior pdf, what do we
-report as our \emph{results}?
-
-One thing we can keep in mind to guide us in this is what we said above,
-  which is that samplings are good for doing \emph{integrals}.
-We should endeavor to use as our ``results'' outputs from the MCMC
-  that are based on integrals computed with the sampling.
-This includes expectations, medians, quantiles, one-dimensional histograms,
-  and multi-dimensional histograms.
-This does \emph{not} include the ``best'' sample or a mode or optimum.
-The latter things are not necessarily illegitimate outputs of the MCMC,
-  but they do not make best use of the fact that the sampling is a tool for integration,
-  and we do not recommend them.
-
-Imagine that you are in the simplest case:
-You have a model with a small number of parameters (say three-ish),
-  and only one of them is of great interest.
-What are your options for the ``measurement'' of this parameter?
-The only simple integral-based options are the posterior mean
-  or posterior median value for the parameter.
-
-For example,
-  imagine that by MCMC you have generated
-  $K$ samples $\pars_k$ of a parameter vector $\pars$.
-Now you have a scalar function $q(\pars)$ which takes the parameter vector
-  and returns a scalar value%
-  \note{For the median-of-sampling value, $q(\pars)$ needs to return a scalar,
-  but technically, for the mean-of-sampling, $q(\pars)$ can be a vector or something high-dimensional.}
-  which could be as simple as a single component of the parameter vector
-  (one parameter from the list),
-  or something more complex.
-The mean-of-sampling value $\mean{q}$ is just
-\begin{eqnarray}
-\mean{q} &\leftarrow& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
-\quad ,
-\end{eqnarray}
-  and the median-of-sampling value is just the $[K/2]$th value of $q(\pars_k)$
-  when the $q(\pars_k)$ have been ordered (sorted).
-These are both produced by integrals;
-  the first is the value returned by the expectation integral estimate,
-  the second is the value past which half of the integrated pdf lies.
-
-What are your best options for the ``uncertainty'' or ``limits'' on this parameter?
-The only simple integral-based options are either variances or else posterior quantiles.
-We usually use quantiles.
-That is, the ``one-sigma'' error bar can be taken to be the half-size of the central (or smallest%
-  \note{HOGG shizzle about choosing quantiles}) interval of the parameter
-  that contains 68 percent of the posterior samples.
-The ``two-sigma'' error bar would be the same but for the 95-percent interval.
-Again, these limits can be estimated%
-  \note{One amusing thing about samplings,
-  which are so beloved of us probabilistic (Bayesian) reasoners,
-  is that anything we \emph{do} with a sampling,
-  like estimate an integral or a quantile,
-  is just an old-school frequentist estimator.
-  A frequentist estimator of a Bayesian quantity, to be sure, but a frequentist estimator nonetheless.}
-  by ordering the $q(\pars_k)$ values,
-  and finding the $\pars$ values such that some fraction (0.68 or 0.95)
-  of the samples lie between them.
-Again, to form these limits, $q(\pars)$ must be a scalar function (so sorting is well defined).
-
-One amusing thing is that if you choose the 68-percent interval sensibly,
-  but use as the ``measurement'' the posterior mean,
-  you can get pathological situations in which the posterior mean measurement
-  is actually \emph{outside} the one-sigma confidence interval.
-For this reason (and others), we usually recommend as a default behavior%
-  ---in the one-dimensional case---%
-  to choose the \emph{median} of sampling as the measurement value,
-  the 16-percent quantile as the lower one-sigma error bar,
-  and the 84-percent quantile as the upper one-sigma error bar.
-This has pathologies in higher dimensions (as we are about to see),
-  but is pretty safe for one-dimensional answers.
-
-The conservative scientist would show not just 68-percent error bars,
-  but also 95-percent
-  (to help readers visualize the skew of the posterior pdf).
-The very conservative scientist would also show a histogram
-  of the posterior samples,
-  with the relvant quantiles (2.5, 16, 50, 84, and 97.5~percent) indicated.
-
-As we mentioned above, scientists often like to report the ``best sample'';
-  that is, the sample with the highest posterior pdf value.
-This is not usually a good idea.
-For one, MCMC is a sampling algorithm, not an optimization algorithm;
-  there are no guarantees that it will find the optimum of the posterior pdf in reasonable time.%
-  \note{The sampler samples the pdf fairly.
-    The tallest peak in the posterior is not guaranteed to be---%
-    and in general is not---%
-    also the peak with the greatest posterior ``mass''.
-    That is, the samples in a fair sampling will not necessarily come
-    predominantly from the \emph{tallest} peak in the posterior pdf.
-    They will come from the peak with the greatest total integral
-    of the likelihood over the prior.
-    These issues might sound ``academic'',
-    but when the number of parameters gets large (greater than, say, 10),
-    many normal intuitions one might have (if any) about what is reasonably likely in a pdf
-    are regularly violated.}
-For two, the closeness of the best sample to the posterior mode is a strong function of sample size,
-  and with very bad scaling.%
-  \note{If you have a $K$-point sampling in a $d$-dimensional parameter space,
-    there is some best sample $\pars_k^{\best}$.  Now imagine that you want to make
-    that best sample 10 times better---that is, you want to find a point $\pars^{\better}$
-    that is ten times closer to the true optimum.  How many more samples do you need to take?
-    In the limit that $K$ is large, on average, you have to take $10^d$ more samples!
-    Most sensible optimizers are far, far better than this.}
-For three, if you just want an optimum, use an optimizer!%
-  \note{HOGG, something?}
-That is, we \emph{strongly advise against} reporting,
-  as ``the'' measurement or ``the result'',
-  the parameter value or values for the best sample.
-Giving some posterior samples is a good idea (see below).
-If you feel drawn to give the best sample,
-  instead give the parameter values found by optimizing the posterior PDF,
-  starting at the best sample as an initialization
-  (and sacrifice your probabilism\note{something}).
-This optimal-posterior parameter value is called the
-  ``maximum \foreign{a posteriori}'' or ``MAP'' value for the parameters;
-  it is like a maximum-likelihood value but regularized by the prior.
-It is an estimator with some good (and some bad) properties, but it is not the point of MCMC,
-  and therefore outside the scope of this \documentname.
-
-The parameter space $\pars$ is usually multi-dimensional, and more
-than one of those parameters is of interest.
-In this case, the mean or median of sampling can be produced for each
-dimension.
-Because the sampling projected onto any dimension is a marginalization
-of the posterior pdf, any such one-dimensional mean or median is the
-mean or median of the marginalized posterior pdf.
-
-There is one oddity to note here, as it catches many investigators by
-surprise:
-Even if the model is good and the posterior pdf is unimodal and well-behaved,
-the median (or even mean) of the posterior pdf for each of parameters,
-when taken together as a ``best-fit'' parameter vector $\pars^\ast$,
-will not itself necessarily be a good fit to the data!
-If there is substantial ``curvature'' to the pdf in the parameter
-space, the mean or median of sampling does not necessarily lie at a
-high-probability location of parameter space.
-This may seem counterintuitive, but it is easy to see in the case of a
-``banana-shaped'' posterior pdf.
-This all relates to the fact that MCMC is not an optimizer, it is a
-sampler.
-It is important, when reporting the output of an MCMC run by giving
-means or medians of the posterior PDF to remind the reder or user of
-that output that it does not necessarily represent (collectively) a
-good fit to the data; these outputs only give information that is
-useful one parameter at a time.
-
-In principle the only output from the sampling that safely gives both
-probabilistic information about the result of the inference and also
-good-fitting models is a few---randomly chosen---example samples.
-We strongly recommend this\note{HOGG:  And we do this WHERE? Citation!};
-in particular this is a better thing to do
-than to give the ``best sample'', which isn't even guaranteed to be
-near the bulk of the posterior pdf or the samples therefrom.
-
-If you \emph{do} return posterior samples to your audience, how many
-should you return?
-There are only heuristic answers to this, but a guideline is that, if
-you only care about a single (one-dimensional) parameter, you don't
-need many samples; a dozen suffices to give you a reasonable posterior
-pdf mean and variance.\note{HOGG cite Mackay.}
-If you care about $K$ parameters or dimensions of the parameter space,
-in general the need for samples grows exponentially (or perhaps even
-factorially!) with the number of dimensions.\note{HOGG cite something.}
-So if you have a ten-dimensional space, expect to be publishing your
-samples in an electronic table on the web!
-If you \emph{do} publish sufficient numbers of posterior samples, you
-might find users who want to make serious use of them.\note{HOGG cite
-  our importance-sampling papers with some explanation here.}
-
-Of course figures are always better than tables, at least in the
-printed form of scientific publications.
-In a $D$-dimensional parameter space, we recommend plotting all $D$
-one-dimensional sample histograms, on a pretty fine binning, and all
-$D$-choose-2 two-dimensional histograms (scatter plots) to show the
-low-level covariances and non-linearities.
-If you are clever, all these plots can be arranged into a lovely and
-informative triangle.\note{HOGG cite triangle.py and put an example in
-  the note!}
-These two-dimensional plots do not in any sense contain all the
-information in the sampling!  However, they are remarkable for
-locating expected and unexpected parameter relationships, and often
-invaluable for suggesting re-parameterizations and transformations
-that simplify your problem.
-
-\section{Tuning}\label{sec:tuning}
-
-Most MCMC methods
-  (though not all\note{We are promoters of an ensemble method that has a
-  nearly-fixed proposal distribution and requires no tuning (CITE EMCEE).})
-  make use of something like a ``proposal distribution''
-  which determines what kinds of steps the walker can take
-  as it random-walks through the parameter space.
-The user generally has a lot of control over what this proposal distribution might be,
-  and how to choose the parameters.
-For example, in a $d$-dimensional parameter space, %do we consistently use d here?
-  a zero-mean but anisotropic Gaussian (normal distribution)
-  is often used to draw offsets for the walker to take from point to point.
-Even within this choice (which is of one function among many possibilities),
-  there are $d\,(d+1)/2$ parameters in the $d\times d$ symmetric, positive definite covariance matrix
-  to set ``by hand''.
-How to choose this function and set these parameters?
-
-The key idea here is that if the proposal distribution is too narrow---%
-  it proposes steps too small---%
-  almost all steps will be accepted (REFERENCE ALGORITHM HERE),
-  but it will take a long time to move anywhere because of timidity.
-If the propsoal distribution is too wide---%
-  it proposes steps too large---%
-  the moves will cover parameter space easily,
-  but almost no steps will be accepted;
-  it will tend to jump to much lower probability regions.
-There is a Goldilocks step size (proposal distribution root-variance) that is ``just right''.
-In one dimension this might be easy to find,
-  but, as we say, in large numbers of dimensions,
-  there is a lot of freedom in choosing the parameters of the distribution.
-  
-% BJB
-% Please suggest mixtures of scales for M-H proposals.
-% You can mimic the properties of slice sampling but with
-% much easier code.
-
-In a deep sense, the only scalar that makes sense to optimize,
-  when choosing proposal distribution (or, loosely speaking, step size),
-  is the autocorrelation time, described above.
-The optimal step size is the step size that makes for the shortest autocorrelation time.
-This is easy to state, but hard to use in practice;
-  being a second-order statistic of the MCMC chain,
-  the autocorrelation time is a hard thing to measure without a lot of data,
-  so it is hard to quickly estimate it and adjust,
-  much less put it into some kind of optimization loop.
-We usually use proxies for this of various kinds.
-
-The simplest heuristic proxy statistic for tuning is the \emph{acceptance fraction}.
-If you are accepting almost all proposed steps, your step sizes are too small on average.
-If you are accepting almost none, your step sizes are too large.
-The Goldilocks value is around a quarter,
-  with an argument floating around that it should be 0.234 for best performance\note{CITE GELMAN}
-  (though you could never tune it precisely enough to warrant that third digit of accuracy).
-In the burn-in phase (discussed below) of an MCMC run,
-  it makes sense to track the acceptance ratio,
-  and adjust the proposal distribution variance as you get acceptance ratios
-  that are far from the Goldilocks ratio.
-This process can be automated easily;
-  such automation is part of many projects that use MCMC.
-
-% HOGG:  Is the following a repeat from previously and/or does it mesh with what's earlier?
-
-A very common---%
-  and very useful---%
-  kind of proposal distribution is one that cycles through parameters,
-  taking a random step in just one parameter at a time.
-Aside from involving some persistence of state,
-  this kind of proposal distribution can be valuable,
-  in part because it reduces the (almost impossible) $d$-dimensional tuning problem
-  to $d$ one-dimensional problems:
-In this form of proposal distrubution,
-  it is possible to track a separate acceptance fraction for every parameter.
-Code can be built that uses the burn-in phase to tune all $d$ proposal variances
-  such that each of them, individually,
-  obtains acceptance at the same Goldilocks ratio.
-
-One note to make here---%
-  because it is relevant to tuning---%
-  is that tuning can \emph{only} take place during the burn-in phase;
-  you cannot tune \emph{while} you run your final MCMC run.
-Why not?
-Because tuning the proposal distribution based on the past history of the chain
-  violates the ``Markov'' property
-  that each step depends \emph{only} on the state at the previous step.
-Violating the Markov property can be very bad;
-  when you violate it,
-  you lose all the provable properties of MCMC
-  on which all our righteous power is based.
-
-Another proxy for autocorrelation time useful for tuning is the
-  Expected Squared Jump Distance.\note{(CITE GELMAN)}
-This is the mean squared distance the walker moves, per step.
-It is maximized when the acceptance ratio is reasonable
-  and the step size is large;
-  it is large when the exploration of the space is fast.
-This proxy is easy to measure and use for tuning,
-  and more directly related to autocorrelation time than the acceptance ratio.
-We recommend using it for tuning, though we have never used it ourselves.
-Like the acceptance fraction, it can also be used to tune
-  in the case that the proposal distribution loops over parameters;
-  once again, the user gets (in this case) $d$ one-dimensional tunings.
-
-When sampling really gets very slow,
-  there are various tricks and tips to work through.
-One is to see if any of the parameters has a conditional posterior
-  probability that is guaranteed to be Gaussian
-  (this is true for some linear parameters in least-square problems
-  when the priors are Gaussian, for example).
-These dimensions can often be sampled \emph{exactly},
-  outside of the MCCM framework;
-  the algorithm looks like:
-Take an MCMC step in the hard parameters,
-  then take an exact step in the easy parameters,
-  repeat.
-Another related trick is to analytically marginalize,
-  rather than sample,
-  easy nuisance parameters.
-The huge bag of possible tricks is so large,
-  it goes way beyond the scope of this introductory \documentname.
-In our experience, it is valuable to make friends with at least one statistician,
-  one applied mathematician, and one computer scientist.
-Between them, they ought to span the literature.
-
-\section{Initialization and burn-in}
-
-Just as most (though not all) MCMC methods require a choice of proposal distribution,
-  most (though not all) require a choice about initialization:
-The walker needs (or walkers need) to be started somewhere in the parameter space.
-In many use cases for MCMC,
-  the investigator wants to use it to obtain uncertainty information about
-  or propagate uncertainty into parameter estimates.
-In these cases, it makes sense to initialize the walker or walkers at sensible parameter estimates,
-  found by optimizing a likelihood or a posterior PDF in advance of sampling.
-In extremely high dimensions (large numbers of parameters), this can be a bad idea,
-  since the optimal parameters are not necessarily near typical posterior samples\note{Make the counterintuitive point.},
-  but in low dimensions (few to tens) this is often sensible.
-
-In other use cases,
-  the investigator wants to use MCMC to search all of parameter space
-  for good models, and also sample.
-In this case, it makes sense to be more catholic with initialization...
-
-...but note that MCMC is not the ideal search algorithm for any parameter space.
-
-...Start from different locations
-% BJB
-% What different locations?
-% Drawn from the prior can be useful. Then you can
-% look at the chains and see which ones "made it" and
-% which ones "got stuck" and delete the latter
-
-...Dealing with multi-modal problems
-% Starting from different locations is good
-% for DIAGNOSING a problem as multimodal but it's
-% terrible for quantifying the modes. Explain why,
-% it's a good teaching point.
 
 \section{Likelihoods and priors}
 
