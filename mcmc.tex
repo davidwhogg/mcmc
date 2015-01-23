@@ -1322,7 +1322,7 @@ like this:
 \begin{verbatim}
 def ln_f(pars, data):
     x = ln_prior(pars)
-    if is_Inf(x):
+    if not is_finite(x):
         return -Inf
     return x + ln_likelihood(data, pars)
 \end{verbatim}
@@ -1403,7 +1403,7 @@ If the priors don't look as you expect,
 Either way, diagnosis in order.
 
 \paragraph{visualization:}
-...Make triangle plots.  Great value!...  Show example here.
+...Make triangle plots.  Great value!...  Show example here... Mentioned above; drop here or reiterate?
 
 \paragraph{likelihood issues:}
 Sometimes there can be problems with the likelihood function itself.
