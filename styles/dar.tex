@@ -22,7 +22,8 @@
 \newcommand{\equationname}{equation}
 \newcommand{\project}[1]{\textsl{#1}}
 \newcommand{\foreign}[1]{\textsl{#1}}
-\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{\detokenize{#1}}}
+\newenvironment{pseudocode}{\begin{ttfamily}\detokenize\obeylines}{}
 \newcommand{\aposteriori}{\foreign{a~posteriori}}
 \newcommand{\apriori}{\foreign{a~priori}}
 \newcommand{\adhoc}{\foreign{ad~hoc}}

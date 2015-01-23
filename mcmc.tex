@@ -26,7 +26,7 @@
 % - is it ``a MCMC sampling'' or ``an MCMC sampling''?
 % - \note{} right after word if you are endnoting a phrase,
 %   but after the full stop if endnoting the sentence or paragraph.
-% - do we work in $x$ or $\pars$?  I am confused...
+% - always $\pars$ never $x$; $K$ samples $\pars_k$ and $\pars$ space is $D$-dimensional
 % - should we use the word ``walker'' anywhere, everywhere, or never?
 
 \documentclass[12pt,twoside,pdftex]{article}
@@ -241,58 +241,58 @@ which appear after the main text.
 
 \section{What is a sampling?}
 
-Heuristically, a sampling $\setof{x_k}_{k=1}^K$ from some pdf $p(x)$
-is a set of $K$ values $x_k$ that are independent draws from the pdf.
+Heuristically, a sampling $\setof{\pars_k}_{k=1}^K$ from some pdf $p(\pars)$
+is a set of $K$ values $\pars_k$ that are independent draws from the pdf.
 Heuristically, if an enormous (large $K$) sampling could be displayed
-in a finely binned $x$-space histogram, the histogram would look---up
-to a total normalization---just like the original function $p(x)$.
+in a finely binned $\pars$-space histogram, the histogram would look---up
+to a total normalization---just like the original function $p(\pars)$.
 
 Not being mathematicians, we don't know the precise definition of a
 pdf\note{Seriously.  We don't.  It has something to do with measure theory.}, but for our purposes here a pdf is
 any single-valued (scalar) function that is non-negative everywhere
-(the entire domain of $x$), and obeys a normalization condition
+(the entire domain of $\pars$), and obeys a normalization condition
 \begin{eqnarray}
-0 &\leq& p(x) \quad \mbox{for all $x$}
+0 &\leq& p(\pars) \quad \mbox{for all $\pars$}
 \\ \label{eq:normp}
-1 &=& \int p(x)\,\dd x
+1 &=& \int p(\pars)\,\dd\pars
 \quad ,
 \end{eqnarray}
-where, implicitly, the integral is over the full domain of $x$.
-Importantly, although $p(x)$ is single-valued, $x$ can be a scalar or
+where, implicitly, the integral is over the full domain of $\pars$.
+Importantly, although $p(\pars)$ is single-valued, $\pars$ can be a scalar or
 a multi-element vector or list or blob; it can be arbitrarily large
 and complicated.
-In data-analysis contexts, $x$ will often be the full blob of free
+In data-analysis contexts, $\pars$ will often be the full blob of free
 parameters in the model.
 Implicitly, the integral in \equationname~(\ref{eq:normp}) is high-dimensional; it
-has as many dimensions as there are elements or entries or components of $x$.
-Also, if there are elements or entries or components of $x$ that are discrete
+has as many dimensions as there are elements or entries or components of $\pars$.
+Also, if there are elements or entries or components of $\pars$ that are discrete
 (that is, take on only integer values or equivalent),
 then along those dimensions the integral becomes a discrete sum.
 This latter is a detail to which we return below.
 
-Given this pdf $p(x)$, we can define \emph{expectation values} $E[x]$
-for $x$ or for any quantity that can be expressed as a function $q(x)$
-of $x$:
+Given this pdf $p(\pars)$, we can define \emph{expectation values} $E[\pars]$
+for $\pars$ or for any quantity that can be expressed as a function $q(\pars)$
+of $\pars$:
 \begin{eqnarray}
-E[x] &\equiv& \int x\,p(x)\,\dd x
+E[\pars] &\equiv& \int \pars\,p(\pars)\,\dd \pars
 \\
-E[q] &\equiv& \int q(x)\,p(x)\,\dd x
+E[q] &\equiv& \int q(\pars)\,p(\pars)\,\dd \pars
 \quad ,
 \end{eqnarray}
 where again the integrals are implicitly definite integrals over the
 entire domain
-of $x$ (all the parts of $x$ space in which $p(x)$ is finite) and the
-integrals are multi-dimensional if $x$ is multi-dimensional.
-These expectation values are the mean values of $x$ and $q(x)$ under
+of $\pars$ (all the parts of $\pars$ space in which $p(\pars)$ is finite) and the
+integrals are multi-dimensional if $\pars$ is multi-dimensional.
+These expectation values are the mean values of $\pars$ and $q(\pars)$ under
 the pdf.  A good sampling---really the definition of a good
 sampling---makes the sampling approximation to these integrals
 accurate.
-With a good sampling $\setof{x_k}_{k=1}^K$ the integrals get replaced
-with sums over samples $x_k$:
+With a good sampling $\setof{\pars_k}_{k=1}^K$ the integrals get replaced
+with sums over samples $\pars_k$:
 \begin{eqnarray}
-E[x] &\approx& \frac{1}{K}\,\sum_{k=1}^K x_k
+E[\pars] &\approx& \frac{1}{K}\,\sum_{k=1}^K \pars_k
 \\
-E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(x_k)
+E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
 \quad .
 \end{eqnarray}
 That is, a sampling is good when any expectation value of interest is
@@ -304,42 +304,42 @@ The size $K$ of the sampling you need \emph{in practice} will depend
 on the expectations you want to compute, and the accuracies you need.
 
 As we noted above, in the context of MCMC, we are often sampling or
-using some \emph{badly normalized} function $f(x)$.
-This function is just the pdf $p(x)$ multiplied by some unknown and
+using some \emph{badly normalized} function $f(\pars)$.
+This function is just the pdf $p(\pars)$ multiplied by some unknown and
 hard-to-compute scalar.
-In this case, for our purposes, the conditions on $f(x)$ are that it
+In this case, for our purposes, the conditions on $f(\pars)$ are that it
 be non-negative everywhere and have \emph{finite} integral $Z$
 \begin{eqnarray}
-0 &\leq& f(x) \quad \mbox{for all $x$}
+0 &\leq& f(\pars) \quad \mbox{for all $\pars$}
 \\
-Z &=& \int f(x)\,\dd x
+Z &=& \int f(\pars)\,\dd \pars
 \quad .
 \end{eqnarray}
 
-When the sampling $\setof{x_k}_{k=1}^K$ is of one of these badly
-normalized functions $f(x)$---as it usually will be---the
+When the sampling $\setof{\pars_k}_{k=1}^K$ is of one of these badly
+normalized functions $f(\pars)$---as it usually will be---the
 sampling-approximation expectation values are the expectation values
 under the properly-normalized corresponding pdf, even though you might
 \emph{never learn that normalization}.
-When we run MCMC sampling on $f(x)$, a function which differs from a
-pdf $p(x)$ by some unknown normalization constant, then the sampling
+When we run MCMC sampling on $f(\pars)$, a function which differs from a
+pdf $p(\pars)$ by some unknown normalization constant, then the sampling
 permits computation of the following kinds of quantities:
 \begin{eqnarray}
-E[q] &\equiv& \frac{\int q(x)\,f(x)\,\dd x}{\int f(x)\,\dd x}
+E[q] &\equiv& \frac{\int q(\pars)\,f(\pars)\,\dd \pars}{\int f(\pars)\,\dd \pars}
 \\
-E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(x_k)
+E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
 \quad .
 \end{eqnarray}
 That is, the sampling can be constructed (as we will show below) from
-$f(x)$ directly, and it permits you to compute expectation values
+$f(\pars)$ directly, and it permits you to compute expectation values
 without ever requiring you to integrate either the numerator integral
 or the denominator integral, both of which are generally
 intractable.\note{As we will
   see, the intractability comes from various directions, but one is
-  that the dimension of $x$ gets large in most realistic situations.
-  Another is that the support of $p(x)$ tends to be, in normal
+  that the dimension of $\pars$ gets large in most realistic situations.
+  Another is that the support of $p(\pars)$ tends to be, in normal
   inference situations, \emph{far smaller} than the full domain of
-  $x$.
+  $\pars$.
   That is, the pdf is at or very close to zero over all but some tiny
   and very hard-to-find part of the space.}
 
@@ -350,10 +350,10 @@ In a deep sense, the \emph{only} thing a sampling is good for is
 There are many uses of the MCMC sampling, some of them good and some of them bad.
 Most of the good or sensible uses will somehow involve integration.
 
-% in the next paragraph I adopt $d$ to be the dimensionality of the space
+% in the next paragraph I adopt $D$ to be the dimensionality of the space
 
-For example, one magical property of a sampling (in a $d$-dimensional space)
-  is that a \emph{histogram} (a $d$-dimensional histogram) of the samples
+For example, one magical property of a sampling (in a $D$-dimensional space)
+  is that a \emph{histogram} (a $D$-dimensional histogram) of the samples
   (divided, if you like, by the number of samples in each bin and the bin width\note{something about units and normalization})
   looks very much like the pdf from which the samples were drawn.
 This is a way to ``reconstruct'' the pdf from the sampling:
@@ -372,12 +372,12 @@ For this reason (and others), in what follows, when we talk about what to report
   and we will advise against mode.
 
 Finally---and perhaps most importantly---a magical property of a sampling
-  (in a $d$-dimensional space)
-  is that if some of your $d$ dimensions are totally uninteresting
+  (in a $D$-dimensional space)
+  is that if some of your $D$ dimensions are totally uninteresting
   (nuisance parameters, if you will)
-  and some of your $d$ dimensions are of great interest,
-  the sampling in the full $d$-space is trivially converted into a sampling in the subspace of interest:
-You just drop from each $x_k$ vector (or blob or list) the dimensions of no interest!
+  and some of your $D$ dimensions are of great interest,
+  the sampling in the full $D$-space is trivially converted into a sampling in the subspace of interest:
+You just drop from each $\pars_k$ vector (or blob or list) the dimensions of no interest!
 That is, the projection of the sampling to the subspace of interest produces
   a sampling of the marginalized pdf, marginalizing (or projecting) out the nuisance parameters.%
   \note{This point about marginalization is, once again, a use of the sampling to perform an \emph{integral};
@@ -490,7 +490,7 @@ In what follows, when we discuss tuning of the proposal pdf, we will
   often cycle through the parameter blob components and propose changes
   in only one dimension or element or component at a time.
 That is, at step $k+1$ you might only propose a one-dimensional move
-  in the $i$th dimension, not in all $d$ dimensions of the parameter
+  in the $i$th dimension, not in all $D$ dimensions of the parameter
   space.
 That won't change anything significant; but if you are implementing
   this right now you might want to do that.
@@ -504,10 +504,10 @@ One note to make here
   in the same coordinates (parameterization or transformation of parameters)
   as that in which your priors are \emph{specified},
   or else multiply in a (possibly nasty) Jacobian.
-That is, if your prior is ``flat in $x$''
-  but you find it easier to run your sampler by proposing steps in $\ln x$,
+That is, if your prior is ``flat in $\pars$''
+  but you find it easier to run your sampler by proposing steps in $\ln \pars$,
   if you don't modify your acceptance fraction by the Jacobian,
-  your \emph{real} prior won't be flat in $x$.
+  your \emph{real} prior won't be flat in $\pars$.
 These think-os can get subtle;
   the best way to avoid them
   is to write your code and your likelihood function
@@ -676,11 +676,11 @@ Most MCMC methods
   as it random-walks through the parameter space.
 The user generally has a lot of control over what this proposal distribution might be,
   and how to choose the parameters.
-For example, in a $d$-dimensional parameter space, %do we consistently use d here?
+For example, in a $D$-dimensional parameter space, %do we consistently use d here?
   a zero-mean but anisotropic Gaussian (normal distribution)
   is often used to draw offsets for the walker to take from point to point.
 Even within this choice (which is of one function among many possibilities),
-  there are $d\,(d+1)/2$ parameters in the $d\times d$ symmetric, positive definite covariance matrix
+  there are $D\,(D+1)/2$ parameters in the $D\times D$ symmetric, positive definite covariance matrix
   to set ``by hand''.
 How to choose this function and set these parameters?
 
@@ -735,11 +735,11 @@ A very common---%
   taking a random step in just one parameter at a time.
 Aside from involving some persistence of state,
   this kind of proposal distribution can be valuable,
-  in part because it reduces the (almost impossible) $d$-dimensional tuning problem
-  to $d$ one-dimensional problems:
+  in part because it reduces the (almost impossible) $D$-dimensional tuning problem
+  to $D$ one-dimensional problems:
 In this form of proposal distrubution,
   it is possible to track a separate acceptance fraction for every parameter.
-Code can be built that uses the burn-in phase to tune all $d$ proposal variances
+Code can be built that uses the burn-in phase to tune all $D$ proposal variances
   such that each of them, individually,
   obtains acceptance at the same Goldilocks ratio.
 
@@ -767,7 +767,7 @@ This proxy is easy to measure and use for tuning,
 We recommend using it for tuning, though we have never used it ourselves.
 Like the acceptance fraction, it can also be used to tune
   in the case that the proposal distribution loops over parameters;
-  once again, the user gets (in this case) $d$ one-dimensional tunings.
+  once again, the user gets (in this case) $D$ one-dimensional tunings.
 
 When sampling really gets very slow,
   there are various tricks and tips to work through.
@@ -939,11 +939,11 @@ For one, MCMC is a sampling algorithm, not an optimization algorithm;
     are regularly violated.}
 For two, the closeness of the best sample to the posterior mode is a strong function of sample size,
   and with very bad scaling.%
-  \note{If you have a $K$-point sampling in a $d$-dimensional parameter space,
+  \note{If you have a $K$-point sampling in a $D$-dimensional parameter space,
     there is some best sample $\pars_k^{\best}$.  Now imagine that you want to make
     that best sample 10 times better---that is, you want to find a point $\pars^{\better}$
     that is ten times closer to the true optimum.  How many more samples do you need to take?
-    In the limit that $K$ is large, on average, you have to take $10^d$ more samples!
+    In the limit that $K$ is large, on average, you have to take $10^D$ more samples!
     Most sensible optimizers are far, far better than this.}
 For three, if you just want an optimum, use an optimizer!%
   \note{HOGG, something?}
@@ -1263,12 +1263,12 @@ trained professional.
 
 \section{Likelihoods and priors}
 
-MCMC is used to obtain samples $x_k$ from pdf $p(x)$,
-  or a badly normalized all-positive function $f(x)$
+MCMC is used to obtain samples $\pars_k$ from a pdf $p(\pars)$,
+  or a badly normalized all-positive function $f(\pars)$
   that is different from the pdf by an unknown factor $Z$.
 In the context of data analysis,
-  MCMC is usually being used to obtain samples
-  that are \emph{parameter values} for a probabilistic model of some data.
+  MCMC is usually being used to obtain samples $\pars_k$
+  that are \emph{parameter values} $\pars$ for a probabilistic model of some data.
 That is, MCMC is sampling a pdf \emph{for the parameters}.
 If it is returning parameter values, then it is not sampling a pdf for the data.
 That is, MCMC can only sample a posterior (or prior) pdf for the parameters.
@@ -1292,13 +1292,44 @@ No, not really;
   it is a posterior probability that is directly proportional to the likelihood function.
 That is, it is a posterior probability for some implicit (and improper) ``flat'' priors.
 
-% Hogg say:  I have no idea what the comment here (below) means!
+% Hogg say:  I have no idea what the comment here (below) means, even though I wrote it!
 % ---
 % Give a sense of the difficulties you get into if you fail here; like
 % discussion with Sven Kreiss on 2013-02-14...
 % ---
 
-...Explain how your code \emph{should look} with a prior function and a likelihood function...
+Ideally, if you are using MCMC for inference, your code should input
+to the MCMC function or routine a probability function which is a
+product of a prior times a likelihood.
+In terms of implementation, it is usually advisable to work in the
+logarithm of the density function, so the function input to the MCMC code
+would be called something like \code{ln_f()}.
+This function \code{ln_f()} internally would compute and return the
+sum of a log prior pdf \code{ln_prior()} and a log likelihood function
+\code{ln_likelihood()}.
+(When working in logarithmic probability, in M--H-like MCMC methods,
+the accept--reject step would change from a comparison of a random
+deviate with a ratio of probabilities to comparison of the log of a
+random deviate with a difference of log probabilities.)
+
+If you are using ``flat'' (improper) priors, the \code{ln_prior()}
+function can just return a zero no matter what the parameters.
+If it is flat with bounds (that is, proper), the \code{ln_prior()}
+should check the bounds and return \code{-Inf} values if the parameter
+vector is out of bounds.
+The pseudo-code for the \code{ln_f()} function should look something
+like this:
+\begin{verbatim}
+def ln_f(pars, data):
+    x = ln_prior(pars)
+    if is_Inf(x):
+        return -Inf
+    return x + ln_likelihood(data, pars)
+\end{verbatim}
+This pseudo-code ensures that you only compute the likelihood when the
+parameters are within the prior bounds; it assumes implicitly that the
+prior pdf is easier to compute than the likelihood.
+If you find yourself in the opposite regime, adjust accordingly.
 
 ...It is a good idea to have proper priors.
 It is a good test of your priors that you can sample with a ``null'' likelihood function.
@@ -1322,23 +1353,23 @@ In addition to a full set of unit tests for every part of your code
   runs with output that must meet certain expectations.
 The simplest kind of functional test is to sample a known distribution,
   and check that the sampling has the moments you expect (to within tolerances).
-For example, you can sample a $d$-dimensional Gaussian distribution with known non-trivial covariance,
+For example, you can sample a $D$-dimensional Gaussian distribution with known non-trivial covariance,
   and check that the empirical covariance comes out as expected.
 This is an easy test to fail, so a success builds confidence in any MCMC code.
 
 In the most extreme form of this test,
-  for a Gaussian in $d$ dimensions,
+  for a Gaussian in $D$ dimensions,
   build the covariance matrix input to the Gaussian distribution
-  by taking the sum of the outer product of $d+1$ randomly generated vectors.
+  by taking the sum of the outer product of $D+1$ randomly generated vectors.
 Then, before sampling, get the eigenvalues and eigenvectors of the matrix.
 Set up the MCMC sampler with the Gaussian function with this covariance matrix
   as the probability function (or the log of it as the log-probability function).
 Sample for many autocorrelation times,
   or until you are confident you are getting good samples.
-Check that the empirical $d$-dimensional covariance of the samples
+Check that the empirical $D$-dimensional covariance of the samples
   has the same (or similar) eigenvectors and eigenvlues to the input matrix.
 Also check that the individual one-dimensional samplings
-  (along each axis or any projection in the $d$-space)
+  (along each axis or any projection in the $D$-space)
   look Gaussian and have nearly vanishing skew and kurtosis.
 It takes some thinking and some calculating to see ``how well'' these things all ought to match
   expectations, but one thing that can be said with confidence is that agreement should improve
