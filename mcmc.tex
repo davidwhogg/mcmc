@@ -1330,6 +1330,13 @@ This pseudo-code ensures that you only compute the likelihood when the
 parameters are within the prior bounds; it assumes implicitly that the
 prior pdf is easier to compute than the likelihood.
 If you find yourself in the opposite regime, adjust accordingly.
+Of course the above pseudo-code presumes that when you perform the
+accept--reject step of the MCMC method, the programming language handles
+properly the \code{-Inf} values.\footnote{If you are working in a language
+that doesn't have an \code{Inf} or doesn't evaluate comparisons correctly
+when the \code{Inf} appears, you might have to write some case code, and
+have your \code{ln_f} function return a value \emph{and} some kind of flag
+which indicates ``zero probability'' or $f(\pars)=0$.}
 
 ...It is a good idea to have proper priors.
 It is a good test of your priors that you can sample with a ``null'' likelihood function.
@@ -1441,7 +1448,7 @@ These problems hurt optimizers more than samplers,
 In general, plotting the likelihood function as a function of parameter along
   slices in parameter space often reveals bugs or think-os.
 
-SHOW EXAMPLES?
+...SHOW EXAMPLES?
 
 \paragraph{low acceptance fraction:}
 If you find that you are getting low acceptance fraction
@@ -1510,6 +1517,16 @@ Again, if the acceptance ratio is low and there appear to be multiple modes,
   it is likely that the sampling will also be initialization dependent,
   and it is very unlikely that your sampling is going to be converged.
 
+\paragraph{bad initialization:}
+If you initialize your sampler in a disallowed region of parameter
+space---that is, a part of the space with $f(\pars)=0$ (so your
+\code{ln_f()} function returns \code{-Inf})---it might have a very
+hard time random-walking out of that location.
+At initialization time, it is important to test that the
+initialization is permitted.
+For ensemble methods, it is important to test that \emph{all} the
+walkers in the ensemble are initialized to permitted values.
+
 \paragraph{parameterization problems:}
 It helps to think carefully about how to parameterize.
 For example, if there is an angle $\phi$ in your problem,
@@ -1545,7 +1562,7 @@ They can be found by performing an exploratory sampling,
   making a triangle plot as described above,
   and looking for narrow diagonal lines in the two-dimentional scatter plots.
 
-HOGG:  How to deal with discrete or integer or binary parameters?
+HOGG: ...How to deal with discrete or integer or binary parameters?
 
 \paragraph{model checking:}
 ...Beyond the scope of this document...
@@ -1572,8 +1589,6 @@ How could you possibly know that your sampling really represents your \emph{real
 %% ...Posteriors:  You can do anything you like (within
 %% reason) to the output samples and be sampling the posterior in that
 %% transformed quantity.
-
-%% ...How to deal with forbidden regions in prior, or sharp prior boundaries?
 
 %% ...How to deal with constraints that pin you to a subspace of the parameter space?  Method-dependent.
 
