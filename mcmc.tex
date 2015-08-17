@@ -5,7 +5,7 @@
 % to-do
 % -----
 % - mention JAGS and STAN in methods section
-% - perhaps re-order to m-h, convergence, reporting results, other methods ??
+% - when we say ``below'' also give a Section Number.
 % - where to put comments about how to structure code ln_likelihood(pars, data, I) and ln_prior(pars, I)
 % - need to mention case where there is an MC integral INSIDE the likelihood function
 % - need to mention testing the likelihood function
@@ -321,7 +321,7 @@ normalized functions $f(\pars)$---as it usually will be---the
 sampling-approximation expectation values are the expectation values
 under the properly-normalized corresponding pdf, even though you might
 \emph{never learn that normalization}.
-When we run MCMC sampling on $f(\pars)$, a function which differs from a
+When we run MCMC sampling on $f(\pars)$, a function that differs from a
 pdf $p(\pars)$ by some unknown normalization constant, then the sampling
 permits computation of the following kinds of quantities:
 \begin{eqnarray}
@@ -441,7 +441,7 @@ To generate the next sample $\pars_{k+1}$ do the following:
 \end{itemize}
 That is, at each step, either a new proposed position in the parameter
   space gets accepted into the list of samples or else the previous sample
-  in the parameter space gets repeated.
+  in the parameter space \emph{gets repeated}.
 The algorithm can be iterated a large number $K$ of times to produce $K$ samples.
 
 This algorithm---and indeed any MCMC algorithm---produces a
@@ -983,7 +983,7 @@ This may seem counterintuitive, but it is easy to see in the case of a
 This all relates to the fact that MCMC is not an optimizer, it is a
 sampler.
 It is important, when reporting the output of an MCMC run by giving
-means or medians of the posterior PDF to remind the reder or user of
+means or medians of the posterior PDF to remind the reader or user of
 that output that it does not necessarily represent (collectively) a
 good fit to the data; these outputs only give information that is
 useful one parameter at a time.
@@ -1123,6 +1123,8 @@ $\pars$-space, cycling through axes as you go from step to step.
 This helps with tuning and diagnosis, but it also permits a good
 implementation to capitalize on simpler calculations for the simpler
 parameter directions.
+
+%% DWH:  Note here that this requires writing the f(\pars) code to capitalize on the axis-aligned moves!!
 
 Gibbs sampling can be very good for exploiting multiprocessing:
 Global parameter updates might require a serial re-calculation of the
