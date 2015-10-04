@@ -1,20 +1,22 @@
 % This file is part of the MCMC project,
 %   which is (in turn) part of the Data Analysis Recipes project.
-% Copyright 2013, 2014, 2015 David W. Hogg (NYU) and Dan Foreman-Mackey (NYU).
+% Copyright 2013, 2014, 2015 David W. Hogg (NYU) and Dan Foreman-Mackey (NYU, UW).
 
 % to-do
 % -----
+% - deal with all mentions of ``DFM'' or ``HOGG''
+% - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
 % - when we say ``below'' also give a Section Number.
 % - where to put comments about how to structure code ln_likelihood(pars, data, I) and ln_prior(pars, I)
 % - need to mention case where there is an MC integral INSIDE the likelihood function
 % - need to mention testing the likelihood function
 % - send to friendlies for comments
+%   - Gelman
 %   - Lang
 %   - Rix
 %   - Bovy
 %   - Brewer
-%   - Hill
 % - post on arXiv
 
 % style notes
@@ -64,9 +66,12 @@
 
 \noindent
 Dan~Foreman-Mackey\\
+\affil{Department~of~Astronomy, University~of~Washington}\\
 \affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,
        New~York~University}\\[1ex]
 David~W.~Hogg\\
+\affil{Simons~Center~for~Data~Analysis,
+       Simons~Foundation}\\
 \affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,
        New~York~University}\\
 \affil{Center~for~Data~Science,
@@ -284,7 +289,7 @@ entire domain
 of $\pars$ (all the parts of $\pars$ space in which $p(\pars)$ is finite) and the
 integrals are multi-dimensional if $\pars$ is multi-dimensional.
 These expectation values are the mean values of $\pars$ and $q(\pars)$ under
-the pdf.  A good sampling---really the definition of a good
+the pdf.  A good sampling---and really this is the definition of a good
 sampling---makes the sampling approximation to these integrals
 accurate.
 With a good sampling $\setof{\pars_k}_{k=1}^K$ the integrals get replaced
@@ -407,7 +412,7 @@ prior pdf and a likelihood is only necessary for what follows in
 the context of advanced sampling techniques like tempering or
 nested sampling, both mentioned briefly below.
 
-\section{What is Metropolis--Hastings MCMC?}
+\section{Metropolis--Hastings MCMC}
 
 The simplest algorithm for MCMC is the Metropolis--Hastings algorithm (M--H MCMC).\note{%
   HOGG put here some short discussion of the name of the algorithm and the original reference.}
@@ -617,6 +622,7 @@ and by definition, the autocorrelation ``time'' $\tau$ is
 \tau = \sum_{\Delta = 0}^{\infty} C(\Delta)
 \label{eq:autocorrelationtime}\quad .
 \end{eqnarray}
+%% DFM: IS THIS DEFINITION CORRECT OR IS THERE A FACTOR OF 2 OR SOMETHING?
 Heuristically, the autocorrelation time is the number of samples you
 need to take before you get an independent sample.
 More precisely, the autocorrelation time is the factor by which you
@@ -628,7 +634,7 @@ the chain down to every $\tau$th sample (instead of using all $K$
 samples), you will get just as good sampling-based estimates as if you
 had used all $K$ samples.
 
-A sampler with a better autocorrelation time is just better; you have
+A sampler with a smaller autocorrelation time is just better; you have
 to do fewer $f(\pars)$ calls per independent sample, and you have to
 run less time to get accurate sampling-based integral estimates.
 A sampler that takes an independent sample every time would have an
@@ -1124,7 +1130,7 @@ This helps with tuning and diagnosis, but it also permits a good
 implementation to capitalize on simpler calculations for the simpler
 parameter directions.
 
-%% DWH:  Note here that this requires writing the f(\pars) code to capitalize on the axis-aligned moves!!
+%% HOGG:  Note here that this requires writing the f(\pars) code to capitalize on the axis-aligned moves!!
 
 Gibbs sampling can be very good for exploiting multiprocessing:
 Global parameter updates might require a serial re-calculation of the
@@ -1294,7 +1300,7 @@ No, not really;
   it is a posterior probability that is directly proportional to the likelihood function.
 That is, it is a posterior probability for some implicit (and improper) ``flat'' priors.
 
-% Hogg say:  I have no idea what the comment here (below) means, even though I wrote it!
+% HOGG say:  I have no idea what the comment here (below) means, even though I wrote it!
 % ---
 % Give a sense of the difficulties you get into if you fail here; like
 % discussion with Sven Kreiss on 2013-02-14...
