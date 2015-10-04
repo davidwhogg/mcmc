@@ -5,12 +5,14 @@
 % to-do
 % -----
 % - deal with all mentions of ``DFM'' or ``HOGG''
+% - Do we need to explain the variance on a sampling-based estimator of an integral?  Right now this is just in an end-note (or will be when I write it).  Should it be in the main text?  Probably!
 % - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
 % - when we say ``below'' also give a Section Number.
 % - where to put comments about how to structure code ln_likelihood(pars, data, I) and ln_prior(pars, I)
 % - need to mention case where there is an MC integral INSIDE the likelihood function
 % - need to mention testing the likelihood function
+% - would love to have the Note symbols to be links to the notes and the notes to have links back to the main text...!
 % - send to friendlies for comments
 %   - Gelman
 %   - Lang
@@ -118,11 +120,12 @@ the ``Bayes integral'' and ``prior predictive probability'', and is usually
 \emph{extremely hard to
   calculate}.\note{Some would call
   the factor $Z$ in \equationname~(\ref{eq:bayes}) something like
-  ``$p(\data)$'' or ``the marginal likelihood'' or the 
+  ``$p(\data)$'' or ``the fully marginalized likelihood'' or the 
   probability of the data.
   Of course it is only the probability of the data within the model
   space under consideration!
-  We discuss this object and these issues elsewhere (HOGG CITE).
+  We (intend to) discuss this object and these issues elsewhere
+  (in various things in preparation).
   The factor $Z$ is often hugely difficult to compute, because the
   likelihood (or the prior) can have extremely complex structure,
   with multiple arbitrarily compact modes, arbitrarily positioned
@@ -152,10 +155,11 @@ You have a huge blob of data $\data$ (think of this as a vector or
 list or heterogeneous collection of observations\note{In general in
   this \documentname\ we will treat any variable as being capable of
   containing not just a value but some huge arbitrarily structured set
-  of values in matrix, vector, or more complex form.}).
+  of values in matrix, vector, or an ordered list of any set of such objects,
+  or perhaps some even more complex form.}).
 You also have a model sophisticated enough---a probabilistic,
 generative model, if you will\note{For more discussion
-  of our definition of a \emph{model}, see [HOGG SOME OTHER NOTE] in
+  of our definition of a \emph{model}, see [some other as-yet-unwritten \documentname] in
   this series.
   Briefly, a ``model'' for us is a likelihood function (a pdf for the data given
   model parameters), and a prior pdf over the parameters.
@@ -163,14 +167,18 @@ generative model, if you will\note{For more discussion
   sampling, say) parameters and parameters can generate (again by
   sampling, say) data, the model is effectively (or actually, if you
   are a true subjective Bayesian) a probability distribution (pdf)
-  over all possible data.
+  over all possible data.%
 }---that, given a
 setting of a huge blob of parameters\note{Again, the parameter
   blob $\pars$ should also be thought of as an immense, arbitrarily
   structured set or list of parameters, possibly even with no fixed
-  dimension!} $\pars$, you can compute a pdf for data (or likelihood\note{We
-  bash the terminology ``likelihood'' in [SOME OTHER NOTE] in this
-  series.}) $p(\data\given\pars)$.
+  dimension!} $\pars$, you can compute a pdf for data (or likelihood\note{We will
+  bash the terminology ``likelihood'' in another, as-yet-unwritten, \documentname\ in this
+  series.  Techically, this thing $p(\data\given\pars)$
+  is only properly a likelihood function when
+  we are thinking of the data $\data$ as being fixed, and the parameters $\pars$
+  as being permitted
+  to vary.}) $p(\data\given\pars)$.
 Furthermore, say you also can write down some kind of informative or
 vague prior pdf $p(\pars)$ for the parameter blob.
 If all these things are true, then---even if you can't compute
@@ -949,8 +957,9 @@ For two, the closeness of the best sample to the posterior mode is a strong func
     there is some best sample $\pars_k^{\best}$.  Now imagine that you want to make
     that best sample 10 times better---that is, you want to find a point $\pars^{\better}$
     that is ten times closer to the true optimum.  How many more samples do you need to take?
-    In the limit that $K$ is large, on average, you have to take $10^D$ more samples!
-    Most sensible optimizers are far, far better than this.}
+    In the limit that $K$ is large, on average, you have to take a factor of
+    $10^D$ more samples!
+    Any reasonable optimizer is far, far better than this (in terms of compute time).}
 For three, if you just want an optimum, use an optimizer!%
   \note{HOGG, something?}
 That is, we \emph{strongly advise against} reporting,
@@ -1024,7 +1033,7 @@ one-dimensional sample histograms, on a pretty fine binning, and all
 $D$-choose-2 two-dimensional histograms (scatter plots) to show the
 low-level covariances and non-linearities.
 If you are clever, all these plots can be arranged into a lovely and
-informative triangle.\note{HOGG cite triangle.py and put an example in
+informative triangle.\note{HOGG cite corner.py and put an example in
   the note!}
 These two-dimensional plots do not in any sense contain all the
 information in the sampling!  However, they are remarkable for
@@ -1155,7 +1164,8 @@ produces the gradient of any function you can write.\note{HOGG cite
 There is a class of MCMC methods that make use of gradient information
 to effectively inform the proposal distribution and thus speed sampling.
 
-... HOGG more here!
+... HOGG more here!  For example, does this work better in large
+numbers of dimensions?  If so, we should say so.
 
 \paragraph{Importance:}
 Sometimes it is possible to sample efficiently from a distribution
