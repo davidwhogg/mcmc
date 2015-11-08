@@ -37,7 +37,7 @@
 \documentclass[12pt,twoside,pdftex]{article}
 \usepackage{styles/dar_endnotes}
 
-\newcommand{\this}{Using Markov Chain Monte Carlo}
+\newcommand{\chaptertitle}{Using Markov Chain Monte Carlo}
 \include{styles/dar}
 
 \newcommand{\data}{D}
@@ -45,10 +45,9 @@
 \newcommand{\best}{{\mathrm{(best)}}}
 \newcommand{\better}{{\mathrm{(better)}}}
 
-\begin{document}
-
-\thispagestyle{plain}\sloppy\sloppypar\raggedbottom
-\section*{Data analysis recipes:\\ \this\footnotemark}
+\begin{document}\sloppy\sloppypar\raggedbottom\thispagestyle{plain}%
+%
+\section*{Data analysis recipes:\\ \chaptertitle\footnotemark}
 
 \footnotetext{%
     The notes begin on page~\pageref{note:first}, including the
@@ -1628,6 +1627,7 @@ How could you possibly know that your sampling really represents your \emph{real
 \markright{Notes}\theendnotes
 
 \clearpage
+\raggedright
 \begin{thebibliography}{}\markright{References}
 \bibitem[Brooks \etal(2011)]{mcmchandbook}
   Brooks,~S., Gelman~A., Jones~G., \& Meng,~X.-L., eds.\ 2011,
@@ -1637,6 +1637,8 @@ How could you possibly know that your sampling really represents your \emph{real
 \bibitem[Foreman-Mackey \etal(2012)]{emcee}
   Foreman-Mackey,~D., Hogg,~D.~W., Lang,~D., \& Goodman,~J.\ 2012,
   \project{emcee}: The MCMC Hammer,
+  \textit{Pubs.\,Astron.\,Soc.\,Pac.}\ \textbf{125} 306--312
+  \doi{10.1086/670067}
   (also \arxiv{1202.3665}).
 \bibitem[Hou \etal(2014)]{fengji}
   Hou,~F., Goodman,~J., \& Hogg,~D.~W., 2014,
