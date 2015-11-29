@@ -4,13 +4,13 @@
 
 % to-do
 % -----
-% - Deal with all mentions of ``DFM'' or ``HOGG'' and all ``...''
+% - Deal with all mentions of ``DFM'' or ``HOGG'' and all ``CITE'' and ``...''
 % - Should we cite the Brooks book or just chapters within it?  I think the latter!
 % - Should we make an \acronym{} environment and use it religiously?  I think yes.
 % - Do we need to explain the variance on a sampling-based estimator of an integral?  Right now this is just in an end-note (or will be when I write it).  Should it be in the main text?  Probably!
 % - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
-% - when we say ``below'' also give a Section Number.
+% - when we say ``below'' or ``above'' also give a Section Number.
 % - where to put comments about how to structure code ln_likelihood(pars, data, I) and ln_prior(pars, I)
 % - need to mention case where there is an MC integral INSIDE the likelihood function
 % - need to mention testing the likelihood function
@@ -93,7 +93,7 @@ output to produce parameter estimates with associated uncertainties.
 [Insert some generally useful point here!]
 \end{abstract}
 
-\section{When do you need MCMC?}
+\section{When do you need MCMC?}\label{sec:when}
 
 Markov Chain Monte Carlo (MCMC) methods are methods for sampling
 probability distribution functions or probability density functions (pdfs).
@@ -318,7 +318,7 @@ approximation becomes exact as $K$ goes to infinity.
 The size $K$ of the sampling you need \emph{in practice} will depend
 on the expectations you want to compute, and the accuracies you need.
 
-As we noted above, in the context of MCMC, we are often sampling or
+As we noted above (\sectionname~\ref{sec:when}), in the context of MCMC, we are often sampling or
 using some \emph{badly normalized} function $f(\pars)$.
 This function is just the pdf $p(\pars)$ multiplied by some unknown and
 hard-to-compute scalar.
@@ -1654,7 +1654,8 @@ integral.
 However, it is usually inadvisable:
 The integral is expensive to compute.
 Most MCMC methods are cleverly designed to \emph{avoid} computing this
-integral; so it usually adds expense to the project.
+integral (as we note above in \sectionname~\ref{sec:when}); so it usually adds
+expense to the project.
 At the end of the day, it returns only a single, scalar number, with
 no guidance about how to use it (and indeed there are only heuristics
 to reach for).
