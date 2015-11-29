@@ -6,6 +6,7 @@
 % -----
 % - Deal with all mentions of ``DFM'' or ``HOGG'' and all ``...''
 % - Should we cite the Brooks book or just chapters within it?  I think the latter!
+% - Should we make an \acronym{} environment and use it religiously?  I think yes.
 % - Do we need to explain the variance on a sampling-based estimator of an integral?  Right now this is just in an end-note (or will be when I write it).  Should it be in the main text?  Probably!
 % - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
@@ -1584,14 +1585,82 @@ They can be found by performing an exploratory sampling,
 HOGG: ...How to deal with discrete or integer or binary parameters?
 
 \paragraph{model checking:}
-...Beyond the scope of this document...
-Something about cross-validation and posterior predictive checks...
-Something about plotting models (drawn from posterior) on data, where appropriate...
-How could you possibly know that your sampling really represents your \emph{real} posterior PDF?..
+\emph{All models are wrong, but some are useful.}
+That's not a quote from Box, but it's close.\note{The real quotation
+  is a parenthetical sentence ``Remember that all models are wrong;
+  the practical question is how wrong do they have to be to not be
+  useful.'' (\citealt{box}, p.~74).  It is amazing how rarely this is
+  ever quoted correctly; or maybe there is another source for this
+  quotation?}
+The point (for our purposes) is that if you check your model hard
+enough---that is, you take enough data---you will certainly rule it
+out.\note{Physicists sometimes forget this, and believe that various
+  physical theories, such as quantum electrodynamics or the
+  cold-dark-matter cosmological model, are strictly true.  First of
+  all, there is no way to know that for sure, and second of all, even
+  if they \emph{are} true, they don't precisely explain any
+  observation, which is also affected by various kinds of auxilliary
+  effects and noises for which there is (and can be, for deep reasons,
+  discussed elsewhere by us; CITE) no extremely precise model.  So in
+  detail, any model of any specific observation must be wrong, even in
+  the (exceedingly unlikely) event that the fundamental model is
+  correct.}
+``Model checking'' is an enormous subject that goes way beyond the
+scope of this \documentname, for which reason we won't say much about
+it here except to make two points:
 
-...The Bayes integral / evidence integral?  It is both the biggest strength and biggest weakness that vanilla MCMC methods can't give you this integral.  There are tricks, and then there are MCMC methods.  All that said, you never really want to calculate this integral!
+The first---and most important---point about model checking is that
+you always learn a huge amount by checking the model.
+What this entails is looking at the distribution of residuals or the
+quality of the predictions of the model when compared to the data.
+There are methods (like the chi-squared statistic and the Bayesian
+evidence integral) that check the absolute quality of the model in a
+scalar way.
+These are usually uninformative, because (as we noted), all models are
+wrong, and eventually the data will be good enough to return a bad
+statistic here.\note{Sometimes Bayesians like to complain that the
+  chi-squared statistic is a measure of the size of your data!  That's
+  true when your model is wrong (that is, always).}
 
-...Posterior predictive checks?
+Much more informative are methods (like plotting residuals of the data
+away from the model in the space of the data) that look at what parts
+of the data the model ``explains well'' and what parts of the data the
+model ``explains badly''.
+These kinds of experiments usually reveal inadequacies of the model in
+a rich way, or confirm that certain assumptions are bad.
+Cross-validation\note{CITE SOMETHING} is a framework for constructing
+valuable tests of this form, as is posterior predictive checks\note{CITE SOMETHING}.
+Importantly, you want to find ways to compare your model to your data
+\emph{in the space of the data}.
+Don't just look at the parameter space of your model!
+It is the data that really exist, especially when all models are wrong!
+
+There are model checking methods (like varying the prior and
+re-running MCMC) that test the sensitivity of results to assumptions.
+Not only are these very valuable for testing the model, they are
+essential for writing any paper about your results: The reader always
+wants to know the sensitivity of results to assumptions.\note{And be
+  sure not to forget that there are (at least) as many assumptions
+  encoded in your likelihood function as there are in your prior
+  pdfs.}
+Once again, it is important to find ways to display the results of
+such tests in the space of the data.
+All we will say here about these kinds of rich model tests is that you
+should do them, and report the results.
+
+The second---and less important---point about model checking is that
+the ur-Bayesian thing to be doing is computing a Bayesian evidence
+integral.
+However, it is usually inadvisable:
+The integral is expensive to compute.
+Most MCMC methods are cleverly designed to \emph{avoid} computing this
+integral; so it usually adds expense to the project.
+At the end of the day, it returns only a single, scalar number, with
+no guidance about how to use it (and indeed there are only heuristics
+to reach for).
+If your model is wrong, the richer tests of visualization of residuals
+or sensitivity to assumptions are much more likely to lead to insight
+about what changes to make or what new directions to explore.
 
 %% HOGG DELETED / COMMENTED OUT THE BELOW
 %% - make sure everything below is discussed somewhere above and then delete it below.
@@ -1629,6 +1698,11 @@ How could you possibly know that your sampling really represents your \emph{real
 \clearpage
 \raggedright
 \begin{thebibliography}{}\markright{References}
+\bibitem[Box \& Draper(1987)]{box}
+  Box,~G.~E.~P. \& Draper,~N.~R.\ 1987,
+  \textit{Empirical Model Building and Response Surfaces},
+  John Wiley \& Sons, New York, NY
+  \isbn{978-0471810339}.
 \bibitem[Brooks \etal(2011)]{mcmchandbook}
   Brooks,~S., Gelman~A., Jones~G., \& Meng,~X.-L., eds.\ 2011,
   \textit{Handbook of Markov Chain Monte Carlo},
