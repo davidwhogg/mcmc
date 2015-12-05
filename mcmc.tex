@@ -11,7 +11,6 @@
 % - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
 % - when we say ``below'' or ``above'' also give a Section Number.
-% - where to put comments about how to structure code ln_likelihood(pars, data, I) and ln_prior(pars, I)
 % - need to mention case where there is an MC integral INSIDE the likelihood function
 % - need to mention testing the likelihood function
 % - would love to have the Note symbols to be links to the notes and the notes to have links back to the main text...!
@@ -400,7 +399,8 @@ That is, the projection of the sampling to the subspace of interest produces
         The sampling performs this integration automatically.}
 That is extremely important for inference,
   where there are always parameters with very different levels of importance to the scientific conclusions.
-This point will return again below, either explicitly or implicitly. % HOGG: does it?
+This point will return again below, either explicitly or implicitly.
+[HOGG: does it?]
 
 Although the discussion in this \documentname\ is general, the most
 common use of MCMC sampling (for us, anyway) is in probabilistic
@@ -1121,19 +1121,26 @@ We will not give a full description of all the MCMC algorithms out
 there, but just provide some field notes and pointers to references.
 New MCMC methods are being developed all the time, so a reader with a
 serious problem would do well to consult with the applied-mathematics
-or statistics literature.\note{HOGG: Your best interface to these
-  literatures is a colleague in another department.  Break down those walls!}
+or statistics literature.\note{Your best interface to these
+  literatures is often a colleague in another department, like applied
+  mathematics, statistics, or computer science.  Break down those
+  walls!}
 The different methods to which we refer here are (in general) very
 different in their difficulty of implementation.
 We won't help with that either, except to say that there are more and
 more open-source or distributed packages every year.
 We will try to name some current implementations in the notes, but any
-list compiled today will be incomplete tomorrow.
+list compiled today will be incomplete tomorrow.\note{One check-point
+  in this literature is the compliation volume by
+  \citet{mcmchandbook}, but much has been developed and changed even
+  since that was written.}
 The spaces of MCMC methods and MCMC method implementations are both
 growing rapidly, in part because MCMC has become such a core
 technology in the empirical sciences.
 
-...Note a good general reference here?  MacKay?
+All we are going to do here is give a cursory mention to some methods
+we know about, with some keywords that can be used to search more
+deeply.
 
 % *********** BJB talking:
 % I suggest partitioning the discussion of different methods into the following
@@ -1220,8 +1227,8 @@ produces the gradient of any function you can write.\note{HOGG cite
 There is a class of MCMC methods that make use of gradient information
 to effectively inform the proposal distribution and thus speed sampling.
 
-... HOGG more here!  For example, does this work better in large
-numbers of dimensions?  If so, we should say so.
+DFM: more here!  For example, does this work better in large numbers
+of dimensions?  If so, we should say so.  And references, please.
 
 \paragraph{Importance:}
 Sometimes it is possible to sample efficiently from a distribution
@@ -1393,6 +1400,7 @@ should check the bounds and return \code{-Inf} values if the parameter
 vector is out of bounds.
 The pseudo-code for the \code{ln_f()} function should look something
 like this:
+% DFM: Do you have a preferred environment for code other than verbatim?
 \begin{verbatim}
 def ln_f(pars, data):
     x = ln_prior(pars)
@@ -1412,11 +1420,11 @@ when the \code{Inf} appears, you might have to write some case code, and
 have your \code{ln_f} function return a value \emph{and} some kind of flag
 which indicates ``zero probability'' or $f(\pars)=0$.}
 
-...It is a good idea to have proper priors.
+HOGG: ...It is a good idea to have proper priors.
 It is a good test of your priors that you can sample with a ``null'' likelihood function.
 You can often have your priors wrong despite having beautiful code.
 
-...You must describe your priors in the same parameterization that you ``step'' in.
+HOGG: ...You must describe your priors in the same parameterization that you ``step'' in.
 That is, if you change your parameters, you \emph{must} change your priors correspondingly.
 Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
@@ -1484,7 +1492,7 @@ If the priors don't look as you expect,
 Either way, diagnosis in order.
 
 \paragraph{visualization:}
-...Make triangle plots.  Great value!...  Show example here... Mentioned above; drop here or reiterate?
+HOGG:...Make triangle plots.  Great value!...  Show example here... Mentioned above; drop here or reiterate?
 
 \paragraph{likelihood issues:}
 Sometimes there can be problems with the likelihood function itself.
@@ -1522,7 +1530,7 @@ These problems hurt optimizers more than samplers,
 In general, plotting the likelihood function as a function of parameter along
   slices in parameter space often reveals bugs or think-os.
 
-...SHOW EXAMPLES?
+DFM:...SHOW EXAMPLES?
 
 \paragraph{low acceptance fraction:}
 If you find that you are getting low acceptance fraction
@@ -1552,7 +1560,7 @@ If you are using an ensemble sampler\note{CITE EMCEE},
 A converged run for an ensemble sampler will show every single walker traversing the parameter space
   in every dimension many times.
 
-SHOW EXAMPLES OF GOOD AND BAD?
+DFM: SHOW EXAMPLES OF GOOD AND BAD?
 
 \paragraph{initialization-dependence:}
 If you initialize your MCMC runs in different places in parameter space,
