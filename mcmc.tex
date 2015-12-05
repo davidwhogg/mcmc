@@ -33,7 +33,7 @@
 % - \note{} right after word if you are endnoting a phrase,
 %   but after the full stop if endnoting the sentence or paragraph.
 % - always $\pars$ never $x$; $K$ samples $\pars_k$ and $\pars$ space is $D$-dimensional
-% - should we use the word ``walker'' anywhere, everywhere, or never?
+% - should we use the word ``walker'' everywhere and do we?
 
 \documentclass[12pt,twoside,pdftex]{article}
 \usepackage{styles/dar_endnotes}
@@ -459,6 +459,8 @@ That is, at each step, either a new proposed position in the parameter
   in the parameter space \emph{gets repeated}.
 The algorithm can be iterated a large number $K$ of times to produce $K$ samples.
 
+DWH: ...Why does M--H MCMC work (briefly)?  Here or later?
+
 This algorithm---and indeed any MCMC algorithm---produces a
   \emph{biased random walk} through parameter space.
 It is a random walk for the same reason that it is ``Markov'':
@@ -511,8 +513,6 @@ That won't change anything significant; but if you are implementing
   this right now you might want to do that.
 It will help us tune the proposal pdf (\sectionname~\ref{sec:tuning})
 and diagnose problems (\sectionname~\ref{sec:troubleshooting}).
-
-...Why does M--H MCMC work (briefly)? ...Or put this in a note on an earlier paragraph?
 
 One note to make here
   is that you must \emph{propose}
@@ -808,37 +808,91 @@ Between them, they ought to span the literature.
 
 \section{Initialization and burn-in}
 
-Just as most (though not all) MCMC methods require a choice of proposal distribution,
-  most (though not all) require a choice about initialization:
-The walker needs (or walkers need) to be started somewhere in the parameter space.
-In many use cases for MCMC,
-  the investigator wants to use it to obtain uncertainty information about
-  or propagate uncertainty into parameter estimates.
-In these cases, it makes sense to initialize the walker or walkers at sensible parameter estimates,
-  found by optimizing a likelihood or a posterior PDF in advance of sampling.
-In extremely high dimensions (large numbers of parameters), this can be a bad idea,
-  since the optimal parameters are not necessarily near typical posterior samples\note{Make the counterintuitive point.},
-  but in low dimensions (few to tens) this is often sensible.
+Just as most (though not all) MCMC methods require a choice of
+proposal distribution, most (though not all) require a choice about
+initialization:
+The walker needs (or walkers need) to be started somewhere in the
+parameter space.
+In many use cases for MCMC, the investigator wants to use it to obtain
+uncertainty information about or propagate uncertainty into parameter
+estimates.
+In these cases, it makes sense to initialize the walker or walkers at
+sensible parameter estimates, found by optimizing a likelihood or a
+posterior PDF in advance of sampling.
+In extremely high dimensions (large numbers of parameters), this can
+be a bad idea, since the optimal parameters are not necessarily near
+typical posterior samples\note{When the dimensionality of the
+  parameter space gets very large, almost all samples will be
+  \emph{very far} from the optimum of the posterior pdf.  One way to
+  think about this is to think of a random Gaussian draw in $D$
+  dimensions: A typical draw will be $\sqrt{D}$ standard deviations
+  Euclidean distance from the maximum of the Gaussian.  That's a long
+  way when $D=100$ or $1000$!  Another way to think about it is that
+  there are a lot of ways to move \emph{away} from the point you care
+  about, but very few ways to move close to it.  The upshot is that
+  even with an \emph{enormous} sampling, if you are in large
+  dimensions, not a single sample will be very near the optimum.}, but
+in low dimensions (few to tens) this is often sensible.
 
-In other use cases,
-  the investigator wants to use MCMC to search all of parameter space
-  for good models, and also sample.
-In this case, it makes sense to be more catholic with initialization...
+Ideally, you will initialize the walker not at a completely irrelevant
+point, nor at the optimum of the posterior pdf, but at a typical or
+pretty good place in the posterior pdf.
+That would minimize burn-in!
+But, in general, being at the optimum or anywhere near a good place is
+usually better than a mindless initialization.
 
-...but note that MCMC is not the ideal search algorithm for any parameter space.
+If you suspect, or if it is even possible, that your problem is badly
+multi-modal, then you will have to start at multiple points in
+parameter space and compare the resulting chains.
+By ``badly multi-modal'' we mean that there are peaks in the posterior
+pdf that are connected by low-enough valleys that it is very unlikely
+or takes a long time for a walker to traverse from one peak to the
+next.
+If this might be an issue, then the best diagnosis is to start many
+chains in parallel and check that they lead to identical (or very
+similar) posterior inferences (same pdf location and shape and
+statistics).
 
-...Start from different locations
-% BJB
-% What different locations?
-% Drawn from the prior can be useful. Then you can
-% look at the chains and see which ones "made it" and
-% which ones "got stuck" and delete the latter
+Of course if you find out the worst---if you find out that different
+initializations lead to different posterior inferences---you are in
+trouble:
+There is no trivial way to combine together the samplings you get of
+different modes!
+You can either wait a \emph{very long time} so that you see a single
+walker in a single MCMC run traverse from mode to mode enough times to
+make a representative sampling (dozens or hundreds of times, ideally),
+or you can use a high-end sampler (like nested sampling) that is
+designed for such problems.
+In principle there are methods that involve splitting the space into
+two spaces, sampling them separately, and then combining the chains
+according to their relative evidence afterwards.
+That's a research project beyond the scope of this \documentname.
 
-...Dealing with multi-modal problems
-% Starting from different locations is good
-% for DIAGNOSING a problem as multimodal but it's
-% terrible for quantifying the modes. Explain why,
-% it's a good teaching point.
+DFM: IS THIS PARAGRAPH USEFUL OR CLEAR?
+Of course there are some kinds of multi-modalities that aren't a
+problem.
+For example, you can have two solutions to a problem that differ only
+in the \emph{labeling} of the components---say the Gaussians making up
+a mixture of Gaussians---that make up the model.
+One solution has the $K$ Gaussian components in one order, and the
+other in another order, but they are identical Gaussians in all
+other respects.
+Because these two solutions make the same predictions for any data, and
+only differ in their irrelevant, latent, internal ``naming'' of components,
+they are not really different solutions.
+This suggests that when you ask whether the outputs of two MCMC chains
+are consistent with one another, you should do so in the realm of the
+parameters you \emph{care about}, not irrelevant parameters that do
+not have impact on any present or future data.
+
+But it is worth remembering that just as MCMC is not a good optimizer
+(generically, samples will not lie close to the maximum of the posterior pdf),
+it is also not a good \emph{search algorithm}.
+There is no sense in which (standard) MCMC methods are efficient at
+searching, or engineered to search, all of parameter space.
+If you really need to check all of parameter space, you should put
+MCMC aside, and do an exhaustive search.\note{You might want to open a
+  bottle of wine or two while the code runs.}
 
 \section{Results, error bars, and figures}
 
