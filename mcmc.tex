@@ -1033,8 +1033,7 @@ For two, the closeness of the best sample to the posterior mode is a strong func
     In the limit that $K$ is large, on average, you have to take a factor of
     $10^D$ more samples!
     Any reasonable optimizer is far, far better than this (in terms of compute time).}
-For three, if you just want an optimum, use an optimizer!%
-  \note{HOGG, something?}
+For three, if you just want an optimum, use an optimizer!
 That is, we \emph{strongly advise against} reporting,
   as ``the'' measurement or ``the result'',
   the parameter value or values for the best sample.
@@ -1124,7 +1123,8 @@ can approach this limit very slowly (or not at all\note{HOGG: discuss
 For this reason, in the finite duration of a scientific project, most
 users of MCMC have one of two (related) problems:
 Either \textsl{(1)}~it is taking too long---it is taking too many steps or
-executing too many calls of the function $f(\pars)$ to get independent samples---or \textsl{(2)}~it is not
+executing too many calls of the function $f(\pars)$ to get independent
+samples---or \textsl{(2)}~it is not
 exploring the full parameter space---there are local optima (or bad
 local geometry around those optima) ``trapping'' the algorithm.
 
@@ -1217,9 +1217,15 @@ one parameter at a time; that is, do only axis-aligned moves in the
 $\pars$-space, cycling through axes as you go from step to step.
 This helps with tuning and diagnosis, but it also permits a good
 implementation to capitalize on simpler calculations for the simpler
-parameter directions.
-
-%% HOGG:  Note here that this requires writing the f(\pars) code to capitalize on the axis-aligned moves!!
+parameter directions.\note{%
+  The point is that sometimes there are some parameters that only
+  affect a very small number of data points, or parameters that change
+  the model or the likelihood function and prior values in a very
+  simple-to-compute way.  If such simple parameters exist, it makes
+  sense to write your likelihood and prior code to capitalize on these
+  simplicities.  This is not always trivial, because it may involve
+  caching parts of the calculation and so on.  Details would be beyond
+  our scope.}
 
 Gibbs sampling can be very good for exploiting multiprocessing:
 Global parameter updates might require a serial re-calculation of the
