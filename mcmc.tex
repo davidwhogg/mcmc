@@ -40,6 +40,8 @@
 \newcommand{\chaptertitle}{Using Markov Chain Monte Carlo}
 \include{styles/dar}
 
+% HOGG: \Var NEEDS TO BE DEFINED:
+\newcommand{\Var}{\mathrm{Var}}
 \newcommand{\data}{D}
 \newcommand{\pars}{\theta}
 \newcommand{\best}{{\mathrm{(best)}}}
@@ -342,6 +344,7 @@ permits computation of the following kinds of quantities:
 E[q] &\equiv& \frac{\int q(\pars)\,f(\pars)\,\dd \pars}{\int f(\pars)\,\dd \pars}
 \\
 E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
+\label{eq:expectationvalue}
 \quad .
 \end{eqnarray}
 That is, the sampling can be constructed (as we will show below) from
@@ -551,7 +554,8 @@ That is, even if---in the end---%
   you want to leave the sampling code to the experts and run an industrial-strength code,
   it is still valuable to build your own,
   given the simplicity of the algorithm,
-  and given the intuition you gain by doing it (at least once) yourself.\note{HOGG Refer again to the DAR on fitting a line for an example project.}
+  and given the intuition you gain by doing it (at least once) yourself.\note{%
+    HOGG Refer again to the DAR on fitting a line for an example project.}
 
 \section{Convergence}\label{sec:convergence}
 
@@ -634,10 +638,23 @@ and by definition, the autocorrelation ``time'' $\tau$ is
 \end{eqnarray}
 %% DFM: IS THIS DEFINITION CORRECT OR IS THERE A FACTOR OF 2 OR SOMETHING? OR A SUM FROM -infty to +infty?
 Heuristically, the autocorrelation time is the number of samples you
-need to take before you get an independent sample.
+need to take before you get a new independent sample.
 More precisely, the autocorrelation time is the factor by which you
 have to reduce the number of samples when you compute the variance on
-a sampling-based expectation value estimate.\note{HOGG Explain more fully.  Maybe also cite Fengji.}
+a sampling-based expectation value estimate.
+
+That is, if the expectation value $E[q]$ is computed by the sampling
+approximation given in \equationname~(\ref{eq:expectationvalue}),
+there is an uncertainty on that expectation given by
+\begin{eqnarray}
+  \mbox{$E[q]$ uncertainty} &=& \left[\frac{\tau}{K}\,\Var[q]\right]^{1/2}
+  \\
+  &\approx& \left[\frac{\tau}{K^2}\,\sum_{k=1}^K \left(q(\pars_k) - E[q]\right)^2\right]^{1/2}
+  \quad ,
+\end{eqnarray}
+where we are being a bit loose with terminology because this is the
+uncertainty not on $E[q]$ but on our sampling-based \emph{estimator} for
+$E[q]$, and the $E[q]$ inside the sum is that estimator too.
 It is slightly off-topic here, but related to this, if you have a long
 chain of length $K$ and with autocorrelation time $\tau$ and you thin
 the chain down to every $\tau$th sample (instead of using all $K$
