@@ -431,16 +431,16 @@ nested sampling, both mentioned briefly below.
 \begin{problem}
 Look up (or choose) definitions for the mean, variance, skewness,
 and kurtosis of a distribution.
-Also look up or compute the analytic values of these for a top-hat
-(uniform) distribution.
+Also look up or compute the analytic values of these four statistics
+for a top-hat (uniform) distribution.
 Write a computer program that uses some standard package (such as
 \project{numpy}\note{HOGG CITE NUMPY}) to generate $K$ random numbers
 $x$ from a uniform distribution in the interval $0<x<1$.
 Now use those $K$ numbers to compute a the sampling estimate of the
 mean, variance, skewness, and kurtosis (four estimates)
-Make four plot of these four estimates as a function of $\ln K$, for
-$K=2^n$ for $n=8$ up to $n=20$ (that is, $K=256$, $K=512$, and so on
-up to $K=1048576$).
+Make four plot of these four estimates as a function of $1/K$ or
+perhaps $\log_2 K$, for $K=4^n$ for $n=1$ up to $n=10$ (that is,
+$K=4$, $K=16$, and so on up to $K=1048576$).
 Over-plot the analytic answers.
 What can you conclude?
 \end{problem}
