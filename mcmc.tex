@@ -11,6 +11,7 @@
 % - Do we need to explain the variance on a sampling-based estimator of an integral?  Right now this is just in an end-note (or will be when I write it).  Should it be in the main text?  Probably!
 % - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
+% - follow up the idea that burn-in doesn't exist at all!
 % - when we say ``below'' or ``above'' also give a Section Number.
 % - need to mention case where there is an MC integral INSIDE the likelihood function
 % - need to mention testing the likelihood function
@@ -83,14 +84,13 @@ Dan~Foreman-Mackey\\
 
 \begin{abstract}
 Markov Chain Monte Carlo (MCMC) methods for sampling probability
-distribution functions, plus abundant computational resources,
+distribution functions (combined with abundant computational resources)
 have transformed the sciences.
-Here we give a fast overview of basic MCMC methods and then turn to
+Here we give a brief overview of basic MCMC methods and then turn to
 practical advice for their use in real inference problems.
 We give advice on method choice, tuning for performance,
-initialization and burn-in, judging convergence, and use of the chain
+methods for initialization, tests of convergence, and use of the chain
 output to produce parameter estimates with associated uncertainties.
-[Insert some generally useful point here!]
 \end{abstract}
 
 \section{When do you need MCMC?}\label{sec:when}
@@ -116,10 +116,9 @@ p(\pars\given\data) &=& \frac{1}{Z}\,p(\data\given\pars)\,p(\pars)
 \label{eq:bayes}\quad .
 \end{eqnarray}
 In these contexts, the constant $Z$, sometimes written as
-$p(\data)$, is known by the names ``evidence'', ``marginal likelihood''
-the ``Bayes integral'' and ``prior predictive probability'', and is usually
-\emph{extremely hard to
-  calculate}.\note{Some would call
+$p(\data)$, is known by the names ``evidence'', ``marginal likelihood'',
+``Bayes integral'', and ``prior predictive probability'', and is usually
+\emph{extremely hard to calculate}.\note{Some would call
   the factor $Z$ in \equationname~(\ref{eq:bayes}) something like
   ``$p(\data)$'' or ``the fully marginalized likelihood'' or the 
   probability of the data.
@@ -152,7 +151,7 @@ forms it is \emph{extremely easy to implement}.
 For all these reasons, MCMC is ideal for sampling posterior pdfs in
 the real situations in which scientists find themselves.
 
-Say you are in this situation.
+Say you are in this situation:
 You have a huge blob of data $\data$ (think of this as a vector or
 list or heterogeneous collection of observations\note{In general in
   this \documentname\ we will treat any variable as being capable of
@@ -181,8 +180,8 @@ setting of a huge blob of parameters\note{Again, the parameter
   we are thinking of the data $\data$ as being fixed, and the parameters $\pars$
   as being permitted
   to vary.}) $p(\data\given\pars)$.
-Furthermore, say you also can write down some kind of informative or
-vague prior pdf $p(\pars)$ for the parameter blob.
+Furthermore, say also that you can write down some kind of informative or
+vague prior pdf $p(\pars)$ for the parameter blob $\pars$.
 If all these things are true, then---even if you can't compute
 anything else---in principle a trivial-to-implement MCMC can give you
 a fair sampling of the posterior pdf.
@@ -200,7 +199,7 @@ All that said, and adhering to the traditions of the \project{Data
   Analysis Recipes} project\note{Every \documentname\ in the \project{Data
     Analysis Recipes} series begins with a rant in which we argue that
   most uses of the methods in question are not appropriate!}, we are
-compelled to note that MCMC is in fact \emph{over-used}.
+compelled to note at the outset that MCMC is in fact \emph{over-used}.
 Because MCMC provably (under assumptions\note{Hint at assumptions
   here.}, some of which will be discussed below) samples the full
 posterior pdf in all of parameter space, many investigators use MCMC
@@ -208,6 +207,8 @@ because it will sample \emph{all} of the parameter space
 ($\pars$-space).
 That is, they are using MCMC because they want to
 \emph{search the parameter space for good models}.
+This is not a good reason to use MCMC!
+Another bad use case is the following:
 Because MCMC samples the parameter representatively, it spends most of
 its time near very good models; models that (within the confines of
 the prior pdf) do a good job of explaining the data.
@@ -220,6 +221,7 @@ choices of prior pdf, \emph{optimizes the likelihood}.\note{Of course
   someone ``wants'' to optimize, it is actually useful that they
   choose the ``wrong'' tool, because that ``wrong'' tool gives them
   back something far more useful than the output of any optimizer!}
+This is another bad reason!
 
 Both of these reasons for using MCMC---that it is a parameter-space
 search algorithm, and that it is a simple-to-code effective
