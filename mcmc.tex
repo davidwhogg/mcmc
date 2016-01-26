@@ -4,14 +4,13 @@
 
 % to-do
 % -----
-% - [delete this]
 % - Deal with all mentions of ``DFM'' or ``HOGG'' and all ``CITE'' and ``...''
 % - Should we cite the Brooks book or just chapters within it?  I think the latter!
 % - Should we make an \acronym{} environment and use it religiously?  I think yes.
 % - Do we need to explain the variance on a sampling-based estimator of an integral?  Right now this is just in an end-note (or will be when I write it).  Should it be in the main text?  Probably!
 % - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
-% - follow up the idea that burn-in doesn't exist at all!
+% - follow up the idea that burn-in doesn't exist at all!  It does for emcee.
 % - when we say ``below'' or ``above'' also give a Section Number.
 % - need to mention case where there is an MC integral INSIDE the likelihood function
 % - need to mention testing the likelihood function
@@ -26,7 +25,7 @@
 
 % style notes
 % -----------
-% - These documents are ``Chapters'', no?
+% - These documents are ``Chapters'', no?  Use \documentname.
 % - [LaTeX] newline after every full stop for proper git diffing
 % - [LaTeX] eqnarray not equation
 % - pdf not PDF
@@ -55,7 +54,8 @@
 \footnotetext{%
     The notes begin on page~\pageref{note:first}, including the
     license\note{\label{note:first}
-        Copyright 2013, 2014, 2015, 2016 the authors. This work is licensed under a
+        Copyright 2013, 2014, 2015, 2016 the authors (OMG this took us a long time).
+        This work is licensed under a
         \href{http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en\_US}{%
             Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported
             License}.}
@@ -64,8 +64,9 @@
           Jo Bovy (IAS),
           Brendon Brewer (Auckland),
           Jonathan Goodman (NYU),
-          Fengji Hou (NYU), and
-          Dustin Lang (CMU)
+          Fengji Hou (NYU),
+          Dustin Lang (CMU), and
+          Iain Murray (Edinburgh)
         for valuable advice and comments over the years.}.
 }
 
@@ -405,8 +406,7 @@ That is, the projection of the sampling to the subspace of interest produces
         The sampling performs this integration automatically.}
 That is extremely important for inference,
   where there are always parameters with very different levels of importance to the scientific conclusions.
-This point will return again below, either explicitly or implicitly.
-[HOGG: does it?]
+This point will return again below in \sectionname~\ref{sec:results}.
 
 Although the discussion in this \documentname\ is general, the most
 common use of MCMC sampling (for us, anyway) is in probabilistic
@@ -577,8 +577,36 @@ That is, even if---in the end---%
   and given the intuition you gain by doing it (at least once) yourself.\note{%
     HOGG Refer again to the DAR on fitting a line for an example project.}
 
+\begin{problem}\label{prob:firstMH}
+In your scientific programming language of choice, write a very simple
+M-H MCMC sampler.
+Sample in a single parameter $x$ and give the sampler as its density
+function $p(x)$ a Gaussian density with mean 2 and variance 2.
+Give the sampler a proposal distribution $q(x'\given x)$ a Gaussian
+pdf with mean zero and variance 1.
+Initialize the sampler with $x=0$ and run the sampler for more than $10^4$ steps.
+Plot the results as a histogram, with the true density over-plotted sensibly.
+\end{problem}
+
 \begin{problem}
-HOGG
+Re-do \problemname~\ref{prob:firstMH} but now with an input density
+that is uniform on $3<x<7$ and zero everywhere else.
+What change did you have to make to the initialization, and why?
+\end{problem}
+
+\begin{problem}
+Re-do \problemname~\ref{prob:firstMH} but with different values for
+the variance of the proposal distribution $q(x'\given x)$.
+What happens when you go to very extreme values (like for instance
+$0.00001$ or $1000.0$)?
+\end{problem}
+
+\begin{problem}
+Why, in \problemname~\ref{prob:firstMH}, did we give the proposal
+distribution $q(x'\given x)$ zero mean?
+What would be bad if we hadn't done that?
+Try setting the mean of $q(x'\given x)$ to something non-zero and see
+what happens.
 \end{problem}
 
 \section{Convergence}\label{sec:convergence}
@@ -947,7 +975,7 @@ MCMC aside, and do an exhaustive search.\note{You might want to open a
 HOGG
 \end{problem}
 
-\section{Results, error bars, and figures}
+\section{Results, error bars, and figures}\label{sec:results}
 
 For a committed probabilistic scientist---frequentist or
 Bayesian---there is no ``answer'', there are only probability density
@@ -1848,6 +1876,10 @@ about what changes to make or what new directions to explore.
   \textit{Pubs.\,Astron.\,Soc.\,Pac.}\ \textbf{125} 306--312
   \doi{10.1086/670067}
   (also \arxiv{1202.3665}).
+\bibitem[Hogg \etal(2010)]{fittingaline}
+  Hogg,~D.~W., Bovy,~J., \& Lang,~D., 2010,
+  Data analysis recipes: Fitting a model to data,
+  \arxiv{1008.4686v1}.
 \bibitem[Hou \etal(2014)]{fengji}
   Hou,~F., Goodman,~J., \& Hogg,~D.~W., 2014,
   The probabilities of orbital-companion models for stellar radial velocity data,
