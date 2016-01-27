@@ -4,10 +4,12 @@
 
 % to-do
 % -----
+% - Kill all issues in this list, below:
 % - Deal with all mentions of ``DFM'' or ``HOGG'' and all ``CITE'' and ``...''
 % - Should we cite the Brooks book or just chapters within it?  I think the latter!
 % - Should we make an \acronym{} environment and use it religiously?  I think yes.
 % - Do we need to explain the variance on a sampling-based estimator of an integral?  Right now this is just in an end-note (or will be when I write it).  Should it be in the main text?  Probably!
+% - mention ESJD
 % - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
 % - follow up the idea that burn-in doesn't exist at all!  It does for emcee.
@@ -17,6 +19,7 @@
 % - would love to have the Note symbols to be links to the notes and the notes to have links back to the main text...!
 % - send to friendlies for comments
 %   - Gelman
+%   - Goodman
 %   - Lang
 %   - Rix
 %   - Bovy
@@ -520,7 +523,7 @@ You can break this property, if you like, and then adjust the
   except under the supervision of a trained professional.\note{Actually,
   our own favorite method, \project{emcee}, has a proposal pdf that does
   violate detailed balance in this way and has a compensated
-  acceptance ratio.  Read the paper [HOGG CITE] for more details.}
+  acceptance fraction.  Read the paper [HOGG CITE] for more details.}
 If the detailed balance condition frightens you (as it frightens us),
   then just stick with pdfs that are symmetric in $\pars'$ and $\pars$,
   like the Gaussian, or a centered uniform distribution and forget about
@@ -752,7 +755,21 @@ Often some parameter directions are much worse than others; it is
 worth looking at the chain in all parameter directions.
 
 \begin{problem}
-HOGG
+Re-do \problemname~\ref{prob:firstMH} but now look at convergence:
+Plot the $x$ chain as a function of timestep.  Also split the chain
+into four contiguous segments (the first, second, third, and fourth
+quarters of the chain).  In each of these four, compute the empirical
+mean and empirical variance of $x$.  What do you conclude about
+convergence from these heuristics?
+\end{problem}
+
+\begin{problem}
+Write a piece of code that computes the empirical autocorrelation
+function and the empirical autocorrelation time from a chain.  Run
+this on the chain you obtained from \problemname~\ref{prob:firstMH}.
+Plot the autocorrelation function you get and over-plot the
+autocorrelation time as an indicator on the plot.  What do you
+conclude?
 \end{problem}
 
 \section{Tuning}\label{sec:tuning}
