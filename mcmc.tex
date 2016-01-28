@@ -598,6 +598,18 @@ that is uniform on $3<x<7$ and zero everywhere else.
 What change did you have to make to the initialization, and why?
 \end{problem}
 
+\begin{problem}\label{prob:twod}
+Re-do \problemname~\ref{prob:firstMH} but now with an input density
+that is a function of two variables $(x, y)$.
+For the function use a covariant Gaussian density with variance tensor HOGG,
+and then a top-hat function that is uniform on HOGG and zero elsewhere.
+For the proposal distribution $q(x'\given x)$ a two-dimensional Gaussian
+density with zero mean and variance tensor set to the two-dimensional
+identity matrix.
+Plot the two one-dimensional histograms and also a two-dimensional scatter
+plot for each sampling.
+\end{problem}
+
 \begin{problem}
 Re-do \problemname~\ref{prob:firstMH} but with different values for
 the variance of the proposal distribution $q(x'\given x)$.
@@ -611,6 +623,9 @@ distribution $q(x'\given x)$ zero mean?
 What would be bad if we hadn't done that?
 Try setting the mean of $q(x'\given x)$ to something non-zero and see
 what happens.
+Bonus points: Modify the acceptance--rejection criterion to deal with
+the messed-up $q(x'\given x)$ and show that everything works once
+again.
 \end{problem}
 
 \section{Convergence}\label{sec:convergence}
@@ -898,7 +913,14 @@ In our experience, it is valuable to make friends with at least one statistician
 Between them, they ought to span the literature.
 
 \begin{problem}
-HOGG
+Look at the source code of HOGG: REFERENCE EMCEE, and see if you can
+re-code or extract the autocorrelation-time estimator called HOGG.
+This code should take a MCMC chain of parameter vectors as input and
+return a vector of autocorrelation times as output.
+\end{problem}
+
+\begin{problem}
+Run the MCMC sampling of \probemname~\ref{prob:twod} to...HOGG
 \end{problem}
 
 \section{Initialization and burn-in}
