@@ -452,7 +452,11 @@ What can you conclude?
 \section{Metropolis--Hastings MCMC}
 
 The simplest algorithm for MCMC is the Metropolis--Hastings algorithm (M--H MCMC).\note{%
-  HOGG put here some short discussion of the name of the algorithm and the original reference.}
+  There are many claims that this algorithm is incorrectly named,
+  with claims that it should be credited to Enrico Fermi or Stan Ulam.
+  We don't have any opinions of this matter, but encourage the reader to follow this up.
+  The original paper is \citet{metropolis}, and there are a few sketchy historical notes
+  in \citet{geyer}.}
 It is so simple that we recommend that any reader of this document
   who has not previously implemented the algorithm take a break at the end
   of this \sectionname\ and implement it forthwith, in a short piece of computer code,
@@ -932,7 +936,8 @@ fraction of about 0.25.
 \begin{problem}
 Re-do \problemname~\ref{prob:tuning} but instead of trying to reach a
 certain acceptance fraction, try to minimize the autocorrelation time.
-What do you get as the best value of $Q$?
+(This, by the way, is the Right Thing To Do, but often expensive.)
+What do you get as the best value of $Q$ in this case?
 \end{problem}
 
 \section{Initialization and burn-in}
@@ -1024,6 +1029,7 @@ MCMC aside, and do an exhaustive search.\note{You might want to open a
   bottle of wine or two while the code runs.}
 
 \begin{problem}
+
 HOGG
 \end{problem}
 
@@ -1928,6 +1934,10 @@ about what changes to make or what new directions to explore.
   \textit{Pubs.\,Astron.\,Soc.\,Pac.}\ \textbf{125} 306--312
   \doi{10.1086/670067}
   (also \arxiv{1202.3665}).
+\bibitem[Geyer(2011)]{geyer}
+  Geyer,~C.~J., 2011,
+  Introduction to Markov Chain Monte Carlo,
+  in \citet{mcmchandbook}.
 \bibitem[Hogg \etal(2010)]{fittingaline}
   Hogg,~D.~W., Bovy,~J., \& Lang,~D., 2010,
   Data analysis recipes: Fitting a model to data,
@@ -1936,8 +1946,12 @@ about what changes to make or what new directions to explore.
   Hou,~F., Goodman,~J., \& Hogg,~D.~W., 2014,
   The probabilities of orbital-companion models for stellar radial velocity data,
   \arxiv{1401.6128}.
+\bibitem[Metropolis \etal(1953)]{metropolis}
+  Metropolis,~N., Rosenbluth,~A.~W., Rosenbluth,~M.~N., Teller,~A.~H., \& Teller,~E., 1953,
+  Equation of state calculations by fast computing machines,
+  \textit{J.\ Chem.\ Phys.}, \textbf{21} 1087--1092.
 \bibitem[van~der~Walt \etal(2011)]{numpy}
-  van~der~Walt,~S., Colbert,~S.~C., and Varoquaux,~G., 2011,
+  van~der~Walt,~S., Colbert,~S.~C., \& Varoquaux,~G., 2011,
   The NumPy Array: A structure for efficient numerical computation,
   \textit{Computing in Sci.\ \& Eng.}\ \textbf{13}, 22--30
   \doi{10.1109/MCSE.2011.37}.
