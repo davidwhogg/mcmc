@@ -936,6 +936,9 @@ tensor that is $Q$ times the two-dimensional identity matrix.
 Assess the acceptance fraction as a function of $Q$.
 Find (very roughly) the value of $Q$ that gives an acceptance
 fraction of about 0.25.
+Don't try to optimize precisely; just evaluate the acceptance fraction
+on a logarithmic grid of $Q$ with values of $Q$ separated by factors
+of 2.
 \end{problem}
 
 \begin{problem}
@@ -943,6 +946,14 @@ Re-do \problemname~\ref{prob:tuning} but instead of trying to reach a
 certain acceptance fraction, try to minimize the autocorrelation time.
 (This, by the way, is the Right Thing To Do, but often expensive.)
 What do you get as the best value of $Q$ in this case?
+Again, just evaluate on a coarse logarithmic grid.
+\end{problem}
+
+\begin{problem}
+In \problemname~\ref{prob:tuning} you varied only the parameter $Q$, but
+really there are three free parameters (two variances and a covariance).
+If the problem was $D$-dimensional, how many tuning parameters would there
+be, in principle?
 \end{problem}
 
 \section{Initialization and burn-in}
