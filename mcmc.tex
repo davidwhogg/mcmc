@@ -465,7 +465,8 @@ It is so simple that we recommend that any reader of this document
   who has not previously implemented the algorithm take a break at the end
   of this \sectionname\ and implement it forthwith, in a short piece of computer code,
   in the context of some simple problem.\note{%
-    HOGG put reference to fitting a line here and point inside to the simple problem suggestion.}
+    HOGG put reference to fitting a line here and point inside to the simple problem suggestion.
+    HOGG connect to the actual \problemname s in this document!!}
 
 The M--H MCMC algorithm requires two inputs.
 The first is a handle to the function $f(\pars)$ that is the function to be sampled,
@@ -1032,9 +1033,35 @@ If you really need to check all of parameter space, you should put
 MCMC aside, and do an exhaustive search.\note{You might want to open a
   bottle of wine or two while the code runs.}
 
-\begin{problem}
+\begin{problem}\label{prob:initialization}
+Re-do \problemname~\ref{prob:firstMH} but with different starting
+positions.
+What happens as you make the starting position extremely far from the
+origin?
+Did you write the algorithm in terms of $\ln p(x)$ or $p(x)$?
+This makes a difference for extreme initializations!
+What is the scaling:  As you move the initialization further away,
+how much longer does it take for the sampler to reach reasonable
+density?
+\end{problem}
 
-HOGG
+\begin{problem}
+Check the scaling you found in \problemname~\ref{prob:initialization}
+with a higher-dimensional Gaussian (try, for example, a 10-d Gaussian).
+The same or worse?
+\end{problem}
+
+\begin{problem}
+Import (or write) an optimizer, and upgrade the code you wrote for
+\problemname~\ref{prob:initialization} to begin by optimizing $\ln
+p(x)$ and only then start the MCMC sampler from that optimum.
+Use a sensible optimizer.
+Compare the scaling you found in
+\problemname~\ref{prob:initialization} to the same scaling for the
+optimizer.
+To make this test fair, don't use the awesome math you know about
+Gaussians to help you here; pretend that $p(x)$ is an unknown function
+with unknown derivatives.
 \end{problem}
 
 \section{Results, error bars, and figures}\label{sec:results}
