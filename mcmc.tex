@@ -590,7 +590,7 @@ That is, even if---in the end---%
   and given the intuition you gain by doing it (at least once) yourself.\note{%
     HOGG Refer again to the DAR on fitting a line for an example project.}
 
-\begin{problem}\label{prob:firstMH}
+\begin{problem}\label{prob:MH}
 In your scientific programming language of choice, write a very simple
 M-H MCMC sampler.
 Sample in a single parameter $x$ and give the sampler as its density
@@ -602,13 +602,13 @@ Plot the results as a histogram, with the true density over-plotted sensibly.
 \end{problem}
 
 \begin{problem}
-Re-do \problemname~\ref{prob:firstMH} but now with an input density
+Re-do \problemname~\ref{prob:MH} but now with an input density
 that is uniform on $3<x<7$ and zero everywhere else.
 What change did you have to make to the initialization, and why?
 \end{problem}
 
 \begin{problem}\label{prob:twod}
-Re-do \problemname~\ref{prob:firstMH} but now with an input density
+Re-do \problemname~\ref{prob:MH} but now with an input density
 that is a function of two variables $(x, y)$.
 For the function use a covariant Gaussian density with variance tensor HOGG,
 and then a top-hat function that is uniform on HOGG and zero elsewhere.
@@ -620,14 +620,14 @@ plot for each sampling.
 \end{problem}
 
 \begin{problem}
-Re-do \problemname~\ref{prob:firstMH} but with different values for
+Re-do \problemname~\ref{prob:MH} but with different values for
 the variance of the proposal distribution $q(x'\given x)$.
 What happens when you go to very extreme values (like for instance
 $10^{-8}$ or $10^6$)?
 \end{problem}
 
 \begin{problem}
-Why, in \problemname~\ref{prob:firstMH}, did we give the proposal
+Why, in \problemname~\ref{prob:MH}, did we give the proposal
 distribution $q(x'\given x)$ zero mean?
 What would be bad if we hadn't done that?
 Try setting the mean of $q(x'\given x)$ to something non-zero and see
@@ -780,7 +780,7 @@ Often some parameter directions are much worse than others; it is
 worth looking at the chain in all parameter directions.
 
 \begin{problem}
-Re-do \problemname~\ref{prob:firstMH} but now look at convergence:
+Re-do \problemname~\ref{prob:MH} but now look at convergence:
 Plot the $x$ chain as a function of timestep.  Also split the chain
 into four contiguous segments (the first, second, third, and fourth
 quarters of the chain).  In each of these four, compute the empirical
@@ -791,7 +791,7 @@ convergence from these heuristics?
 \begin{problem}
 Write a piece of code that computes the empirical autocorrelation
 function and the empirical autocorrelation time from a chain.  Run
-this on the chain you obtained from \problemname~\ref{prob:firstMH}.
+this on the chain you obtained from \problemname~\ref{prob:MH}.
 Plot the autocorrelation function you get and over-plot the
 autocorrelation time as an indicator on the plot.  What do you
 conclude?
@@ -1045,7 +1045,7 @@ MCMC aside, and do an exhaustive search.\note{You might want to open a
   bottle of wine or two while the code runs.}
 
 \begin{problem}\label{prob:initialization}
-Re-do \problemname~\ref{prob:firstMH} but with different starting
+Re-do \problemname~\ref{prob:MH} but with different starting
 positions.
 What happens as you make the starting position extremely far from the
 origin?
@@ -1419,7 +1419,7 @@ There is a class of MCMC methods that make use of gradient information
 to effectively inform the proposal distribution and thus speed sampling.
 
 DFM: more here!  For example, does this work better in large numbers
-of dimensions?  If so, we should say so.  And references, please.
+of dimensions?  If so, we should say so.  And cite \citep{hamiltonian}.
 
 \paragraph{Importance:}
 Sometimes it is possible to sample efficiently from a distribution
@@ -1624,7 +1624,21 @@ That is, if you change your parameters, you \emph{must} change your priors corre
 Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
 \begin{problem}
-HOGG
+Run your M-H MCMC sampler from \problemname~\ref{prob:MH}, but now
+with a density function that is precisely unity \emph{everywhere}
+(that is, at any input value of $x$ it returns unity).  That is, an
+improper function.  Run it for longer and longer and plot the chain
+value $x$ as a function of timestep.  What happens?
+\end{problem}
+
+\begin{problem}
+Modify the sampler you wrote in \problemname~\ref{prob:MH} to take
+steps not in $x$ but in $\ln x$.  That is, replace the Gaussian
+proposal distribution $q(x'\given x)$ with a Gaussian distribution in
+$\ln x$ $q(\ln x'\given \ln x)$.  What about your answers change?  How
+wrong is your answer?  Bonus points: Compute the analytic function
+that you have sampled from (that is, not $p(x)$) and over-plot it on
+your histogram.
 \end{problem}
 
 \section{Troubleshooting and advice}\label{sec:troubleshooting}
@@ -1967,7 +1981,7 @@ about what changes to make or what new directions to explore.
   \isbn{978-0471810339}.
 \bibitem[Brooks \etal(2011)]{mcmchandbook}
   Brooks,~S., Gelman~A., Jones~G., \& Meng,~X.-L., eds.\ 2011,
-  \textit{Handbook of Markov Chain Monte Carlo},
+  \href{http://www.mcmchandbook.net/HandbookTableofContents.html}{\textit{Handbook of Markov Chain Monte Carlo}},
   Chapman and Hall~/~CRC Press
   \isbn{978-1-4200-7941-8}.
 \bibitem[Foreman-Mackey \etal(2012)]{emcee}
@@ -1978,7 +1992,7 @@ about what changes to make or what new directions to explore.
   (also \arxiv{1202.3665}).
 \bibitem[Geyer(2011)]{geyer}
   Geyer,~C.~J., 2011,
-  Introduction to Markov Chain Monte Carlo,
+  \href{http://www.mcmchandbook.net/HandbookChapter1.pdf}{Introduction to Markov Chain Monte Carlo},
   in \citet{mcmchandbook}.
 \bibitem[Hogg \etal(2010)]{fittingaline}
   Hogg,~D.~W., Bovy,~J., \& Lang,~D., 2010,
@@ -1992,6 +2006,10 @@ about what changes to make or what new directions to explore.
   Metropolis,~N., Rosenbluth,~A.~W., Rosenbluth,~M.~N., Teller,~A.~H., \& Teller,~E., 1953,
   Equation of state calculations by fast computing machines,
   \textit{J.\ Chem.\ Phys.}, \textbf{21} 1087--1092.
+\bibitem[Neal \etal(2011)]{hamiltonian}
+  Neal,~R.~M., 2011,
+  \href{http://www.mcmchandbook.net/HandbookChapter5.pdf}{MCMC Using Hamiltonian Dynamics},
+  in \citet{mcmchandbook}.
 \bibitem[van~der~Walt \etal(2011)]{numpy}
   van~der~Walt,~S., Colbert,~S.~C., \& Varoquaux,~G., 2011,
   The NumPy Array: A structure for efficient numerical computation,
