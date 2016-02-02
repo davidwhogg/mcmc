@@ -465,8 +465,13 @@ It is so simple that we recommend that any reader of this document
   who has not previously implemented the algorithm take a break at the end
   of this \sectionname\ and implement it forthwith, in a short piece of computer code,
   in the context of some simple problem.\note{%
-    HOGG put reference to fitting a line here and point inside to the simple problem suggestion.
-    HOGG connect to the actual \problemname s in this document!!}
+    We request this in a trivial case below in
+    \problemname~\ref{prob:MH} and the following problems in this
+    \sectionname.
+    We make the same request in a less trivial context in our
+    model-fitting \documentname\ (\citealt{fittingaline},
+    \problemname~6 and 7), where we ask the Reader to implement MCMC for
+    a useful mixture model.}
 
 The M--H MCMC algorithm requires two inputs.
 The first is a handle to the function $f(\pars)$ that is the function to be sampled,
@@ -1278,7 +1283,19 @@ invaluable for suggesting re-parameterizations and transformations
 that simplify your problem.
 
 \begin{problem}
-HOGG
+Look up the Rosenbrock density used as the demonstration case for the
+\project{emcee} sampler (see \citealt{emcee}).
+Tune up a M--H MCMC sampler to sample this density (this isn't trivial),
+or just install and use \project{emcee} to sample it.
+Now plot the $x$ and $y$ histograms of a 10,000-point sampling of this
+distribution (you might have to sample more than 10,000 and thin the
+chain), and also plot the two-dimensional scatter plot of $x,y$
+samples.
+Overplot on all three plots an indicator of the means and medians of
+the samples along the $x$ and $y$ directions.
+Overplot on all three plots the (above) recommended quantiles of the
+samples.
+Comment on the results.
 \end{problem}
 
 \section{Gibbs, ensemble, Hamiltonian, and so on}\label{sec:methods}
