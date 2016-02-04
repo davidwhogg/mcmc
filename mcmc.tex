@@ -807,7 +807,9 @@ conclude?
 
 Most MCMC methods
   (though not all\note{We are promoters of an ensemble method that has a
-  nearly-fixed proposal distribution and requires no tuning (CITE EMCEE).})
+  nearly-fixed proposal distribution and requires no tuning \citep{emcee}.
+  There are many problems for which this is \emph{not} the best choice
+  of sampler, but since it obviates tuning, it can be a good first choice.})
   make use of something like a ``proposal distribution''
   which determines what kinds of steps the walker can take
   as it random-walks through the parameter space.
@@ -854,8 +856,12 @@ We usually use proxies for this of various kinds.
 The simplest heuristic proxy statistic for tuning is the \emph{acceptance fraction}.
 If you are accepting almost all proposed steps, your step sizes are too small on average.
 If you are accepting almost none, your step sizes are too large.
-The Goldilocks value is around a quarter,
-  with an argument floating around that it should be 0.234 for best performance\note{CITE GELMAN}
+The Goldilocks value is between a half and about a quarter,
+  with an argument floating around that it should be 0.234 for best
+  performance in high dimensional problems\note{%
+    The argument and assumptions underlying the 0.234 fraction
+    (and higher acceptance fractions at lower numbers of dimensions)
+    are laid out in \citet{gelman234}.}
   (though you could never tune it precisely enough to warrant that third digit of accuracy).
 In the burn-in phase (discussed below) of an MCMC run,
   it makes sense to track the acceptance ratio,
@@ -1795,7 +1801,8 @@ These plots will have long horizontal patches if the chain is getting stuck;
   a converged chain will show the walker traversing the parameter space in every dimension fully many times
   over the length of the run.
 Not a few times; many times.
-If you are using an ensemble sampler\note{CITE EMCEE},
+If you are using an ensemble sampler\note{Such as \project{emcee} \citep{emcee};
+  one nice thing about the ensemble sampler is that it gives you great diagnostic information automatically.}
   make plots showing all $M$ walkers, each a different color.
 A converged run for an ensemble sampler will show every single walker traversing the parameter space
   in every dimension many times.
@@ -2017,6 +2024,10 @@ about what changes to make or what new directions to explore.
   \textit{Pubs.\,Astron.\,Soc.\,Pac.}\ \textbf{125} 306--312
   \doi{10.1086/670067}
   (also \arxiv{1202.3665}).
+\bibitem[Gelman \etal(1996)]{gelman234}
+  Gelman,~A., Roberts,~G.~O., \& Gilks,~W.~R., 1996,
+  Efficient Metropolis jumping rules,
+  \textit{Bayesian Stat.}\ \textbf{5} 599--607.
 \bibitem[Geyer(2011)]{geyer}
   Geyer,~C.~J., 2011,
   \href{http://www.mcmchandbook.net/HandbookChapter1.pdf}{Introduction to Markov Chain Monte Carlo},
