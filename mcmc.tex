@@ -539,7 +539,7 @@ You can break this property, if you like, and then adjust the
   except under the supervision of a trained professional.\note{Actually,
   our own favorite method, \project{emcee}, has a proposal pdf that does
   violate detailed balance in this way and has a compensated
-  acceptance fraction.  Read the paper [HOGG CITE] for more details.}
+  acceptance fraction.  Read the paper \cite{emcee} for more details.}
 If the detailed balance condition frightens you (as it frightens us),
   then just stick with pdfs that are symmetric in $\pars'$ and $\pars$,
   like the Gaussian, or a centered uniform distribution and forget about
@@ -1431,8 +1431,15 @@ differentiated, such that it is possible to quickly execute a gradient
 $\dd f/\dd\pars$ evaluation.
 Indeed, in the modern world of computing, there are even
 auto-differentiation systems that deliver automatically code that
-produces the gradient of any function you can write.\note{HOGG cite
-  autodiff systems}
+produces the gradient of any function you can write.\note{%
+  The idea is that for (almost) any function you can write,
+  a robot can write the function that is the derivative of that
+  function, using simple differentiation rules andthe magic of the
+  chain rule. Differentiation is a typographic operation on computer
+  functions!  The idea is \emph{not} to take numerical (small
+  difference) derivatives of the code; there is no way that
+  finite-difference differentiation could help your sampling in the
+  long run.}
 There is a class of MCMC methods that make use of gradient information
 to effectively inform the proposal distribution and thus speed sampling.
 
@@ -1550,10 +1557,6 @@ but there are criteria for creating reversible-jump proposals between
 the parameter spaces.
 These methods are best built and operated under the supervision of a
 trained professional.
-
-\begin{problem}
-HOGG
-\end{problem}
 
 \section{Likelihoods and priors}
 
