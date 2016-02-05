@@ -5,7 +5,7 @@
 % to-do
 % -----
 % - Kill all issues in this list, below:
-% - Deal with all mentions of ``DFM'' or ``HOGG'' and all ``CITE'' and ``...''
+% - Deal with all mentions of ``DFM'' or ``HOGG'' and ``...''
 % - Should we cite the Brooks book or just chapters within it?  I think the latter!
 % - Should we make an \acronym{} environment and use it religiously?  I think yes.
 % - Do we need to explain the variance on a sampling-based estimator of an integral?  Right now this is just in an end-note (or will be when I write it).  Should it be in the main text?  Probably!
@@ -1944,8 +1944,13 @@ of the data the model ``explains well'' and what parts of the data the
 model ``explains badly''.
 These kinds of experiments usually reveal inadequacies of the model in
 a rich way, or confirm that certain assumptions are bad.
-Cross-validation\note{CITE SOMETHING} is a framework for constructing
-valuable tests of this form, as is posterior predictive checks\note{CITE SOMETHING}.
+Cross-validation\note{Cross-validation is an incredibly valuable set
+  of techniques that all astronomers should know.
+  it is not clear what to cite here, but one possibility is \citet{crossval}.}
+is a framework for constructing
+valuable tests of this form, as is posterior predictive checks\note{%
+  The posterior predictive check is one of the Bayesian equivalents of
+  a goodness-of-fit test \citep{ppcheck}.}
 Importantly, you want to find ways to compare your model to your data
 \emph{in the space of the data}.
 Don't just look at the parameter space of your model!
@@ -2031,8 +2036,17 @@ about what changes to make or what new directions to explore.
   \textit{Pubs.\,Astron.\,Soc.\,Pac.}\ \textbf{125} 306--312
   \doi{10.1086/670067}
   (also \arxiv{1202.3665}).
-\bibitem[Gelman \etal(1996)]{gelman234}
-  Gelman,~A., Roberts,~G.~O., \& Gilks,~W.~R., 1996,
+\bibitem[Geisser(1993)]{crossval}
+  Geisser,~S., 1993,
+  \textit{Predictive Inference: An Introduction},
+  Chapman \& Hall
+  \isbn{978-0412034718}.
+\bibitem[Gelman \etal(1996a)]{ppcheck}
+  Gelman,~A., Meng,~X.-L., \& Stern,~H., 1996a,
+  \href{http://www.jstor.org/stable/24306036}{Posterior predictive assessment of model fitness via realized discrepancies},
+  \textit{Statistica Sinica}, \textbf{6}(4) 733--760.
+\bibitem[Gelman \etal(1996b)]{gelman234}
+  Gelman,~A., Roberts,~G.~O., \& Gilks,~W.~R., 1996b,
   \href{http://www.stat.columbia.edu/~gelman/research/published/baystat5.pdf}{Efficient Metropolis jumping rules},
   in Bernardo,~J.~M, Berger,~J.~O., Dawid,~A.~P., \& Smith,~A.~F.~M, eds.,
   \textit{Bayesian Statistics} \textbf{5}, Oxford University Press
