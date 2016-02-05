@@ -900,7 +900,7 @@ Violating the Markov property can be very bad;
   on which all our righteous power is based.
 
 Another proxy for autocorrelation time useful for tuning is the
-  Expected Squared Jump Distance.\note{(CITE GELMAN)}
+  Expected Squared Jump Distance.\note{See \citet{esjd}.}
 This is the mean squared distance the walker moves, per step.
 It is maximized when the acceptance ratio is reasonable
   and the step size is large;
@@ -1891,7 +1891,7 @@ For another example, sometimes there is almost an exact degeneracy between two p
   say $a$ and $b$.  Then it makes sense to switch to parameters $a+b$ and $a-b$,
   or some other linear combinations where correlations or near-degeneracies are likely to be reduced.
 Again, such transformations require also prior transformations, which must be made with care.
-There are some affine invariant samplers\note{CITE EMCEE AGAIN HERE} that are invariant to such transformations,
+There are some affine invariant samplers\note{Note how much we like to cite \citet{emcee}!} that are invariant to such transformations,
   but if you aren't using such a sampler,
   it is worth getting out ahead of these problems.
 They can be found by performing an exploratory sampling,
@@ -1917,7 +1917,7 @@ out.\note{Physicists sometimes forget this, and believe that various
   if they \emph{are} true, they don't precisely explain any
   observation, which is also affected by various kinds of auxilliary
   effects and noises for which there is (and can be, for deep reasons,
-  discussed elsewhere by us; CITE) no extremely precise model.  So in
+  to be discussed in other \documentname s in this series) no extremely precise model.  So in
   detail, any model of any specific observation must be wrong, even in
   the (exceedingly unlikely) event that the fundamental model is
   correct.}
@@ -2057,6 +2057,10 @@ about what changes to make or what new directions to explore.
   Neal,~R.~M., 2011,
   \href{http://www.mcmchandbook.net/HandbookChapter5.pdf}{MCMC Using Hamiltonian Dynamics},
   in \citet{mcmchandbook}, 113--162.
+\bibitem[Pasarica \& Gelman(2010)]{esjd}
+  Pasarica,~C. \& Gelman,~A., 2010
+  \href{http://www.jstor.org/stable/24308995}{Adaptively scaling the Metropolis algorithm using expected squared jumped distance},
+  \textit{Statistica Sinica}, \textbf{20}(1) 343--364.
 \bibitem[van~der~Walt \etal(2011)]{numpy}
   van~der~Walt,~S., Colbert,~S.~C., \& Varoquaux,~G., 2011,
   The NumPy Array: A structure for efficient numerical computation,
