@@ -5,8 +5,8 @@
 % to-do
 % -----
 % - Kill all issues in this list, below:
-% - Deal with all mentions of ``DFM'' or ``HOGG'' and ``...''
-% - Should we cite the Brooks book or just chapters within it?  I think the latter!
+% - Deal with all mentions of ``DFM'' or ``HOGG''
+% - Go through github issues, if any.
 % - Should we make an \acronym{} environment and use it religiously?  I think yes.
 % - Do we need to explain the variance on a sampling-based estimator of an integral?  Right now this is just in an end-note (or will be when I write it).  Should it be in the main text?  Probably!
 % - mention ESJD
@@ -28,6 +28,7 @@
 
 % style notes
 % -----------
+% - \MCMC not MCMC
 % - These documents are ``Chapters'', no?  Use \documentname.
 % - [LaTeX] newline after every full stop for proper git diffing
 % - [LaTeX] eqnarray not equation
@@ -44,6 +45,8 @@
 \newcommand{\chaptertitle}{Using Markov Chain Monte Carlo}
 \include{styles/dar}
 
+\newcommand{\MCMC}{\acronym{MCMC}}
+\newcommand{\MH}{\acronym{M--H}}
 \newcommand{\Var}{\mathrm{Var}}
 \newcommand{\data}{D}
 \newcommand{\pars}{\theta}
@@ -91,11 +94,11 @@ Daniel~Foreman-Mackey\\
 \affil{Department~of~Astronomy, University~of~Washington}
 
 \begin{abstract}
-Markov Chain Monte Carlo (MCMC) methods for sampling probability
+Markov Chain Monte Carlo (\MCMC) methods for sampling probability
 distribution functions (combined with abundant computational resources)
 have transformed the sciences.
-Here we give a brief overview of the most basic MCMC method and then turn to
-practical advice for the use of MCMC in real inference problems.
+Here we give a brief overview of the most basic \MCMC\ method and then turn to
+practical advice for the use of \MCMC\ in real inference problems.
 We give advice on method choice, tuning for performance,
 methods for initialization, tests of convergence, troubleshooting, and use of the chain
 output to produce or report parameter estimates with associated uncertainties.
@@ -103,15 +106,15 @@ output to produce or report parameter estimates with associated uncertainties.
 
 \section{When do you need MCMC?}\label{sec:when}
 
-Markov Chain Monte Carlo (MCMC) methods are methods for sampling
+Markov Chain Monte Carlo (\MCMC) methods are methods for sampling
 probability distribution functions or probability density functions (pdfs).
 These pdfs may be either probability mass functions on a discrete
 space, or probability densities on a continuous space, though we will
 concentrate on the latter in this \documentname.
-MCMC methods don't require that you have a full analytic description of the
+\MCMC\ methods don't require that you have a full analytic description of the
 properly normalized pdf for sampling to proceed; they only require
 that you be able to compute ratios of the pdf at pairs of locations.
-This makes MCMC methods ideal for sampling \emph{posterior
+This makes \MCMC\ methods ideal for sampling \emph{posterior
   pdfs} in probabilistic inferences:
 
 In a probabilistic inference, the posterior pdf $p(\pars\given\data)$,
@@ -155,11 +158,11 @@ That is, you often know the function $p(\pars\given\data)$ up to a
 constant factor; you can compute ratios of the pdf at pairs of points,
 but not the precise value at any individual point.
 
-In addition to this normalization-insensitive property of MCMC, in its
+In addition to this normalization-insensitive property of \MCMC, in its
 simplest forms it can be run without computing any derivatives or
 integrals of the function, and (as we will show below) in its simplest
 forms it is \emph{extremely easy to implement}.
-For all these reasons, MCMC is ideal for sampling posterior pdfs in
+For all these reasons, \MCMC\ is ideal for sampling posterior pdfs in
 the real situations in which scientists find themselves.
 
 Say you are in this situation:
@@ -194,9 +197,9 @@ setting of a huge blob of parameters\note{Again, the parameter
 Furthermore, say also that you can write down some kind of informative or
 vague prior pdf $p(\pars)$ for the parameter blob $\pars$.
 If all these things are true, then---even if you can't compute
-anything else---in principle a trivial-to-implement MCMC can give you
+anything else---in principle a trivial-to-implement \MCMC\ can give you
 a fair sampling of the posterior pdf.
-That is, you can run MCMC
+That is, you can run \MCMC\ 
 (for a very long time---see \sectionname~\ref{sec:convergence} for how long)
 and you will be left with a set of $K$ parameter-blob settings $\pars_k$ such that the
 full set $\setof{\pars_k}_{k=1}^K$ constitutes a fair sampling from
@@ -210,20 +213,20 @@ All that said, and adhering to the traditions of the \project{Data
   Analysis Recipes} project\note{Every \documentname\ in the \project{Data
     Analysis Recipes} series begins with a rant in which we argue that
   most uses of the methods in question are not appropriate!}, we are
-compelled to note at the outset that MCMC is in fact \emph{over-used}.
-Because MCMC provably (under assumptions\note{Hint at assumptions
+compelled to note at the outset that \MCMC\ is in fact \emph{over-used}.
+Because \MCMC\ provably (under assumptions\note{Hint at assumptions
   here.}, some of which will be discussed below) samples the full
-posterior pdf in all of parameter space, many investigators use MCMC
+posterior pdf in all of parameter space, many investigators use \MCMC\ 
 because it will sample \emph{all} of the parameter space
 ($\pars$-space).
-That is, they are using MCMC because they want to
+That is, they are using \MCMC\ because they want to
 \emph{search the parameter space for good models}.
-This is not a good reason to use MCMC!
+This is not a good reason to use \MCMC!
 Another bad use case is the following:
-Because MCMC samples the parameter representatively, it spends most of
+Because \MCMC\ samples the parameter representatively, it spends most of
 its time near very good models; models that (within the confines of
 the prior pdf) do a good job of explaining the data.
-For this reason, many investigators are using MCMC because it
+For this reason, many investigators are using \MCMC\ because it
 effectively \emph{optimizes the posterior pdf}, or, for certain
 choices of prior pdf, \emph{optimizes the likelihood}.\note{Of course
   a committed Bayesian would argue that any time you are optimizing a
@@ -234,35 +237,35 @@ choices of prior pdf, \emph{optimizes the likelihood}.\note{Of course
   back something far more useful than the output of any optimizer!}
 This is another bad reason!
 
-Both of these reasons for using MCMC---that it is a parameter-space
+Both of these reasons for using \MCMC---that it is a parameter-space
 search algorithm, and that it is a simple-to-code effective
-optimizer---are \emph{not good reasons}.  MCMC is first and foremost a
+optimizer---are \emph{not good reasons}.  \MCMC\ is first and foremost a
 \emph{sampler}.  If you are trying to find the optimum of the
 likelihood or the posterior pdf, you should use an \emph{optimzer},
 not a sampler.  If you want to make sure you search all of parameter
-space, you should use a \emph{search algorithm}, not a sampler.  MCMC
+space, you should use a \emph{search algorithm}, not a sampler.  \MCMC\ 
 is good at one thing, and one thing only: Sampling ill-normalized (or
 otherwise hard to sample) pdfs.
 
 In what follows, we are going to provide a kind of ``user manual'' or
-advice document or folklore capture regarding the use of MCMC for
+advice document or folklore capture regarding the use of \MCMC\ for
 data analysis.
-This will not be a detailed description of multiple MCMC methods
+This will not be a detailed description of multiple \MCMC\ methods
 (indeed, we will only explain one method in detail), and it will not
 be about the mathematical properties or structure of the method or
 methods.
-It will be about how to use MCMC, including diagnosis and
+It will be about how to use \MCMC, including diagnosis and
 trouble-shooting.
 
 The first couple of \sectionname s will describe what a sampling is, and how
-the simplest MCMC method, the Metropolis-Hastings algorithm, can
+the simplest \MCMC\ method, the Metropolis-Hastings algorithm, can
 provide one.
 The next few \sectionname s will provide ideas about how to
-initialize, tune and operate MCMC methods for good performance.
+initialize, tune and operate \MCMC\ methods for good performance.
 The last few \sectionname s will provide advice for making decisions
-among the myriad MCMC methods implementations, how to implement a good
+among the myriad \MCMC\ methods implementations, how to implement a good
 likelihood function and prior pdf function for inference, and how to
-trouble-shoot standard kinds of problems that arise in operating MCMC
+trouble-shoot standard kinds of problems that arise in operating \MCMC\ 
 methods on real problems.
 We will leave parenthetical and philosophical matters to the end-notes,
 which appear after the main text.
@@ -331,7 +334,7 @@ approximation becomes exact as $K$ goes to infinity.
 The size $K$ of the sampling you need \emph{in practice} will depend
 on the expectations you want to compute, and the accuracies you need.
 
-As we noted above (\sectionname~\ref{sec:when}), in the context of MCMC, we are often sampling or
+As we noted above (\sectionname~\ref{sec:when}), in the context of \MCMC, we are often sampling or
 using some \emph{badly normalized} function $f(\pars)$.
 This function is just the pdf $p(\pars)$ multiplied by some unknown and
 hard-to-compute scalar.
@@ -349,7 +352,7 @@ normalized functions $f(\pars)$---as it usually will be---the
 sampling-approximation expectation values are the expectation values
 under the properly-normalized corresponding pdf, even though you might
 \emph{never learn that normalization}.
-When we run MCMC sampling on $f(\pars)$, a function that differs from a
+When we run \MCMC\ sampling on $f(\pars)$, a function that differs from a
 pdf $p(\pars)$ by some unknown normalization constant, then the sampling
 permits computation of the following kinds of quantities:
 \begin{eqnarray}
@@ -376,7 +379,7 @@ The ``correctness'' of a sampling is defined (above) in terms of its use in
   performing integrals or approximate computation of integrals.
 In a deep sense, the \emph{only} thing a sampling is good for is
   computing integrals.
-There are many uses of the MCMC sampling, some of them good and some of them bad.
+There are many uses of the \MCMC\ sampling, some of them good and some of them bad.
 Most of the good or sensible uses will somehow involve integration.
 
 % in the next paragraph I adopt $D$ to be the dimensionality of the space
@@ -396,7 +399,7 @@ Integrals are also involved in finding the mean, median, and any quantiles
   of a pdf.
 They are not involved in finding the \emph{mode} of a pdf.
 For this reason (and others), in what follows, when we talk about what to report
-  about the outcome of your MCMC sampling,
+  about the outcome of your \MCMC\ sampling,
   we will advise in favor of mean, median, and quantiles,
   and we will advise against mode.
 
@@ -417,7 +420,7 @@ That is extremely important for inference,
 This point will return again below in \sectionname~\ref{sec:results}.
 
 Although the discussion in this \documentname\ is general, the most
-common use of MCMC sampling (for us, anyway) is in probabilistic
+common use of \MCMC\ sampling (for us, anyway) is in probabilistic
 inference.
 For this reason, we will often refer to the function $f(\pars)$
 colloquially as ``the posterior pdf''\note{We will also sometimes
@@ -456,7 +459,7 @@ What can you conclude?
 
 \section{Metropolis--Hastings MCMC}
 
-The simplest algorithm for MCMC is the Metropolis--Hastings algorithm (M--H MCMC).\note{%
+The simplest algorithm for \MCMC\ is the Metropolis--Hastings algorithm (\MH\ \MCMC).\note{%
   There are many claims that this algorithm is incorrectly named,
   with claims that it should be credited to Enrico Fermi or Stan Ulam.
   We don't have any opinions of this matter, but encourage the reader to follow this up.
@@ -471,10 +474,10 @@ It is so simple that we recommend that any reader of this document
     \sectionname.
     We make the same request in a less trivial context in our
     model-fitting \documentname\ (\citealt{fittingaline},
-    \problemname~6 and 7), where we ask the Reader to implement MCMC for
+    \problemname~6 and 7), where we ask the Reader to implement \MCMC\ for
     a useful mixture model.}
 
-The M--H MCMC algorithm requires two inputs.
+The \MH\ \MCMC\ algorithm requires two inputs.
 The first is a handle to the function $f(\pars)$ that is the function to be sampled,
   such that the algorithm can evaluate $f(\pars)$ for any value of the parameters $\pars$.
 In data-analysis contexts,
@@ -501,9 +504,9 @@ That is, at each step, either a new proposed position in the parameter
   in the parameter space \emph{gets repeated}.
 The algorithm can be iterated a large number $K$ of times to produce $K$ samples.
 
-HOGG: ...Why does M--H MCMC work (briefly)?  Here or later?
+HOGG: ...Why does \MH\ \MCMC\ work (briefly)?  Here or later?
 
-This algorithm---and indeed any MCMC algorithm---produces a
+This algorithm---and indeed any \MCMC\ algorithm---produces a
   \emph{biased random walk} through parameter space.
 It is a random walk for the same reason that it is ``Markov'':
 The step it makes to position $\pars_{k+1}$ depends only on the state
@@ -517,7 +520,7 @@ Because of this local (Markov) property, the nearby samples are not
   arbitrary run time, and two samples are only independent when they are
   sufficiently separated in the chain (more on this below).
 
-The principal user-settable knob in M--H MCMC is the proposal
+The principal user-settable knob in \MH\ \MCMC\ is the proposal
   pdf $q(\pars'\given\pars)$.
 A typical choice is a multi-variate Gaussian distribution for $\pars'$
   centered on $\pars$ with some simple (diagonal, perhaps) variance
@@ -573,19 +576,19 @@ These think-os can get subtle;
 We will return to this point below in our comments on functional testing.
 
 As we discuss briefly below in \sectionname~\ref{sec:methods},
-  there are many MCMC methods more advanced than M--H.
+  there are many \MCMC\ methods more advanced than M--H.
 However, they all share characteristics with M--H
   (initialization, tuning, judging convergence),
-  such that it is very valuable to understand M--H well before using anything more advanced.
-Furthermore, a scientist new to MCMC benefits enormously from
-  building, tuning, and using her or his own MCMC software.
+  such that it is very valuable to understand \MH\ well before using anything more advanced.
+Furthermore, a scientist new to \MCMC\ benefits enormously from
+  building, tuning, and using her or his own \MCMC\ software.
 One piece of advice we give then,
-  to the new user of MCMC,
-  is to code up, tune, and use a M--H MCMC sampler for a scientific project.
+  to the new user of \MCMC,
+  is to code up, tune, and use a \MH\ \MCMC\ sampler for a scientific project.
 A huge amount is learned in doing this,
-  and it is very often the case that the home-built M--H MCMC does everything needed;
+  and it is very often the case that the home-built \MH\ \MCMC\ does everything needed;
   you often don't need any more advanced tool.
-Only after you have concluded that your home-built M--H MCMC sampler
+Only after you have concluded that your home-built \MH\ \MCMC\ sampler
   is not suited to your project
   (or not developed properly into a properly versatile software package)
   should you download and start to use any professionally developed alternative.
@@ -594,13 +597,16 @@ That is, even if---in the end---%
   it is still valuable to build your own,
   given the simplicity of the algorithm,
   and given the intuition you gain by doing it (at least once) yourself.\note{%
-    HOGG Refer again to the DAR on fitting a line for an example project.}
+    We also make this point in a previous \documentname\ (\citealt{fittingaline};
+    the ambitious reader will find in that \documentname\ a solid example project
+    for using \MCMC\ in a real context.}
 
 \begin{problem}\label{prob:MH}
 In your scientific programming language of choice, write a very simple
-M-H MCMC sampler.
+M-H \MCMC\ sampler.
 Sample in a single parameter $x$ and give the sampler as its density
 function $p(x)$ a Gaussian density with mean 2 and variance 2.
+(Note that variance is the \emph{square} of the standard deviation.)
 Give the sampler a proposal distribution $q(x'\given x)$ a Gaussian
 pdf with mean zero and variance 1.
 Initialize the sampler with $x=0$ and run the sampler for more than $10^4$ steps.
@@ -616,9 +622,15 @@ What change did you have to make to the initialization, and why?
 \begin{problem}\label{prob:twod}
 Re-do \problemname~\ref{prob:MH} but now with an input density
 that is a function of two variables $(x, y)$.
-For the function use a covariant Gaussian density with variance tensor HOGG,
-and then a top-hat function that is uniform on HOGG and zero elsewhere.
-For the proposal distribution $q(x'\given x)$ a two-dimensional Gaussian
+For the density function use two different functions.
+The first density function is a covariant two-dimensional Gaussian density with variance tensor
+\begin{eqnarray}
+V &=& \left[\begin{array}{cc} 2.0 & 1.2 \\ 1.2 & 2.0 \end{array}\right]
+\quad .
+\end{eqnarray}
+The second density function is a rectangular top-hat function that is uniform on
+the joint constraint $3<x<7$ and $1<y<9$ and zero everywhere else.
+For the proposal distribution $q(x', y'\given x, y)$ a two-dimensional Gaussian
 density with zero mean and variance tensor set to the two-dimensional
 identity matrix.
 Plot the two one-dimensional histograms and also a two-dimensional scatter
@@ -645,7 +657,7 @@ again.
 
 \section{Convergence}\label{sec:convergence}
 
-A key question for an MCMC operator---\emph{the} key question in some
+A key question for an \MCMC\ operator---\emph{the} key question in some
 sense---is \emph{how long to run} to be sure of having reliable
 results.
 It is disappointing and annoying to many that there is no extremely
@@ -668,7 +680,7 @@ That is, knowing that you have a complete and representative sampling
 is effectively impossible.
 
 In this context,
-  it is \emph{simply not fair} to require an MCMC run to have fully and completely
+  it is \emph{simply not fair} to require an \MCMC\ run to have fully and completely
   sampled the posterior pdf,
   at least not in any provable sense.
 The question of whether a sampling is converged to a representative sampling
@@ -676,7 +688,7 @@ The question of whether a sampling is converged to a representative sampling
   because the domain of science is the domain of questions answerable by scientists.
 That is, you can \emph{never know} that you have correctly sampled the posterior pdf,
   despite many statements in the literature to the contrary.%
-  \note{Give example statements... Mention cases in which you \emph{might} be able to claim this...}
+  \note{Give example statements... HOGG: Mention cases in which you \emph{might} be able to claim this...}
 The upshot of this is that we don't and can't require any kind of absolute convergence;
   indeed, it would be impossible even to test for it.
 
@@ -709,7 +721,7 @@ C(\Delta) &\equiv& \frac{E[(\pars_k - \mu)\,(\pars_{k+\Delta} - \mu)]}{E[(\pars 
 that is, it is the covariance of points separated by $\Delta$, taken
 relative to the variance.
 In the above equation, the assumption is that the samples $\pars_k$ are
-given in the order that they were generated by the MCMC algorithm.
+given in the order that they were generated by the \MCMC\ algorithm.
 By construction
 \begin{eqnarray}
 C(0) &=& 1
@@ -781,7 +793,7 @@ Since all convergence tests are fundamentally heuristic, it is useful
 to just make the heuristic visualization of the samples $\pars_k$ as a
 function of $k$, in the order they were generated.
 The chain is likely to be converged only if the random-walk process
-crossed the domain of $\pars$ fully many times during the MCMC run.
+crossed the domain of $\pars$ fully many times during the \MCMC\ run.
 Often some parameter directions are much worse than others; it is
 worth looking at the chain in all parameter directions.
 
@@ -805,7 +817,7 @@ conclude?
 
 \section{Tuning}\label{sec:tuning}
 
-Most MCMC methods
+Most \MCMC\ methods
   (though not all\note{We are promoters of an ensemble method that has a
   nearly-fixed proposal distribution and requires no tuning \citep{emcee}.
   There are many problems for which this is \emph{not} the best choice
@@ -847,7 +859,7 @@ In a deep sense, the only scalar that makes sense to optimize,
   is the autocorrelation time, described above.
 The optimal step size is the step size that makes for the shortest autocorrelation time.
 This is easy to state, but hard to use in practice;
-  being a second-order statistic of the MCMC chain,
+  being a second-order statistic of the \MCMC\ chain,
   the autocorrelation time is a hard thing to measure without a lot of data,
   so it is hard to quickly estimate it and adjust,
   much less put it into some kind of optimization loop.
@@ -863,12 +875,12 @@ The Goldilocks value is between a half and about a quarter,
     (and higher acceptance fractions at lower numbers of dimensions)
     are laid out in \citet{gelman234}.}
   (though you could never tune it precisely enough to warrant that third digit of accuracy).
-In the burn-in phase (discussed below) of an MCMC run,
+In the burn-in phase (discussed below) of an \MCMC\ run,
   it makes sense to track the acceptance ratio,
   and adjust the proposal distribution variance as you get acceptance ratios
   that are far from the Goldilocks ratio.
 This process can be automated easily;
-  such automation is part of many projects that use MCMC.
+  such automation is part of many projects that use \MCMC.
 
 % HOGG:  Is the following a repeat from previously and/or does it mesh with what's earlier?
 
@@ -889,14 +901,14 @@ Code can be built that uses the burn-in phase to tune all $D$ proposal variances
 One note to make here---%
   because it is relevant to tuning---%
   is that tuning can \emph{only} take place during the burn-in phase;
-  you cannot tune \emph{while} you run your final MCMC run.
+  you cannot tune \emph{while} you run your final \MCMC\ run.
 Why not?
 Because tuning the proposal distribution based on the past history of the chain
   violates the ``Markov'' property
   that each step depends \emph{only} on the state at the previous step.
 Violating the Markov property can be very bad;
   when you violate it,
-  you lose all the provable properties of MCMC
+  you lose all the provable properties of \MCMC\ 
   on which all our righteous power is based.
 
 Another proxy for autocorrelation time useful for tuning is the
@@ -921,7 +933,7 @@ One is to see if any of the parameters has a conditional posterior
 These dimensions can often be sampled \emph{exactly},
   outside of the MCCM framework;
   the algorithm looks like:
-Take an MCMC step in the hard parameters,
+Take an \MCMC\ step in the hard parameters,
   then take an exact step in the easy parameters,
   repeat.
 Another related trick is to analytically marginalize,
@@ -936,12 +948,12 @@ Between them, they ought to span the literature.
 \begin{problem}
 Look at the source code of HOGG: REFERENCE EMCEE, and see if you can
 re-code or extract the autocorrelation-time estimator called HOGG.
-This code should take a MCMC chain of parameter vectors as input and
+This code should take a \MCMC\ chain of parameter vectors as input and
 return a vector of autocorrelation times as output.
 \end{problem}
 
 \begin{problem}\label{prob:tuning}
-Run the MCMC sampling of \problemname~\ref{prob:twod} with the
+Run the \MCMC\ sampling of \problemname~\ref{prob:twod} with the
 covariant Gaussian density.
 Give the proposal density $q(x'\given x)$ a diagonal variance
 tensor that is $Q$ times the two-dimensional identity matrix.
@@ -971,19 +983,19 @@ be, in principle?
 \begin{problem}\label{prob:rosenbrock}
 Look up the Rosenbrock density used as the demonstration case for the
 \project{emcee} sampler (see \citealt{emcee}).
-Tune the Gaussian proposal distribution in your M--H MCMC sampler to sample this density efficiently.
+Tune the Gaussian proposal distribution in your \MH\ \MCMC\ sampler to sample this density efficiently.
 What autocorrelation time do you get?
 Compare to what \project{emcee} gets.
 \end{problem}
 
 \section{Initialization and burn-in}
 
-Just as most (though not all) MCMC methods require a choice of
+Just as most (though not all) \MCMC\ methods require a choice of
 proposal distribution, most (though not all) require a choice about
 initialization:
 The walker needs (or walkers need) to be started somewhere in the
 parameter space.
-In many use cases for MCMC, the investigator wants to use it to obtain
+In many use cases for \MCMC, the investigator wants to use it to obtain
 uncertainty information about or propagate uncertainty into parameter
 estimates.
 In these cases, it makes sense to initialize the walker or walkers at
@@ -1029,7 +1041,7 @@ trouble:
 There is no trivial way to combine together the samplings you get of
 different modes!
 You can either wait a \emph{very long time} so that you see a single
-walker in a single MCMC run traverse from mode to mode enough times to
+walker in a single \MCMC\ run traverse from mode to mode enough times to
 make a representative sampling (dozens or hundreds of times, ideally),
 or you can use a high-end sampler (like nested sampling) that is
 designed for such problems.
@@ -1050,18 +1062,18 @@ other respects.
 Because these two solutions make the same predictions for any data, and
 only differ in their irrelevant, latent, internal ``naming'' of components,
 they are not really different solutions.
-This suggests that when you ask whether the outputs of two MCMC chains
+This suggests that when you ask whether the outputs of two \MCMC\ chains
 are consistent with one another, you should do so in the realm of the
 parameters you \emph{care about}, not irrelevant parameters that do
 not have impact on any present or future data.
 
-But it is worth remembering that just as MCMC is not a good optimizer
+But it is worth remembering that just as \MCMC\ is not a good optimizer
 (generically, samples will not lie close to the maximum of the posterior pdf),
 it is also not a good \emph{search algorithm}.
-There is no sense in which (standard) MCMC methods are efficient at
+There is no sense in which (standard) \MCMC\ methods are efficient at
 searching, or engineered to search, all of parameter space.
 If you really need to check all of parameter space, you should put
-MCMC aside, and do an exhaustive search.\note{You might want to open a
+\MCMC\ aside, and do an exhaustive search.\note{You might want to open a
   bottle of wine or two while the code runs.}
 
 \begin{problem}\label{prob:initialization}
@@ -1085,7 +1097,7 @@ The same or worse?
 \begin{problem}
 Import (or write) an optimizer, and upgrade the code you wrote for
 \problemname~\ref{prob:initialization} to begin by optimizing $\ln
-p(x)$ and only then start the MCMC sampler from that optimum.
+p(x)$ and only then start the \MCMC\ sampler from that optimum.
 Use a sensible optimizer.
 Compare the scaling you found in
 \problemname~\ref{prob:initialization} to the same scaling for the
@@ -1118,17 +1130,17 @@ substantial problem with being a committed probabilist is that when we
 \emph{probability distribution over publications}; we have to publish
 \emph{one single, deterministic text}; we have to make a decision about what
 to write in the title, the abstract, the tables, figures, and results
-section.  Given a MCMC sampling of the posterior pdf, what do we
+section.  Given a \MCMC\ sampling of the posterior pdf, what do we
 report as our \emph{results}?
 
 One thing we can keep in mind to guide us in this is what we said above,
   which is that samplings are good for doing \emph{integrals}.
-We should endeavor to use as our ``results'' outputs from the MCMC
+We should endeavor to use as our ``results'' outputs from the \MCMC\ 
   that are based on integrals computed with the sampling.
 This includes expectations, medians, quantiles, one-dimensional histograms,
   and multi-dimensional histograms.
 This does \emph{not} include the ``best'' sample or a mode or optimum.
-The latter things are not necessarily illegitimate outputs of the MCMC,
+The latter things are not necessarily illegitimate outputs of the \MCMC,
   but they do not make best use of the fact that the sampling is a tool for integration,
   and we do not recommend them.
 
@@ -1140,7 +1152,7 @@ The only simple integral-based options are the posterior mean
   or posterior median value for the parameter.
 
 For example,
-  imagine that by MCMC you have generated
+  imagine that by \MCMC\ you have generated
   $K$ samples $\pars_k$ of a parameter vector $\pars$.
 Now you have a scalar function $q(\pars)$ which takes the parameter vector
   and returns a scalar value%
@@ -1201,7 +1213,7 @@ The very conservative scientist would also show a histogram
 As we mentioned above, scientists often like to report the ``best sample'';
   that is, the sample with the highest posterior pdf value.
 This is not usually a good idea.
-For one, MCMC is a sampling algorithm, not an optimization algorithm;
+For one, \MCMC\ is a sampling algorithm, not an optimization algorithm;
   there are no guarantees that it will find the optimum of the posterior pdf in reasonable time.%
   \note{The sampler samples the pdf fairly.
     The tallest peak in the posterior is not guaranteed to be---%
@@ -1236,7 +1248,7 @@ If you feel drawn to give the best sample,
 This optimal-posterior parameter value is called the
   ``maximum \foreign{a posteriori}'' or ``MAP'' value for the parameters;
   it is like a maximum-likelihood value but regularized by the prior.
-It is an estimator with some good (and some bad) properties, but it is not the point of MCMC,
+It is an estimator with some good (and some bad) properties, but it is not the point of \MCMC,
   and therefore outside the scope of this \documentname.
 
 The parameter space $\pars$ is usually multi-dimensional, and more
@@ -1258,9 +1270,9 @@ space, the mean or median of sampling does not necessarily lie at a
 high-probability location of parameter space.
 This may seem counterintuitive, but it is easy to see in the case of a
 ``banana-shaped'' posterior pdf.
-This all relates to the fact that MCMC is not an optimizer, it is a
+This all relates to the fact that \MCMC\ is not an optimizer, it is a
 sampler.
-It is important, when reporting the output of an MCMC run by giving
+It is important, when reporting the output of an \MCMC\ run by giving
 means or medians of the posterior PDF to remind the reader or user of
 that output that it does not necessarily represent (collectively) a
 good fit to the data; these outputs only give information that is
@@ -1320,13 +1332,13 @@ Comment on the results.
 
 \section{Gibbs, ensemble, Hamiltonian, and so on}\label{sec:methods}
 
-As we have discussed above, MCMC methods are proven to be correct ``in the limit''; that is, when
+As we have discussed above, \MCMC\ methods are proven to be correct ``in the limit''; that is, when
 an infinite number of samples have been taken.
 When the function $f(\pars)$ has challenging properties, the results
 can approach this limit very slowly (or not at all\note{HOGG: discuss
-  situations in which MCMC will not work---related to support.}).
+  situations in which \MCMC\ will not work---related to support.}).
 For this reason, in the finite duration of a scientific project, most
-users of MCMC have one of two (related) problems:
+users of \MCMC\ have one of two (related) problems:
 Either \textsl{(1)}~it is taking too long---it is taking too many steps or
 executing too many calls of the function $f(\pars)$ to get independent
 samples---or \textsl{(2)}~it is not
@@ -1339,9 +1351,9 @@ Indeed, there are many different strategies that work well or badly
 for different functions $f(\pars)$.
 In this \sectionname, we will try to guide the reader towards methods
 that might help in different circumstances.
-We will not give a full description of all the MCMC algorithms out
+We will not give a full description of all the \MCMC\ algorithms out
 there, but just provide some field notes and pointers to references.
-New MCMC methods are being developed all the time, so a reader with a
+New \MCMC\ methods are being developed all the time, so a reader with a
 serious problem would do well to consult with the applied-mathematics
 or statistics literature.\note{Your best interface to these
   literatures is often a colleague in another department, like applied
@@ -1356,8 +1368,8 @@ list compiled today will be incomplete tomorrow.\note{One check-point
   in this literature is the compliation volume by
   \citet{mcmchandbook}, but much has been developed and changed even
   since that was written.}
-The spaces of MCMC methods and MCMC method implementations are both
-growing rapidly, in part because MCMC has become such a core
+The spaces of \MCMC\ methods and \MCMC\ method implementations are both
+growing rapidly, in part because \MCMC\ has become such a core
 technology in the empirical sciences.
 
 All we are going to do here is give a cursory mention to some methods
@@ -1383,7 +1395,7 @@ deeply.
 
 \paragraph{Ensembles:}
 As we discuss more below, one of the critical challenges in the use of
-MCMC is tuning the proposal pdf $q(\pars'\given\pars)$.
+\MCMC\ is tuning the proposal pdf $q(\pars'\given\pars)$.
 In problems in which all of the parameters (all of the components or entries of $\pars$) are somehow ``equivalent'',
 or the parameters can be seen as components of a vector in a vector
 space, there are \emph{ensemble methods} that make use of not just one
@@ -1395,7 +1407,7 @@ directions at which new proposals should be made, obviating or greatly
 reducing the tuning requirements.
 We are co-authors on one of these methods, \project{emcee}\note{HOGG:
   ref emcee}, which is popular in the astrophysical sciences.
-Because ensemble methods are updating independent MCMC chains, they
+Because ensemble methods are updating independent \MCMC\ chains, they
 are often easy to parallelize to make use of multiple cores.
 
 \paragraph{Gibbs:}
@@ -1416,8 +1428,8 @@ For problems with these structures, Gibbs samplers are ideal, and
 there are good implementations.\note{HOGG cite JAGS}
 
 A trivial kind of Gibbs sampling was mentioned above in the
-discussion of M--H MCMC:
-Even when running vanilla M--H MCMC, it is often useful to update only
+discussion of \MH\ \MCMC:
+Even when running vanilla \MH\ \MCMC, it is often useful to update only
 one parameter at a time; that is, do only axis-aligned moves in the
 $\pars$-space, cycling through axes as you go from step to step.
 This helps with tuning and diagnosis, but it also permits a good
@@ -1443,8 +1455,7 @@ say, and global parameters are parameters \emph{of} that population as
 a whole.
 Parallelization is built in to some Gibbs implementations.\note{HOGG}
 
-\paragraph{Hamiltonian:}
-[HOGG, DFM: THIS HAS SOME OTHER NAME; WHAT?]
+\paragraph{Hamiltonian or Hybrid:}
 In many cases of interest, the function $f(\pars)$ can be analytically
 differentiated, such that it is possible to quickly execute a gradient
 $\dd f/\dd\pars$ evaluation.
@@ -1459,7 +1470,7 @@ produces the gradient of any function you can write.\note{%
   difference) derivatives of the code; there is no way that
   finite-difference differentiation could help your sampling in the
   long run.}
-There is a class of MCMC methods that make use of gradient information
+There is a class of \MCMC\ methods that make use of gradient information
 to effectively inform the proposal distribution and thus speed sampling.
 
 DFM: more here!  For example, does this work better in large numbers
@@ -1468,20 +1479,22 @@ of dimensions?  If so, we should say so.  And cite \citep{hamiltonian}.
 \paragraph{Importance:}
 Sometimes it is possible to sample efficiently from a distribution
 that is close to the target function $f(\pars)$ you care about but
-hard to sample efficiently with MCMC.
+hard to sample efficiently with \MCMC.
 An example is a problem that has a simple (Gaussian, say) likelihood
 function times a non-trivial prior:
 It is easy to sample from a Gaussian likelihood times a Gaussian
-prior, even without MCMC, but it might be hard to do the same sampling
+prior, even without \MCMC, but it might be hard to do the same sampling
 under a more complex prior.
-Importance sampling is a direct sampling method (not really an MCMC
+Importance sampling is a direct sampling method (not really an \MCMC\ 
 method at all):
 You take a sampling from the approximate function (which by assumption
 was easy) and then you re-weight the sampling (or do a subsequent
 rejection of samples) using the ratio of the true function to the
 approximate function as a weight or probability.
-We use this quite a bit in our hierarchical inferences.\note{HOGG:
-  Citations}
+We use this quite a bit in our hierarchical inferences.\note{%
+  For example, we use importance sampling to convert individual-planet
+  exoplanet inferences (all performed with dumb priors) into a full-population
+  consistent hierarchical model in \citet{eccentricity}.}
 
 Two of the significant technical details for importance sampling are the
 following:
@@ -1493,7 +1506,7 @@ used as a probability for rejection of samples, then the true function
 must be greater than or equal to the approximate function everywhere!
 
 \paragraph{Slice:}
-... When is slice sampling a good idea?  DFM, can you help here?
+DFM ... When is slice sampling a good idea?  DFM, can you help here?
 
 Slice sampling makes use of the point that (in one dimension) a fair
 sampling of $f(\pars)$ is a projection onto the $\pars$ axis of a
@@ -1516,15 +1529,15 @@ involving samplings governed by Gaussian Processes.\note{DFM: Cite us
   and Murray here.}
 
 \paragraph{Tempering:}
-A huge problem for MCMC samplers---which make local moves based on
+A huge problem for \MCMC\ samplers---which make local moves based on
 local positioning in the parameter space---is that there can be
 multiple modes in the function $f(\pars)$, separated by valleys of
 zero or near-zero density.
-A vanilla MCMC method cannot easily cross such valleys with local
+A vanilla \MCMC\ method cannot easily cross such valleys with local
 moves.
 The idea behind simulated tempering and related methods is to ``smooth
 out'' the function $f(\pars)$ or reduce its dynamic range, to make the
-peaks less tall and the valleys less deep, to permit the MCMC random
+peaks less tall and the valleys less deep, to permit the \MCMC\ random
 walk to cross the valleys.
 The standard method is to introduce a ``temperature'' variable and,
 while sampling, take the likelihood function to the power of the
@@ -1568,7 +1581,7 @@ case the number of stars itself is a parameter, so the number of
 parameters is itself a function of the parameters.\note{HOGG Cite
   Brewer et al}
 In these cases you can only use certain kinds of samplers (though M--H
-MCMC is one you can choose), and, in addition, you need to make
+\MCMC\ is one you can choose), and, in addition, you need to make
 special kinds of proposals that permit the system to jump from one
 parameter space to another that has different dimensionality.
 In these cases, the concept of detailed balance becomes non-trivial,
@@ -1579,17 +1592,17 @@ trained professional.
 
 \section{Likelihoods and priors}
 
-MCMC is used to obtain samples $\pars_k$ from a pdf $p(\pars)$,
+\MCMC\ is used to obtain samples $\pars_k$ from a pdf $p(\pars)$,
   or a badly normalized all-positive function $f(\pars)$
   that is different from the pdf by an unknown factor $Z$.
 In the context of data analysis,
-  MCMC is usually being used to obtain samples $\pars_k$
+  \MCMC\ is usually being used to obtain samples $\pars_k$
   that are \emph{parameter values} $\pars$ for a probabilistic model of some data.
-That is, MCMC is sampling a pdf \emph{for the parameters}.
+That is, \MCMC\ is sampling a pdf \emph{for the parameters}.
 If it is returning parameter values, then it is not sampling a pdf for the data.
-That is, MCMC can only sample a posterior (or prior) pdf for the parameters.
+That is, \MCMC\ can only sample a posterior (or prior) pdf for the parameters.
 \emph{It cannot sample a likelihood.}%
-\note{Well, technically, MCMC \emph{can} be used to sample a likelihood function,
+\note{Well, technically, \MCMC\ \emph{can} be used to sample a likelihood function,
   but the samples would be samples of possible \emph{data} not possible \emph{parameters}.
   The purist might say that even this is not sampling a likelihood function,
   because you should only call it a ``likelihood function'' in contexts in which you are
@@ -1601,7 +1614,7 @@ Despite all this, in many cases,
   data analysts believe they are sampling the likelihood.
 This is because (we presume) they have put a likelihood function
   (or log-likelihood function)
-  in as the input to the MCMC code, where the probability function
+  in as the input to the \MCMC\ code, where the probability function
   (or log-probability function) should go.
 Then is it the likelihood that is being sampled?
 No, not really;
@@ -1614,16 +1627,16 @@ That is, it is a posterior probability for some implicit (and improper) ``flat''
 % discussion with Sven Kreiss on 2013-02-14...
 % ---
 
-Ideally, if you are using MCMC for inference, your code should input
-to the MCMC function or routine a probability function which is a
+Ideally, if you are using \MCMC\ for inference, your code should input
+to the \MCMC\ function or routine a probability function which is a
 product of a prior times a likelihood.
 In terms of implementation, it is usually advisable to work in the
-logarithm of the density function, so the function input to the MCMC code
+logarithm of the density function, so the function input to the \MCMC\ code
 would be called something like \code{ln_f()}.
 This function \code{ln_f()} internally would compute and return the
 sum of a log prior pdf \code{ln_prior()} and a log likelihood function
 \code{ln_likelihood()}.
-(When working in logarithmic probability, in M--H-like MCMC methods,
+(When working in logarithmic probability, in M--H-like \MCMC\ methods,
 the accept--reject step would change from a comparison of a random
 deviate with a ratio of probabilities to comparison of the log of a
 random deviate with a difference of log probabilities.)
@@ -1648,7 +1661,7 @@ parameters are within the prior bounds; it assumes implicitly that the
 prior pdf is easier to compute than the likelihood.
 If you find yourself in the opposite regime, adjust accordingly.
 Of course the above pseudo-code presumes that when you perform the
-accept--reject step of the MCMC method, the programming language handles
+accept--reject step of the \MCMC\ method, the programming language handles
 properly the \code{-Inf} values.\footnote{If you are working in a language
 that doesn't have an \code{Inf} or doesn't evaluate comparisons correctly
 when the \code{Inf} appears, you might have to write some case code, and
@@ -1664,7 +1677,7 @@ That is, if you change your parameters, you \emph{must} change your priors corre
 Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
 \begin{problem}
-Run your M-H MCMC sampler from \problemname~\ref{prob:MH}, but now
+Run your M-H \MCMC\ sampler from \problemname~\ref{prob:MH}, but now
 with a density function that is precisely unity \emph{everywhere}
 (that is, at any input value of $x$ it returns unity).  That is, an
 improper function.  Run it for longer and longer and plot the chain
@@ -1681,30 +1694,36 @@ that you have sampled from (that is, not $p(x)$) and over-plot it on
 your histogram.
 \end{problem}
 
+\begin{problem}
+For a real-world inference problem, read enough of
+\citet{fittingaline} to understand and execute Exercise~6 in that
+document.
+\end{problem}
+
 \section{Troubleshooting and advice}\label{sec:troubleshooting}
 
-When issues arise with MCMC sampling,
+When issues arise with \MCMC\ sampling,
   they are sometimes difficult to diagnose:
-Is it the MCMC code, the priors, the likelihood function,
+Is it the \MCMC\ code, the priors, the likelihood function,
   the initialization, the tuning, or something else?
 
 \paragraph{functional testing:}
 In addition to a full set of unit tests for every part of your code
   (yeah \emph{right}\note{If you aren't unit testing, you are probably making some very big mistakes.}),
-  we recommend building some end-to-end functional tests that permit you to perform MCMC
+  we recommend building some end-to-end functional tests that permit you to perform \MCMC\ 
   runs with output that must meet certain expectations.
 The simplest kind of functional test is to sample a known distribution,
   and check that the sampling has the moments you expect (to within tolerances).
 For example, you can sample a $D$-dimensional Gaussian distribution with known non-trivial covariance,
   and check that the empirical covariance comes out as expected.
-This is an easy test to fail, so a success builds confidence in any MCMC code.
+This is an easy test to fail, so a success builds confidence in any \MCMC\ code.
 
 In the most extreme form of this test,
   for a Gaussian in $D$ dimensions,
   build the covariance matrix input to the Gaussian distribution
   by taking the sum of the outer product of $D+1$ randomly generated vectors.
 Then, before sampling, get the eigenvalues and eigenvectors of the matrix.
-Set up the MCMC sampler with the Gaussian function with this covariance matrix
+Set up the \MCMC\ sampler with the Gaussian function with this covariance matrix
   as the probability function (or the log of it as the log-probability function).
 Sample for many autocorrelation times,
   or until you are confident you are getting good samples.
@@ -1726,14 +1745,14 @@ This tests the sampler,
   (functions that can be normalized).
 This test is most effective as a true end-to-end test of your model
   if you structure your code such that the log probability function \code{lnprob}
-  input to the MCMC scheme
+  input to the \MCMC\ scheme
   is set up as a sum of a log likelihood function \code{lnlikelihood}
   and a prior function \code{lnprior}.
 The sampler can be switched to sampling the prior by a simple replacement
   of the \code{lnlikelihood} function
   with a trivial function that always returns zero.
 
-MCMC should run well in this flat-likelihood case (priors are usually easy to sample)
+\MCMC\ should run well in this flat-likelihood case (priors are usually easy to sample)
   and the output sample histograms should look like what you expect
   given the prior pdfs you coded.
 If the walkers run off to positive or negative infinity,
@@ -1787,7 +1806,7 @@ DFM:...SHOW EXAMPLES?
 
 \paragraph{low acceptance fraction:}
 If you find that you are getting low acceptance fraction
-  (in standard M-H MCMC or other varieties for which there is such a concept)
+  (in standard M-H \MCMC\ or other varieties for which there is such a concept)
   you can simply reduce the sizes of the steps you consider to increase the fraction that are accepted.
 This means decreasing the variance of the proposal distribution,
   or whatever parameter or parameters control the width of that distribution.
@@ -1817,15 +1836,15 @@ A converged run for an ensemble sampler will show every single walker traversing
 DFM: SHOW EXAMPLES OF GOOD AND BAD?
 
 \paragraph{initialization-dependence:}
-If you initialize your MCMC runs in different places in parameter space,
+If you initialize your \MCMC\ runs in different places in parameter space,
   do you get the same (or very similar) final parameter samplings,
   in mean and variance?
 If you don't,
   then your posterior PDF is badly multi-modal;
-  trivial MCMC methods probably won't fix your problem.
+  trivial \MCMC\ methods probably won't fix your problem.
 Not to put too fine a point on it:
 If your results are initialization-dependent,
-  then your MCMC runs \emph{are not converged}.
+  then your \MCMC\ runs \emph{are not converged}.
 
 You either have to go to a method that tries to explore the posterior
   more liberally, such as nested sampling or simulated tempering,
@@ -1839,7 +1858,7 @@ We don't have very useful advice here, except to
   spend time learning about the multiple modes in the posterior PDF
   and what each ``means'' or corresponds to,
   and to do your best to express in your results the multiple optima.
-One of the miracles of MCMC is that if you \emph{can} fairly sample
+One of the miracles of \MCMC\ is that if you \emph{can} fairly sample
   as complex posterior PDF,
   the fraction of samples in each mode
   tends to the relative total integrated posterior probability inside each mode,
@@ -1957,7 +1976,7 @@ Don't just look at the parameter space of your model!
 It is the data that really exist, especially when all models are wrong!
 
 There are model checking methods (like varying the prior and
-re-running MCMC) that test the sensitivity of results to assumptions.
+re-running \MCMC) that test the sensitivity of results to assumptions.
 Not only are these very valuable for testing the model, they are
 essential for writing any paper about your results: The reader always
 wants to know the sensitivity of results to assumptions.\note{And be
@@ -1974,7 +1993,7 @@ the ur-Bayesian thing to be doing is computing a Bayesian evidence
 integral.
 However, it is usually inadvisable:
 The integral is expensive to compute.
-Most MCMC methods are cleverly designed to \emph{avoid} computing this
+Most \MCMC\ methods are cleverly designed to \emph{avoid} computing this
 integral (as we note above in \sectionname~\ref{sec:when}); so it usually adds
 expense to the project.
 At the end of the day, it returns only a single, scalar number, with
@@ -2032,7 +2051,7 @@ about what changes to make or what new directions to explore.
   \isbn{978-1-4200-7941-8}.
 \bibitem[Foreman-Mackey \etal(2012)]{emcee}
   Foreman-Mackey,~D., Hogg,~D.~W., Lang,~D., \& Goodman,~J.\ 2012,
-  \project{emcee}: The MCMC Hammer,
+  \project{emcee}: The \MCMC\ Hammer,
   \textit{Pubs.\,Astron.\,Soc.\,Pac.}\ \textbf{125} 306--312
   \doi{10.1086/670067}
   (also \arxiv{1202.3665}).
@@ -2055,10 +2074,14 @@ about what changes to make or what new directions to explore.
   Geyer,~C.~J., 2011,
   \href{http://www.mcmchandbook.net/HandbookChapter1.pdf}{Introduction to Markov Chain Monte Carlo},
   in \citet{mcmchandbook}, 3--48.
-\bibitem[Hogg \etal(2010)]{fittingaline}
-  Hogg,~D.~W., Bovy,~J., \& Lang,~D., 2010,
+\bibitem[Hogg \etal(2010a)]{fittingaline}
+  Hogg,~D.~W., Bovy,~J., \& Lang,~D., 2010a,
   Data analysis recipes: Fitting a model to data,
   \arxiv{1008.4686v1}.
+\bibitem[Hogg \etal(2010b)]{eccentricity}
+  Hogg,~D.~W., Myers,~A.~D., \& Bovy,~J., 2010b,
+  \href{http://adsabs.harvard.edu/abs/2010ApJ...725.2166H}{Inferring the eccentricity distribution},
+  \textit{Astrophys.\ J.}\ \textbf{725}, 2166--2175.
 \bibitem[Hou \etal(2014)]{fengji}
   Hou,~F., Goodman,~J., \& Hogg,~D.~W., 2014,
   The probabilities of orbital-companion models for stellar radial velocity data,
@@ -2069,7 +2092,7 @@ about what changes to make or what new directions to explore.
   \textit{J.\ Chem.\ Phys.}, \textbf{21} 1087--1092.
 \bibitem[Neal \etal(2011)]{hamiltonian}
   Neal,~R.~M., 2011,
-  \href{http://www.mcmchandbook.net/HandbookChapter5.pdf}{MCMC Using Hamiltonian Dynamics},
+  \href{http://www.mcmchandbook.net/HandbookChapter5.pdf}{\MCMC\ Using Hamiltonian Dynamics},
   in \citet{mcmchandbook}, 113--162.
 \bibitem[Pasarica \& Gelman(2010)]{esjd}
   Pasarica,~C. \& Gelman,~A., 2010
