@@ -490,9 +490,14 @@ This second function must meet a symmetry requirement (detailed
   balance) we discuss further below.
 It permits us to random-walk around the parameter space in a fair way.
 
-The algorithm is the following:
-We have generated some set of samples, the most recent of which is $\pars_k$
-To generate the next sample $\pars_{k+1}$ do the following:
+The algorithm\note{Technically this is the \emph{Metropolis} algorithm
+  rather than the Metropolis--Hastings algorithm.  The difference is
+  that in the Metropolis--Hastings algorithm, we permit the proposal
+  distribution to disobey detailed balance and then we correct the
+  acceptance/rejection step to recover detailed balance.} is the
+following: We have generated some set of samples, the most recent of
+which is $\pars_k$ To generate the next sample $\pars_{k+1}$ do the
+following:
 \begin{itemize}
 \item Draw a proposal $\pars'$ from the proposal pdf $q(\pars'\given\pars_k)$.
 \item Draw a random number $0<r<1$ from the uniform distribution.
@@ -504,7 +509,15 @@ That is, at each step, either a new proposed position in the parameter
   in the parameter space \emph{gets repeated}.
 The algorithm can be iterated a large number $K$ of times to produce $K$ samples.
 
-HOGG: ...Why does \MH\ \MCMC\ work (briefly)?  Here or later?
+Why does this algorithm work?  The answer is not absolutely
+trivial\note{There is a very mathematical discussion in \citet{geyer}
+  that we do not fully understand.  There is a more heuristic answer
+  on \project{Wikipedia} that we are happier with!},
+but there are two components to the argument:
+The first is that the Markov process delivers a unique stationary
+distribution.
+The second is that that stationary distribution is proportional to the
+density function $f(\pars)$.
 
 This algorithm---and indeed any \MCMC\ algorithm---produces a
   \emph{biased random walk} through parameter space.
@@ -538,11 +551,16 @@ q(\pars'\given\pars) &=& q(\pars\given\pars')
 that is, it must be just as easy to go one way in the parameter space
   as the other.
 You can break this property, if you like, and then adjust the
-  acceptance condition accordingly, but we \emph{do not recommend this}
+  acceptance condition accordingly (which is truly the Metropolis--Hastings algorithm), but we \emph{do not recommend this}
   except under the supervision of a trained professional.\note{Actually,
   our own favorite method, \project{emcee}, has a proposal pdf that does
   violate detailed balance in this way and has a compensated
   acceptance fraction.  Read the paper \cite{emcee} for more details.}
+The reason is:  It is one thing to draw samples from $q(x'\given x)$.
+It is another thing to correctly write down $q(x'\given x)$.
+  If you violate detailed balance in $q(x'\given x)$ then you have to be
+  able to \emph{both} draw from \emph{and} write down $q(x'\given x)$
+  and you are subject to a set of new possible bugs for your code.
 If the detailed balance condition frightens you (as it frightens us),
   then just stick with pdfs that are symmetric in $\pars'$ and $\pars$,
   like the Gaussian, or a centered uniform distribution and forget about
@@ -687,8 +705,23 @@ The question of whether a sampling is converged to a representative sampling
   of the posterior pdf is actually outside the domain of science,
   because the domain of science is the domain of questions answerable by scientists.
 That is, you can \emph{never know} that you have correctly sampled the posterior pdf,
-  despite many statements in the literature to the contrary.%
-  \note{Give example statements... HOGG: Mention cases in which you \emph{might} be able to claim this...}
+  despite many statements in the literature to the contrary.\note{%
+For example, you can (almost) never say that your chains are
+definitely converged, or that you have the posterior pdf correct to
+some given level of accuracy.  The reason is related to the ``no free
+lunch'' theorem of discrete optimization: In most problems there is no
+way you could have searched your parameter space finely enough to know
+this.  There are some exceptions of course.  In one kind of exception,
+your problem is convex or Gaussian, and you can analytically show that
+there is exactly one mode in the density and where it is.  Of course
+in these cases you rarely need \MCMC\ to solve your problems!  In
+another kind of exception, you can say something about the finite
+width or shape of the modes of the likelihood function (and prior
+pdf).  For example, sometimes the Cram\'er--Rao bound tells you that
+modes of the density must be smoother than some finite amount.  Then
+an exhaustive search of parameter space followed by \MCMC\ can in
+principle have provable properties.  But, as we say, these situations
+are rare.}
 The upshot of this is that we don't and can't require any kind of absolute convergence;
   indeed, it would be impossible even to test for it.
 
@@ -773,8 +806,18 @@ problems we have; this tuning will also be problem-specific.
 There are many heuristic bases on which different samplers might be
 compared or tuned, but fundamentally it is lower autocorrelation time
 that separates good samplers from bad ones and is the ultimate basis
-on which we compare performance.\note{HOGG: Bash Dunkley and anyone
-  else who has used something else to compare.}
+on which we compare performance.\note{%
+  We sometimes see \MCMC\ methods compared according to burn-in times,
+  which, for one, depends strongly on initialization, and, for two,
+  depends strongly on tuning and dynamics.  Similarly we often see
+  comparisons in terms of acceptance ratio.  In principle the only
+  question is how precise are one's inferences given a certain amount
+  of computation.  This is set by the autocorrelation time and (pretty
+  much) nothing else, for reasonably converged chains.  In the real
+  world, of course, one must add to the CPU time the investigator time
+  spent tuning the method (and thinking about initialization) but
+  there is never (to our knowledge) a condition in which burn-in time
+  is the dominant consideration in choosing an MCMC method.}
 
 Of course, the autocorrelation-time definition
 (\ref{eq:autocorrelationtime}) does not by itself provide an
