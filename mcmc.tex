@@ -8,7 +8,6 @@
 % - Deal with all mentions of ``DFM'' or ``HOGG''
 % - Go through github issues, if any.
 % - Systematically cite chapters of Brooks \etal in each section.
-% - mention ESJD
 % - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
 % - follow up the idea that burn-in doesn't exist at all!  It does for emcee.
@@ -916,7 +915,7 @@ The Goldilocks value is between a half and about a quarter,
   performance in high dimensional problems\note{%
     The argument and assumptions underlying the 0.234 fraction
     (and higher acceptance fractions at lower numbers of dimensions)
-    are laid out in \citet{gelman234}.}
+    are laid out in \citet{gelman234}.\label{note:234}}
   (though you could never tune it precisely enough to warrant that third digit of accuracy).
 In the burn-in phase (discussed below in \sectionname~\ref{sec:initialization}) of an \MCMC\ run,
   it makes sense to track the acceptance ratio,
@@ -925,12 +924,10 @@ In the burn-in phase (discussed below in \sectionname~\ref{sec:initialization}) 
 This process can be automated easily;
   such automation is part of many projects that use \MCMC.
 
-% HOGG:  Is the following a repeat from previously and/or does it mesh with what's earlier?
-
 A very common---%
   and very useful---%
   kind of proposal distribution is one that cycles through parameters,
-  taking a random step in just one parameter at a time.
+  taking a random step in just one parameter at a time.\note{This has a lot to do with Gibbs sampling, which is discussed in \sectionname~\ref{sec:methods}.}
 Aside from involving some persistence of state,
   this kind of proposal distribution can be valuable,
   in part because it reduces the (almost impossible) $D$-dimensional tuning problem
