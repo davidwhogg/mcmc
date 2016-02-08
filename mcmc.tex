@@ -212,8 +212,12 @@ All that said, and adhering to the traditions of the \project{Data
     Analysis Recipes} series begins with a rant in which we argue that
   most uses of the methods in question are not appropriate!}, we are
 compelled to note at the outset that \MCMC\ is in fact \emph{over-used}.
-Because \MCMC\ provably (under assumptions\note{HOGG: Hint at assumptions
-  here.}, some of which will be discussed) samples the full
+Because \MCMC\ provably (under assumptions\note{The assumptions include
+  things like:  The algorithm is run ``long enough'', where this phrase
+  is undefined (since the convergence requirements are set by precision
+  requirements on particular integrals), and that the density that is
+  being sampled has some connectedness properties:  There aren't distant islands of finite density
+  separated by regions of zero (or exceedingly low) density.}, some of which will be discussed) samples the full
 posterior pdf in all of parameter space, many investigators use \MCMC\ 
 because it will sample \emph{all} of the parameter space
 ($\pars$-space).
