@@ -4,10 +4,11 @@
 
 % to-do
 % -----
-% - Kill all issues in this list, below:
+% - Kill all issues in this list, below
 % - Deal with all mentions of ``DFM'' or ``HOGG''
 % - Go through github issues, if any.
 % - Systematically cite chapters of Brooks \etal in each section.
+% - Skim MacKay and make sure we cite him in any relevant place.
 % - mention Gelman--Rubin statistic
 % - mention JAGS and STAN in methods section
 % - follow up the idea that burn-in doesn't exist at all!  It does for emcee.
@@ -1348,7 +1349,7 @@ should you return?
 There are only heuristic answers to this, but a guideline is that, if
 you only care about a single (one-dimensional) parameter, you don't
 need many samples; a dozen suffices to give you a reasonable posterior
-pdf mean and variance.\note{HOGG cite Mackay.}
+pdf mean and variance.\note{This point is made well by \citet{mackay}.}
 If you care about $K$ parameters or dimensions of the parameter space,
 in general the need for samples grows exponentially (or perhaps even
 factorially!) with the number of dimensions.\note{HOGG cite something.}
@@ -1792,9 +1793,16 @@ If it doesn't, it is likely that there is something broken about the sampler its
 Another important functional test is to \emph{sample the prior pdf}.
 This tests the sampler,
   tests that your priors really are what you think they are
-  (and there are so many ways for them \emph{not} to be\note{HOGG}),
-  and tests that your prior pdfs are proper
-  (functions that can be normalized).
+  (and there are so many ways for them \emph{not} to be\note{It is
+    easy to think you have flat priors when in practice your sampler
+    has flat priors in the logarithms of the parameters or inverses of
+    the parameters.  Also, it is easy to have improper priors when you
+    think they are proper, because limits are not working, or you were
+    wrong about the convergence of some integral.  Sometimes the prior pdf in practice has
+    different edges than you think because there is some censoring
+    happening that you haven't considered.  And then, of course, it is
+    possible for your sampler itself to be buggy.}), and tests that
+  your prior pdfs are proper (functions that can be normalized).
 This test is most effective as a true end-to-end test of your model
   if you structure your code such that the log probability function \code{lnprob}
   input to the \MCMC\ scheme
@@ -2150,6 +2158,11 @@ about what changes to make or what new directions to explore.
     The orbit of 17P/Holmes from the behavior of photographers},
   \textit{Astron.\ J.}\ \textbf{144} 46
   \doi{10.1088/0004-6256/144/2/46}.
+\bibitem[MacKay(2003)]{mackay}
+  MacKay,~D.~J.~C., 2003,
+  \href{http://www.inference.phy.cam.ac.uk/mackay/itila/book.html}{\textit{Inference, Information Theory, and Learning Algorithms}},
+  Cambridge University Press
+  \isbn{9780521642989}.
 \bibitem[Metropolis \etal(1953)]{metropolis}
   Metropolis,~N., Rosenbluth,~A.~W., Rosenbluth,~M.~N., Teller,~A.~H., \& Teller,~E., 1953,
   Equation of state calculations by fast computing machines,
