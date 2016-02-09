@@ -1221,9 +1221,15 @@ These are both produced by integrals;
 What are your best options for the ``uncertainty'' or ``limits'' on this parameter?
 The only simple integral-based options are either variances or else posterior quantiles.
 We usually use quantiles.
-That is, the ``one-sigma'' error bar can be taken to be the half-size of the central (or smallest%
-  \note{HOGG shizzle about choosing quantiles}) interval of the parameter
-  that contains 68 percent of the posterior samples.
+That is, the ``one-sigma'' error bar can be taken to be the half-size of the central (or smallest\note{%
+  We usually create a 68-percent (or 95-percent) interval or region by
+  excluding the top and bottom 16 percent (or 2.5 percent) of the
+  posterior samples.  Some more aggressive investigators find the
+  smallest interval that contains 68 (or 95) percent of the samples.
+  Both are legitimate, and they are near-identical for distributions
+  that are near-symmetric around the mean.})
+  interval of the parameter that contains 68 percent of the posterior
+  samples.
 The ``two-sigma'' error bar would be the same but for the 95-percent interval.
 Again, these limits can be estimated%
   \note{One amusing thing about samplings,
@@ -1236,6 +1242,10 @@ Again, these limits can be estimated%
   and finding the $\pars$ values such that some fraction (0.68 or 0.95)
   of the samples lie between them.
 Again, to form these limits, $q(\pars)$ must be a scalar function (so sorting is well defined).
+Because they are so afraid of being confused with frequentists,
+Bayesians often call these regions ``credible'' rather than
+``confidence''\note{We don't like this ``credible'' terminology,
+  though we sometimes adopt it to avoid confusion.}
 
 One amusing thing is that if you choose the 68-percent interval sensibly,
   but use as the ``measurement'' the posterior mean,
@@ -1327,10 +1337,11 @@ useful one parameter at a time.
 In principle the only output from the sampling that safely gives both
 probabilistic information about the result of the inference and also
 good-fitting models is a few---randomly chosen---example samples.
-We strongly recommend this\note{HOGG:  And we do this WHERE? Cite Lang, cite eccentricity; etc??};
-in particular this is a better thing to do
-than to give the ``best sample'', which isn't even guaranteed to be
-near the bulk of the posterior pdf or the samples therefrom.
+We strongly recommend this\note{And we do it ourselves.  For examples,
+  you can look at \citet{cometholmes} and \citet{exopop}.}; in
+particular this is a better thing to do than to give the ``best
+sample'', which isn't even guaranteed to be near the bulk of the
+posterior pdf or the samples therefrom.
 
 If you \emph{do} return posterior samples to your audience, how many
 should you return?
@@ -2093,9 +2104,15 @@ about what changes to make or what new directions to explore.
 \bibitem[Foreman-Mackey \etal(2012)]{emcee}
   Foreman-Mackey,~D., Hogg,~D.~W., Lang,~D., \& Goodman,~J.\ 2012,
   \project{emcee}: The \MCMC\ Hammer,
-  \textit{Pubs.\,Astron.\,Soc.\,Pac.}\ \textbf{125} 306--312
+  \textit{Pubs.\ Astron.\ Soc.\ Pac.}\ \textbf{125} 306--312
   \doi{10.1086/670067}
   (also \arxiv{1202.3665}).
+\bibitem[Foreman-Mackey \etal(2014)]{exopop}
+  Foreman-Mackey,~D., Hogg,~D.~W., \& Morton,~T.~D., 2014,
+  \href{http://adsabs.harvard.edu/abs/2014ApJ...795...64F}{Exoplanet population
+    inference and the abundance of earth analogs from noisy, incomplete catalogs},
+  \textit{Astrophys.\ J.}\ \textbf{795} 64
+  \doi{10.1088/0004-637X/795/1/64}.
 \bibitem[Geisser(1993)]{crossval}
   Geisser,~S., 1993,
   \textit{Predictive Inference: An Introduction},
@@ -2122,11 +2139,17 @@ about what changes to make or what new directions to explore.
 \bibitem[Hogg \etal(2010b)]{eccentricity}
   Hogg,~D.~W., Myers,~A.~D., \& Bovy,~J., 2010b,
   \href{http://adsabs.harvard.edu/abs/2010ApJ...725.2166H}{Inferring the eccentricity distribution},
-  \textit{Astrophys.\ J.}\ \textbf{725}, 2166--2175.
+  \textit{Astrophys.\ J.}\ \textbf{725} 2166--2175.
 \bibitem[Hou \etal(2014)]{fengji}
   Hou,~F., Goodman,~J., \& Hogg,~D.~W., 2014,
   The probabilities of orbital-companion models for stellar radial velocity data,
   \arxiv{1401.6128}.
+\bibitem[Lang \& Hogg(2012)]{cometholmes}
+  Lang,~D. \& Hogg,~D.~W., 2012,
+  \href{http://adsabs.harvard.edu/abs/2012AJ....144...46L}{Searching for comets on the World Wide Web:
+    The orbit of 17P/Holmes from the behavior of photographers},
+  \textit{Astron.\ J.}\ \textbf{144} 46
+  \doi{10.1088/0004-6256/144/2/46}.
 \bibitem[Metropolis \etal(1953)]{metropolis}
   Metropolis,~N., Rosenbluth,~A.~W., Rosenbluth,~M.~N., Teller,~A.~H., \& Teller,~E., 1953,
   Equation of state calculations by fast computing machines,
