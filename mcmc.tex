@@ -763,7 +763,7 @@ C(0) &=& 1
 \end{eqnarray}
 and by definition, the autocorrelation ``time'' $\tau$ is
 \begin{eqnarray}
-\tau = \sum_{\Delta = 0}^{\infty} C(\Delta)
+\tau = 2\,\sum_{\Delta = 0}^{\infty} C(\Delta)
 \label{eq:autocorrelationtime}\quad .
 \end{eqnarray}
 %% DFM: IS THIS DEFINITION CORRECT OR IS THERE A FACTOR OF 2 OR SOMETHING? OR A SUM FROM -infty to +infty?
@@ -772,6 +772,10 @@ need to take before you get a new independent sample.
 More precisely, the autocorrelation time is the factor by which you
 have to reduce the number of samples when you compute the variance on
 a sampling-based expectation value estimate.
+
+DFM: Here or in a note, can you give an empirical estimator of the
+autocorrelation time?  The naive estimator is good to give, and we
+could also give a good estimator too.
 
 That is, if the expectation value $E[q]$ is computed by the sampling
 approximation given in \equationname~(\ref{eq:expectationvalue}),
@@ -816,7 +820,7 @@ on which we compare performance.\note{%
   world, of course, one must add to the CPU time the investigator time
   spent tuning the method (and thinking about initialization) but
   there is never (to our knowledge) a condition in which burn-in time
-  is the dominant consideration in choosing an MCMC method.}
+  is the dominant consideration in choosing an \MCMC\ method.}
 
 Of course, the autocorrelation-time definition
 (\ref{eq:autocorrelationtime}) does not by itself provide an
@@ -848,13 +852,20 @@ mean and empirical variance of $x$.  What do you conclude about
 convergence from these heuristics?
 \end{problem}
 
-\begin{problem}
+\begin{problem}\label{prob:estimatetau}
 Write a piece of code that computes the empirical autocorrelation
-function and the empirical autocorrelation time from a chain.  Run
+function and the empirical autocorrelation time from a chain using the na\"ive method DFM:WHERE?  Run
 this on the chain you obtained from \problemname~\ref{prob:MH}.
 Plot the autocorrelation function you get and over-plot the
 autocorrelation time as an indicator on the plot.  What do you
 conclude?
+\end{problem}
+
+\begin{problem}
+Look at the source code of \project{emcee} \citep{emcee}, and see if you can
+re-code or extract the autocorrelation-time estimator called DFM:WHAT?
+This code should take a \MCMC\ chain of parameter vectors as input and
+return a vector of autocorrelation times as output.
 \end{problem}
 
 \section{Tuning}\label{sec:tuning}
@@ -985,13 +996,6 @@ In our experience, it is valuable to make friends with at least one statistician
   one applied mathematician, and one computer scientist.
 Between them, they ought to span the literature.
 
-\begin{problem}
-Look at the source code of HOGG: REFERENCE EMCEE, and see if you can
-re-code or extract the autocorrelation-time estimator called HOGG.
-This code should take a \MCMC\ chain of parameter vectors as input and
-return a vector of autocorrelation times as output.
-\end{problem}
-
 \begin{problem}\label{prob:tuning}
 Run the \MCMC\ sampling of \problemname~\ref{prob:twod} with the
 covariant Gaussian density.
@@ -1008,6 +1012,8 @@ of 2.
 \begin{problem}
 Re-do \problemname~\ref{prob:tuning} but instead of trying to reach a
 certain acceptance fraction, try to minimize the autocorrelation time.
+You will need one of the autocorrelation-time estimators you might have
+built in a previous \problemname.
 (This, by the way, is the Right Thing To Do, but often expensive.)
 What do you get as the best value of $Q$ in this case?
 Again, just evaluate on a coarse logarithmic grid.
@@ -1040,7 +1046,7 @@ uncertainty information about or propagate uncertainty into parameter
 estimates.
 In these cases, it makes sense to initialize the walker or walkers at
 sensible parameter estimates, found by optimizing a likelihood or a
-posterior PDF in advance of sampling.
+posterior pdf in advance of sampling.
 In extremely high dimensions (large numbers of parameters), this can
 be a bad idea, since the optimal parameters are not necessarily near
 typical posterior samples\note{When the dimensionality of the
@@ -1282,7 +1288,7 @@ That is, we \emph{strongly advise against} reporting,
   the parameter value or values for the best sample.
 Giving some posterior samples is a good idea (we return to this below).
 If you feel drawn to give the best sample,
-  instead give the parameter values found by optimizing the posterior PDF,
+  instead give the parameter values found by optimizing the posterior pdf,
   starting at the best sample as an initialization
   (and sacrifice your probabilism\note{something}).
 This optimal-posterior parameter value is called the
@@ -1313,7 +1319,7 @@ This may seem counterintuitive, but it is easy to see in the case of a
 This all relates to the fact that \MCMC\ is not an optimizer, it is a
 sampler.
 It is important, when reporting the output of an \MCMC\ run by giving
-means or medians of the posterior PDF to remind the reader or user of
+means or medians of the posterior pdf to remind the reader or user of
 that output that it does not necessarily represent (collectively) a
 good fit to the data; these outputs only give information that is
 useful one parameter at a time.
@@ -1875,7 +1881,7 @@ If you initialize your \MCMC\ runs in different places in parameter space,
   do you get the same (or very similar) final parameter samplings,
   in mean and variance?
 If you don't,
-  then your posterior PDF is badly multi-modal;
+  then your posterior pdf is badly multi-modal;
   trivial \MCMC\ methods probably won't fix your problem.
 Not to put too fine a point on it:
 If your results are initialization-dependent,
@@ -1887,14 +1893,14 @@ You either have to go to a method that tries to explore the posterior
   each of which contains different posterior modes.
 In general, this problem is hard to fix;
   as we mentioned above, it is provably impossible
-  to explore all of parameter space if the posterior PDF is
+  to explore all of parameter space if the posterior pdf is
   complex in morphology.
 We don't have very useful advice here, except to
-  spend time learning about the multiple modes in the posterior PDF
+  spend time learning about the multiple modes in the posterior pdf
   and what each ``means'' or corresponds to,
   and to do your best to express in your results the multiple optima.
 One of the miracles of \MCMC\ is that if you \emph{can} fairly sample
-  as complex posterior PDF,
+  as complex posterior pdf,
   the fraction of samples in each mode
   tends to the relative total integrated posterior probability inside each mode,
   as the sampling converges.
@@ -1926,7 +1932,7 @@ For example, if there is an angle $\phi$ in your problem,
   makes an intrinsically unimodal problem multimodal!
 In these cases, we usually advise reparameterization from a (say) amplitude $A$ and angle $\phi$
   to two vector components $a\equiv A\,\cos\phi$ and $b\equiv A\,\sin\phi$.
-Of course this re-parameterization changes significantly the \emph{form} of the prior PDF
+Of course this re-parameterization changes significantly the \emph{form} of the prior pdf
   (the transformation brings in a Jacobian);
   it has to be adjusted with care.
 
