@@ -11,7 +11,6 @@
 % - Skim MacKay and make sure we cite him in any relevant place.
 % - mention Gelman--Rubin statistic
 % - mention & cite JAGS and STAN in methods section
-% - follow up the idea that burn-in doesn't exist at all!  It does for emcee.
 % - do we explain how to initialize emcee; do we need to?
 % - need to mention case where there is an MC integral INSIDE the likelihood function
 % - need to mention testing the likelihood function, by, say, 1-d scans back and forth.
@@ -388,8 +387,11 @@ Most of the good or sensible uses will somehow involve integration.
 For example, one magical property of a sampling (in a $D$-dimensional
 space) is that a \emph{histogram} (a $D$-dimensional histogram) of the
 samples (divided, if you like, by the number of samples in each bin
-and the bin width\note{HOGG: something about units and normalization})
-looks very much like the pdf from which the samples were drawn.
+and the bin width\note{We are referring here to the point that if you
+  want a histogram of samples to look just like the posterior pdf from
+  which the samples are drawn, the histogram (thought of as a step
+  function) must integrate to unity.}  looks very much like the pdf
+from which the samples were drawn.
 This is a way to ``reconstruct'' the pdf from the sampling:
 Make a histogram from the samples.
 Even in this case, the sampling is being used to do \emph{integrals};
@@ -687,7 +689,10 @@ The reason that there is no simple answer is that you can't really
 ever know that you have sampled the full posterior pdf, and the reason
 for \emph{that} is that if you \emph{could} know that, you would also
 be able to solve the famously difficult discrete optimization
-problem.\note{HOGG: explain this remark and cite something here}
+problem.\note{Famously, there is ``no free lunch''
+  \citep{nofreelunch}: You can't find the global optimum of a general
+  optimization problem without exhastive search of all possibilities.
+  This is very closely related---somehow---to the difficulty of sampling.}
 Another way to put it is that you might have two modes---two separated
 regions of substantial total probability---in the posterior pdf that
 are both important but separated by a large region of low probability.
@@ -954,7 +959,8 @@ Code can be built that uses the burn-in phase to tune all $D$ proposal variances
 
 One note to make here---%
   because it is relevant to tuning---%
-  is that tuning can \emph{only} take place during the burn-in phase;
+  is that tuning can \emph{only} take place during the burn-in phase
+  (that is, some part of your chain you will discard later);
   you cannot tune \emph{while} you run your final \MCMC\ run.
 Why not?
 Because tuning the proposal distribution based on the past history of the chain
@@ -1071,6 +1077,22 @@ pretty good place in the posterior pdf.
 That would minimize burn-in!
 But, in general, being at the optimum or anywhere near a good place is
 usually better than a mindless initialization.
+
+As to burn-in:
+If you have started your sampler in a non-typical place---or if you
+are concerned that you \emph{might} have started your sampler in a
+non-typical place---then you should discard the beginning of your
+\MCMC\ run before you do your inferences.
+This discarded part is called the ``burn-in''.
+Some practitioners insist that burn-in cannot exist\note{\citet{geyer}
+  takes this view.}: So long as the initial point is a conceivable
+sample, you are fine!
+Ensemble methods (like \project{emcee}\note{\citet{emcee}.}; and
+mentioned below in \sectionname~\ref{sec:methods}) require a burn-in
+phase and discard, because the whole point is that the ensemble must
+grow (or shrink) to fill the posterior pdf volume, and you can't
+initialize the ensemble sensibly if you don't know that volume
+\foreign{a priori}.
 
 If you suspect, or if it is even possible, that your problem is badly
 multi-modal, then you will have to start at multiple points in
@@ -2200,6 +2222,10 @@ about what changes to make or what new directions to explore.
   The NumPy Array: A structure for efficient numerical computation,
   \textit{Computing in Sci.\ \& Eng.}\ \textbf{13}, 22--30
   \doi{10.1109/MCSE.2011.37}.
+\bibitem[Wolpert \& Macready(1997)]{nofreelunch}
+  Wolpert,~D.~H. \& Macready,~W.~G., 1997,
+  No Free Lunch Theorems for Optimization,
+  \textit{IEEE Trans.\ Evolutionary Computation}\ \textbf{1} 67.
 \end{thebibliography}
 
 \end{document}
