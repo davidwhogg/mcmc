@@ -385,10 +385,11 @@ In a deep sense, the \emph{only} thing a sampling is good for is
 There are many uses of the \MCMC\ sampling, some of them good and some of them bad.
 Most of the good or sensible uses will somehow involve integration.
 
-For example, one magical property of a sampling (in a $D$-dimensional space)
-  is that a \emph{histogram} (a $D$-dimensional histogram) of the samples
-  (divided, if you like, by the number of samples in each bin and the bin width\note{something about units and normalization})
-  looks very much like the pdf from which the samples were drawn.
+For example, one magical property of a sampling (in a $D$-dimensional
+space) is that a \emph{histogram} (a $D$-dimensional histogram) of the
+samples (divided, if you like, by the number of samples in each bin
+and the bin width\note{HOGG: something about units and normalization})
+looks very much like the pdf from which the samples were drawn.
 This is a way to ``reconstruct'' the pdf from the sampling:
 Make a histogram from the samples.
 Even in this case, the sampling is being used to do \emph{integrals};
@@ -686,7 +687,7 @@ The reason that there is no simple answer is that you can't really
 ever know that you have sampled the full posterior pdf, and the reason
 for \emph{that} is that if you \emph{could} know that, you would also
 be able to solve the famously difficult discrete optimization
-problem.\note{explain this remark and cite something here}
+problem.\note{HOGG: explain this remark and cite something here}
 Another way to put it is that you might have two modes---two separated
 regions of substantial total probability---in the posterior pdf that
 are both important but separated by a large region of low probability.
@@ -1302,7 +1303,7 @@ Giving some posterior samples is a good idea (we return to this below).
 If you feel drawn to give the best sample,
   instead give the parameter values found by optimizing the posterior pdf,
   starting at the best sample as an initialization
-  (and sacrifice your probabilism\note{something}).
+  (and sacrifice your probabilism\note{HOGG: something}).
 This optimal-posterior parameter value is called the
   ``maximum \foreign{a posteriori}'' or ``MAP'' value for the parameters;
   it is like a maximum-likelihood value but regularized by the prior.
