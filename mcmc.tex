@@ -1322,10 +1322,18 @@ That is, we \emph{strongly advise against} reporting,
   as ``the'' measurement or ``the result'',
   the parameter value or values for the best sample.
 Giving some posterior samples is a good idea (we return to this below).
-If you feel drawn to give the best sample,
-  instead give the parameter values found by optimizing the posterior pdf,
-  starting at the best sample as an initialization
-  (and sacrifice your probabilism\note{HOGG: something}).
+
+If you feel drawn to give the best sample, instead give the parameter
+values found by optimizing the posterior pdf, starting at the best
+sample as an initialization (and sacrifice your probabilism\note{We
+  choose not to count the number of papers out there that claim to be
+  ``Bayesian'' but then deliver the optimum of a posterior PDF.  That
+  sacrifices probabilism, but also all the useful things you get from
+  delivering a posterior, like protection from over-fitting, and
+  non-approximate uncertainty propagation.  You certainly don't need
+  to be a Bayesian---you can do most of the same science as a
+  frequentist---but if you are using \MCMC\ you probably are doing so
+  because you want the benefits of Bayesianism.}).
 This optimal-posterior parameter value is called the
   ``maximum \foreign{a posteriori}'' or ``MAP'' value for the parameters;
   it is like a maximum-likelihood value but regularized by the prior.
