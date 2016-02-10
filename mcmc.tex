@@ -346,7 +346,7 @@ be non-negative everywhere and have \emph{finite} integral $Z$
 \begin{eqnarray}
 0 &\leq& f(\pars) \quad \mbox{for all $\pars$}
 \\
-Z &=& \int f(\pars)\,\dd \pars
+Z &=& \int f(\pars)\,\dd \pars \label{eq:proper}
 \quad .
 \end{eqnarray}
 
@@ -1356,9 +1356,24 @@ in general the need for samples grows exponentially (or perhaps even
 factorially!)\ with the number of dimensions.
 So if you have a ten-dimensional space, expect to be publishing your
 samples in an electronic table on the web!
+
 If you \emph{do} publish sufficient numbers of posterior samples, you
-might find users who want to make serious use of them.\note{HOGG cite
-  our importance-sampling papers with some explanation here.}
+might find users who want to make serious use of them.\note{We have
+  been pushing this approach in our own work; our hierarchical
+  inferences \citep{eccentricity, exopop} make use of importance
+  samplings, starting at posterior samplings from interim prior pdfs.
+  We have used this technology for computational convenience, but it
+  is a framework for building subsequent analyses on the posterior
+  samplings provided by other investigators.  One key---if you want
+  your posterior samplings to be useful---is that you must release
+  (along with your posterior sampling), the value of the prior pdf at
+  the locations of the samples.  That is, you must ``decorate'' the
+  samples (augment them) with prior pdf values or calls, or else
+  release an executable version of your prior pdf, into which all your
+  samples can be put as inputs.  In \emph{principle} it is enough to
+  release a \emph{description} of your prior pdf, but in practice it
+  is rarely correct or specific enough for another investigator to
+  duplicate exactly.  So just augment your samples!}
 
 Of course figures are always better than tables, at least in the
 printed form of scientific publications.
@@ -1722,9 +1737,21 @@ when the \code{Inf} appears, you might have to write some case code, and
 have your \code{ln_f} function return a value \emph{and} some kind of flag
 which indicates ``zero probability'' or $f(\pars)=0$.}
 
-HOGG: ...It is a good idea to have proper priors.
-It is a good test of your priors that you can sample with a ``null'' likelihood function.
-You can often have your priors wrong despite having beautiful code.
+It should be outside of the scope of this document to note here that
+it is a good idea to have proper priors.\note{This point---that you
+  should be using proper priors---is just basic Bayesian good
+  practice, often violated but never for good reasons.}
+Proper priors obey the integral constraint (\ref{eq:proper}),
+with $Z$ finite.
+It isn't a requirement that priors be proper for the posterior to 
+be proper, so many investigators and projects violate this rule.
+This is outside the current scope, except for the following point:
+It is a great functional test of your sampler and your data analysis
+setup to take the likelihood function to a very small power (much less
+than one) or multiply the log-likelihood by a very small number (much
+less than one) and check that the sampler samples, properly and
+correctly, the prior pdf.
+This test is only possible if the prior pdf is proper.
 
 HOGG: ...You must describe your priors in the same parameterization that you ``step'' in.
 That is, if you change your parameters, you \emph{must} change your priors correspondingly.
@@ -2082,17 +2109,8 @@ about what changes to make or what new directions to explore.
 
 %% ...How to deal with constraints that pin you to a subspace of the parameter space?  Method-dependent.
 
-%% ...Initialization and burn-in advice we haven't addressed earlier?
-
 %% ...Finally, to repeat: You can't sample the likelihood!  You can only
 %% sample a posterior pdf!
-
-%% % \begin{figure}[htbp]
-%% % \exampleplot{ex17}
-%% % \caption{Partial solution to \problemname~\ref{prob:bayesintrinsic}:
-%% % The marginalized posterior probability distribution for the intrinsic
-%% % variance.}\label{fig:bayesintrinsic}
-%% % \end{figure}
 
 \clearpage
 \markright{Notes}\theendnotes
