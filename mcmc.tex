@@ -152,7 +152,7 @@ $p(\data)$, is known by the names ``evidence'', ``marginal likelihood'',
   These philosophical matters and the computational issues are both
   outside the scope of this \documentname,
   but suffice it to say:
-  If the computation of $Z$ is in your travel plans, you will need yto
+  If the computation of $Z$ is in your travel plans, you will need to
   think about implementing some non-trivial integrating or sampling
   technology; we will give some brief description of options in
   \sectionname~\ref{sec:methods}.}
@@ -247,7 +247,7 @@ Both of these reasons for using \MCMC---that it is a parameter-space
 search algorithm, and that it is a simple-to-code effective
 optimizer---are \emph{not good reasons}.  \MCMC\ is first and foremost a
 \emph{sampler}.  If you are trying to find the optimum of the
-likelihood or the posterior pdf, you should use an \emph{optimzer},
+likelihood or the posterior pdf, you should use an \emph{optimizer},
 not a sampler.  If you want to make sure you search all of parameter
 space, you should use a \emph{search algorithm}, not a sampler.  \MCMC\ 
 is good at one thing, and one thing only: Sampling ill-normalized (or
@@ -695,7 +695,7 @@ for \emph{that} is that if you \emph{could} know that, you would also
 be able to solve the famously difficult discrete optimization
 problem.\note{Famously, there is ``no free lunch''
   \citep{nofreelunch}: You can't find the global optimum of a general
-  optimization problem without exhastive search of all possibilities.
+  optimization problem without exhaustive search of all possibilities.
   This is very closely related---somehow---to the difficulty of sampling.}
 Another way to put it is that you might have two modes---two separated
 regions of substantial total probability---in the posterior pdf that
