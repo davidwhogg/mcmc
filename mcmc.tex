@@ -4,13 +4,11 @@
 
 % to-do
 % -----
-% - Kill all issues in this list, below
 % - Deal with all mentions of ``DFM'' or ``HOGG''
 % - Go through github issues, if any.
 % - Systematically cite chapters of Brooks \etal in each section.
 % - Skim MacKay and make sure we cite him in any relevant place.
-% - Mention & cite JAGS and STAN in methods section
-% - Do we explain how to initialize emcee; do we need to?
+% - Mention & cite STAN in methods section
 % - Need to mention case where there is an MC integral INSIDE the likelihood function
 % - Need to mention testing the likelihood function, by, say, 1-d scans back and forth.
 % - Would love to have the Note symbols to be links to the notes and the notes to have links back to the main text...!
@@ -21,7 +19,9 @@
 %   - Rix
 %   - Bovy
 %   - Brewer
-% - Post on arXiv
+% - Kill all issues in this list, above, and then:
+%   - Post on arXiv
+%   - Blog about it
 
 % low priority
 % ------------
@@ -1525,8 +1525,18 @@ These methods make use of the distribution of a set of independent
 walkers in the parameter space ($\pars$-space) to gauge the typical step-sizes and
 directions at which new proposals should be made, obviating or greatly
 reducing the tuning requirements.
-We are co-authors on one of these methods, \project{emcee}\note{HOGG:
-  ref emcee}, which is popular in the astrophysical sciences.
+We are co-authors on one of these methods,
+\project{emcee}\note{\citet{emcee}}, which is popular in the
+astrophysical sciences.
+It is worty of note that ensemble methods have particular
+peculiarities about initialization and convergence diagnostics that
+are worth understanding before use.\note{For example, we find
+  empirically that it is better to initialize the ensemble in a ball
+  that is smaller than the full posterior pdf width, not larger.  For
+  another example, the ensemble produces a set of chains that can be
+  used to compute the Gelman--Rubin diagnostic \citep{gelmanrubin},
+  but this is not a conservative test if the initialization was made
+  in a small ball.}
 Because ensemble methods are updating independent \MCMC\ chains, they
 are often easy to parallelize to make use of multiple cores.
 
@@ -1545,7 +1555,7 @@ non-linear function $f(\pars)$, and other directions that are very
 easy to move in (they require only partial re-calculations or the
 sampling could even be analytic and exact).
 For problems with these structures, Gibbs samplers are ideal, and
-there are good implementations.\note{HOGG cite JAGS}
+there are good implementations.\note{For example, \project{JAGS}; find it on the internets.}
 
 A trivial kind of Gibbs sampling was mentioned above (\sectionname~\ref{sec:MH}) in the
 discussion of \MH\ \MCMC:
@@ -1573,7 +1583,9 @@ This kind of structure is common in hierarchical inference, where
 local parameters touch only individual objects in some population,
 say, and global parameters are parameters \emph{of} that population as
 a whole.
-Parallelization is built in to some Gibbs implementations.\note{HOGG}
+Parallelization is built in to some Gibbs implementations.\note{For
+  example, \project{JAGS} automatically
+  parallelizes Gibbs problems.}
 
 \paragraph{Hamiltonian or Hybrid:}
 In many cases of interest, the function $f(\pars)$ can be analytically
@@ -1689,17 +1701,17 @@ an estimate of the integral $Z$ of the likelihood times the prior
 (the Bayes factor or fully marginalized likelihood).
 
 \paragraph{Data augmentation:}
-...HOGG?
+...HOGG Look at the relevant chapter in Brooks.
 
 \paragraph{Reversible-jump:}
 Finally, there are some extreme problems in which it is not just hard
 to sample in the parameter space, but the parameter space itself is
 not of fixed dimension.
+
 For example, if you are modeling an astronomical image with a
 collection of stars, and you don't know how many stars to use; in this
 case the number of stars itself is a parameter, so the number of
-parameters is itself a function of the parameters.\note{HOGG Cite
-  Brewer et al}
+parameters is itself a function of the parameters.\note{Our attempt to sample this very problem is \citet{brewer}.}
 In these cases you can only use certain kinds of samplers (though M--H
 \MCMC\ is one you can choose), and, in addition, you need to make
 special kinds of proposals that permit the system to jump from one
@@ -2168,6 +2180,11 @@ about what changes to make or what new directions to explore.
   \textit{Empirical Model Building and Response Surfaces},
   John Wiley \& Sons, New York, NY
   \isbn{978-0471810339}.
+\bibitem[Brewer \etal(2013)]{brewer}
+  Brewer,~B.~J., Foreman-Mackey,~D., \& Hogg,~D.~W., 2013,
+  {Probabilistic catalogs for crowded stellar fields},
+  \textit{Astron.\,J.} \textbf{146} 7
+  \doi{10.1088/0004-6256/146/1/7}.
 \bibitem[Brooks \etal(2011)]{mcmchandbook}
   Brooks,~S., Gelman~A., Jones~G., \& Meng,~X.-L., eds.\ 2011,
   \href{http://www.mcmchandbook.net/HandbookTableofContents.html}{\textit{Handbook of Markov Chain Monte Carlo}},
