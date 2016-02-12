@@ -9,20 +9,24 @@
 % - Go through github issues, if any.
 % - Systematically cite chapters of Brooks \etal in each section.
 % - Skim MacKay and make sure we cite him in any relevant place.
-% - mention Gelman--Rubin statistic
-% - mention & cite JAGS and STAN in methods section
-% - do we explain how to initialize emcee; do we need to?
-% - need to mention case where there is an MC integral INSIDE the likelihood function
-% - need to mention testing the likelihood function, by, say, 1-d scans back and forth.
-% - would love to have the Note symbols to be links to the notes and the notes to have links back to the main text...!
-% - send to friendlies for comments
+% - Mention & cite JAGS and STAN in methods section
+% - Do we explain how to initialize emcee; do we need to?
+% - Need to mention case where there is an MC integral INSIDE the likelihood function
+% - Need to mention testing the likelihood function, by, say, 1-d scans back and forth.
+% - Would love to have the Note symbols to be links to the notes and the notes to have links back to the main text...!
+% - Send to friendlies for comments
 %   - Gelman
 %   - Goodman
 %   - Lang
 %   - Rix
 %   - Bovy
 %   - Brewer
-% - post on arXiv
+% - Post on arXiv
+
+% low priority
+% ------------
+% - Make endnote numbers clickable links to endnotes and back.  Relevant ideas here:
+%   http://tex.stackexchange.com/questions/8452/making-endnotes-clickable-links-with-hyperref
 
 % style notes
 % -----------
@@ -31,11 +35,11 @@
 % - [LaTeX] newline after every full stop for proper git diffing
 % - [LaTeX] eqnarray not equation
 % - pdf not PDF
-% - is it ``a MCMC sampling'' or ``an MCMC sampling''?
+% - Is it ``a MCMC sampling'' or ``an MCMC sampling''?
 % - \note{} right after word if you are endnoting a phrase,
 %   but after the full stop if endnoting the sentence or paragraph.
-% - always $\pars$ never $x$; $K$ samples $\pars_k$ and $\pars$ space is $D$-dimensional
-% - should we use the word ``walker'' everywhere and do we?
+% - Always $\pars$ never $x$; $K$ samples $\pars_k$ and $\pars$ space is $D$-dimensional
+% - Should we use the word ``walker'' everywhere and do we?
 
 \documentclass[12pt,twoside,pdftex]{article}
 \usepackage{styles/dar_endnotes}
@@ -842,6 +846,11 @@ length of the chain makes any subset seem more representative than it
 truly is; indeed this is a sub-problem of the problem that convergence
 can never be known empirically with good confidence.
 
+HOGG: Introduce and explain the Gelman--Rubin
+diagnostic\note{\citet{gelmanrubin}.}, which is also a good idea, and
+which tests something slightly different than the autocorrelation
+time.
+
 Finally one last point about convergence:
 Since all convergence tests are fundamentally heuristic, it is useful
 to just make the heuristic visualization of the samples $\pars_k$ as a
@@ -1413,8 +1422,7 @@ one-dimensional sample histograms, on a pretty fine binning, and all
 $D$-choose-2 two-dimensional histograms (scatter plots) to show the
 low-level covariances and non-linearities.
 If you are clever, all these plots can be arranged into a lovely and
-informative triangle.\note{HOGG cite corner.py and put an example in
-  the note!}
+informative triangle.\note{Our favorite package these days is our own \project{corner.py}.  Find it on the internets.}
 These two-dimensional plots do not in any sense contain all the
 information in the sampling!  However, they are remarkable for
 locating expected and unexpected parameter relationships, and often
@@ -1441,8 +1449,14 @@ As we have discussed above (\sectionname~\ref{sec:MH}),
 \MCMC\ methods are proven to be correct ``in the limit''; that is, when
 an infinite number of samples have been taken.
 When the function $f(\pars)$ has challenging properties, the results
-can approach this limit very slowly (or not at all\note{HOGG: discuss
-  situations in which \MCMC\ will not work---related to support.}).
+can approach this limit very slowly (or not at all\note{You can get
+  essentially infinite autocorrelation times if the function has
+  isolated regions of finite density separated by large seas of zero
+  or near-zero density.  One disturbing thing about these situations
+  is that any empirical measure of autocorrelation time will give a
+  finite answer, but the density won't be properly sampled, ever.  In
+  principle you can find these with multiple re-starts of the chain
+  and (things like) the Gelman--Rubin diagnostic \citep{gelmanrubin}.}).
 For this reason, in the finite duration of a scientific project, most
 users of \MCMC\ have one of two (related) problems:
 Either \textsl{(1)}~it is taking too long---it is taking too many steps or
@@ -2176,6 +2190,10 @@ about what changes to make or what new directions to explore.
   \textit{Predictive Inference: An Introduction},
   Chapman \& Hall
   \isbn{978-0412034718}.
+\bibitem[Gelman \& Rubin(1992)]{gelmanrubin}
+  Gelman,~A., \& Rubin,~D.~B., 1992,
+  Inference from iterative simulation using multiple sequences,
+  \textit{Statist.\ Sci.}\ \textbf{4} 457--472.
 \bibitem[Gelman \etal(1996a)]{ppcheck}
   Gelman,~A., Meng,~X.-L., \& Stern,~H., 1996a,
   \href{http://www.jstor.org/stable/24306036}{Posterior predictive assessment of model fitness via realized discrepancies},
