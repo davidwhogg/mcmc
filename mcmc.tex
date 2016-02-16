@@ -851,10 +851,25 @@ length of the chain makes any subset seem more representative than it
 truly is; indeed this is a sub-problem of the problem that convergence
 can never be known empirically with good confidence.
 
-HOGG: Introduce and explain the Gelman--Rubin
-diagnostic\note{\citet{gelmanrubin}.}, which is also a good idea, and
-which tests something slightly different than the autocorrelation
-time.
+One simple and sensible test of convergence is the Gelman--Rubin
+diagnostic \note{\citet{gelmanrubin}.}, which compares the variance
+(in one parameter, or your most important parameter, or all
+parameters) \emph{within} a chain to the variance \emph{across}
+chains.
+This requires running multiple chains, and looking at the empirical
+variance of the parameter away from its mean within each individual
+chain, and comparing it to the variance in the mean of that parameter
+across chains, inflated to be a mean per-sample variance.
+What Gelman and Rubin do with these variances specifically is
+sensible, but the important question of convergence is whether, as the
+chains get longer, these two variances asymptotically reach stable
+values, and that those two values agree.
+The Gelman--Rubin diagnostic is related to the autocorrelation time,
+in that it will only deliver success when the chains are much longer
+than an autocorrelation time.
+It can also be used to assess the accuracy of the chain for performing
+integrals---by replacing the mean of the parameter with whatever
+integral is of most interest.
 
 Finally one last point about convergence:
 Since all convergence tests are fundamentally heuristic, it is useful
