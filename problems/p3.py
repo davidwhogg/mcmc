@@ -3,11 +3,12 @@
 
 from __future__ import division, print_function
 
-from plot_setup import SQUARE_FIGSIZE, COLORS
-
 import numpy as np
 import matplotlib.pyplot as pl
 
+from plot_setup import setup, SQUARE_FIGSIZE, COLORS
+
+setup()  # initialize the plotting styles
 np.random.seed(42)
 
 

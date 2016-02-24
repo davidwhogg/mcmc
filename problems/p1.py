@@ -3,10 +3,12 @@
 
 from __future__ import division, print_function
 
-from plot_setup import SQUARE_FIGSIZE, COLORS
 
 import numpy as np
 import matplotlib.pyplot as pl
+from plot_setup import setup, SQUARE_FIGSIZE, COLORS
+
+setup()  # initialize the plotting styles
 
 np.random.seed(42)
 
@@ -47,6 +49,8 @@ for i, (ax, title) in enumerate(zip(
     d = np.max(np.abs(np.array(ax.get_ylim()) - mu))
     ax.set_ylim(mu + d * np.array([-1, 1]))
     ax.set_ylabel(title)
+    ax.yaxis.set_label_coords(-0.3, 0.5)
+    ax.xaxis.set_major_locator(pl.MaxNLocator(6))
 
 [ax.set_xlabel(r"$\log_2 K$") for ax in axes[1]]
 
