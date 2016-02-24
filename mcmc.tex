@@ -482,7 +482,7 @@ The simplest algorithm for \MCMC\ is the Metropolis--Hastings algorithm (\MH\ \M
 It is so simple that we recommend that any reader of this document
   who has not previously implemented the algorithm take a break at the end
   of this \sectionname\ and implement it forthwith, in a short piece of computer code,
-  in the context of some simple problem.\note{%
+  in the context of some simple problems.\note{%
     We request this in a trivial case below in
     \problemname~\ref{prob:MH} and the following problems in this
     \sectionname.
@@ -515,7 +515,7 @@ following:
 \begin{itemize}
 \item Draw a proposal $\pars'$ from the proposal pdf $q(\pars'\given\pars_k)$.
 \item Draw a random number $0<r<1$ from the uniform distribution.
-\item If $f(\pars') / f(\pars_k) > r$ then $\pars_{k+1} \leftarrow \pars'$;
+\item If $f(\pars') \, q(\pars_k\given\pars') / f(\pars_k) \, q(\pars'\given\pars_k) > r$ then $\pars_{k+1} \leftarrow \pars'$;
       otherwise $\pars_{k+1} \leftarrow \pars_k$.
 \end{itemize}
 That is, at each step, either a new proposed position in the parameter
