@@ -11,11 +11,13 @@ import matplotlib.pyplot as pl
 np.random.seed(42)
 
 
-def log_p(x, mean=2.0, variance=2.0):
-    return -0.5 * (x - mean)**2 / variance - 0.5*np.log(2*np.pi*variance)
+def log_p(x, a=3.0, b=7.0):
+    if a <= x <= b:
+        return -np.log(b-a)
+    return -np.inf
 
 
-x = 0.0
+x = 5.0
 lp = log_p(x)
 chain = np.empty(2e4)
 for step in range(len(chain)):
@@ -28,11 +30,14 @@ for step in range(len(chain)):
 
 
 fig, ax = pl.subplots(1, 1, figsize=SQUARE_FIGSIZE)
-ax.hist(chain, 100, histtype="step", color=COLORS["DATA"], normed=True)
-x = 2 + np.linspace(-4.5, 4.5, 5000)
-ax.plot(x, np.exp(log_p(x)), color=COLORS["MODEL_1"])
+ax.axhline(0.0, color="k")
+ax.hist(chain, 50, histtype="step", color=COLORS["DATA"], normed=True)
+x = np.linspace(2.5, 7.5, 5000)
+y = np.exp([log_p(_) for _ in x])
+ax.plot(x, y, color=COLORS["MODEL_1"])
 ax.set_xlim(x.min(), x.max())
+ax.set_ylim(-0.01, y.max() + 0.05)
 ax.set_xlabel("$x$")
 ax.set_ylabel("$p(x)$")
 
-fig.savefig("p2.pdf")
+fig.savefig("p3.pdf")

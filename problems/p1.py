@@ -50,4 +50,4 @@ for i, (ax, title) in enumerate(zip(
 
 [ax.set_xlabel(r"$\log_2 K$") for ax in axes[1]]
 
-pl.savefig("p1.pdf")
+fig.savefig("p1.pdf")
