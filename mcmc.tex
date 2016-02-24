@@ -515,7 +515,7 @@ following:
 \begin{itemize}
 \item Draw a proposal $\pars'$ from the proposal pdf $q(\pars'\given\pars_k)$.
 \item Draw a random number $0<r<1$ from the uniform distribution.
-\item If $f(\pars') \, q(\pars_k\given\pars') / f(\pars_k) \, q(\pars'\given\pars_k) > r$ then $\pars_{k+1} \leftarrow \pars'$;
+\item If $f(\pars') / f(\pars_k) > r$ then $\pars_{k+1} \leftarrow \pars'$;
       otherwise $\pars_{k+1} \leftarrow \pars_k$.
 \end{itemize}
 That is, at each step, either a new proposed position in the parameter
@@ -569,7 +569,7 @@ You can break this property, if you like, and then adjust the
   except under the supervision of a trained professional.\note{Actually,
   our own favorite method, \project{emcee}, has a proposal pdf that does
   violate detailed balance in this way and has a compensated
-  acceptance fraction.  Read the paper \cite{emcee} for more details.}
+  acceptance probability.  Read the paper \cite{emcee} for more details.}
 The reason is:  It is one thing to draw samples from $q(x'\given x)$.
 It is another thing to correctly write down $q(x'\given x)$.
   If you violate detailed balance in $q(x'\given x)$ then you have to be
@@ -598,7 +598,7 @@ One note to make here
   or else multiply in a (possibly nasty) Jacobian.
 That is, if your prior is ``flat in $\pars$''
   but you find it easier to run your sampler by proposing steps in $\ln \pars$,
-  if you don't modify your acceptance fraction by the Jacobian,
+  if you don't modify your acceptance probability by the Jacobian,
   your \emph{real} prior won't be flat in $\pars$.
 These think-os can get subtle;
   the best way to avoid them
@@ -632,6 +632,8 @@ That is, even if---in the end---%
     We also make this point in a previous \documentname\ (\citealt{fittingaline});
     the ambitious reader will find in that \documentname\ a solid example project
     for using \MCMC\ in a real context.}
+
+DFM says: should we say something about using the log density here?
 
 \begin{problem}\label{prob:MH}
 In your scientific programming language of choice, write a very simple
