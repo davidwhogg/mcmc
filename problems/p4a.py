@@ -18,12 +18,6 @@ def log_p_gauss(x):
     return -0.5 * np.dot(x, alpha)
 
 
-def log_p_uniform(x):
-    if 3 <= x[0] <= 7 and 1 <= x[1] <= 9:
-        return 0.0
-    return -np.inf
-
-
 def run_mcmc(log_p, x, prop_sigma=1.0, nsteps=2e4):
     lp = log_p(x)
     chain = np.empty((nsteps, len(x)))
@@ -43,9 +37,3 @@ fig = corner.corner(chain, labels=["$x$", "$y$"],
                     range=[(-4.5, 4.5), (-4.5, 4.5)],
                     plot_density=False, plot_contours=False)
 fig.savefig("p4a.pdf", dpi=300)
-
-chain = run_mcmc(log_p_uniform, np.array([5.0, 5.0]), nsteps=1e5)
-fig = corner.corner(chain, labels=["$x$", "$y$"],
-                    range=[(2.5, 7.5), (0.5, 9.5)],
-                    plot_density=False, plot_contours=False)
-fig.savefig("p4b.pdf", dpi=300)
