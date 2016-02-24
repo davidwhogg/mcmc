@@ -18,8 +18,6 @@ x0 = [-4.0, 5.0]
 s = SQUARE_FIGSIZE
 s[0] *= 3
 fig, axes = pl.subplots(1, 3, sharex=True, sharey=True, figsize=s)
-
-ax = axes[0]
 for n, ax in zip([0.0, -1.0, 2.0], axes):
     chain = run_mcmc(log_p_gauss, np.array(x0), nsteps=2e3, prop_sigma=10**n)
     ax.plot(chain[:, 0], chain[:, 1], "o-", color=COLORS["DATA"], ms=2)
@@ -27,7 +25,7 @@ for n, ax in zip([0.0, -1.0, 2.0], axes):
     ax.set_xlim(-6.3, 6.3)
     ax.set_ylim(-6.3, 6.3)
     ax.set_xlabel("$x$")
-    ax.annotate(r"$\sigma = 10^{{{0:.0f}}}$".format(n),
+    ax.annotate(r"$\sigma_q = 10^{{{0:.0f}}}$".format(n),
                 (1, 0), xycoords="axes fraction",
                 xytext=(-5, 5), textcoords="offset points",
                 ha="right", va="bottom")

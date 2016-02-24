@@ -25,7 +25,7 @@ def log_p_uniform(x):
 
 
 def run_mcmc(log_p, x, prop_sigma=1.0, nsteps=2e4):
-    lp = log_p_gauss(x)
+    lp = log_p(x)
     chain = np.empty((nsteps, len(x)))
     for step in range(len(chain)):
         x_prime = np.array(x)
