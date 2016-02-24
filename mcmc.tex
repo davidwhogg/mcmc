@@ -135,7 +135,7 @@ $p(\data)$, is known by the names ``evidence'', ``marginal likelihood'',
 ``Bayes integral'', and ``prior predictive probability'', and is usually
 \emph{extremely hard to calculate}.\note{Some would call
   the factor $Z$ in \equationname~(\ref{eq:bayes}) something like
-  ``$p(\data)$'' or ``the fully marginalized likelihood'' or the 
+  ``$p(\data)$'' or ``the fully marginalized likelihood'' or the
   probability of the data.
   Of course it is only the probability of the data within the model
   space under consideration!
@@ -203,7 +203,7 @@ vague prior pdf $p(\pars)$ for the parameter blob $\pars$.
 If all these things are true, then---even if you can't compute
 anything else---in principle a trivial-to-implement \MCMC\ can give you
 a fair sampling of the posterior pdf.
-That is, you can run \MCMC\ 
+That is, you can run \MCMC\
 (for a very long time---see \sectionname~\ref{sec:convergence} for how long)
 and you will be left with a set of $K$ parameter-blob settings $\pars_k$ such that the
 full set $\setof{\pars_k}_{k=1}^K$ constitutes a fair sampling from
@@ -224,7 +224,7 @@ Because \MCMC\ provably (under assumptions\note{The assumptions include
   requirements on particular integrals), and that the density that is
   being sampled has some connectedness properties:  There aren't distant islands of finite density
   separated by regions of zero (or exceedingly low) density.}, some of which will be discussed) samples the full
-posterior pdf in all of parameter space, many investigators use \MCMC\ 
+posterior pdf in all of parameter space, many investigators use \MCMC\
 because it will sample \emph{all} of the parameter space
 ($\pars$-space).
 That is, they are using \MCMC\ because they want to
@@ -251,7 +251,7 @@ optimizer---are \emph{not good reasons}.  \MCMC\ is first and foremost a
 \emph{sampler}.  If you are trying to find the optimum of the
 likelihood or the posterior pdf, you should use an \emph{optimizer},
 not a sampler.  If you want to make sure you search all of parameter
-space, you should use a \emph{search algorithm}, not a sampler.  \MCMC\ 
+space, you should use a \emph{search algorithm}, not a sampler.  \MCMC\
 is good at one thing, and one thing only: Sampling ill-normalized (or
 otherwise hard to sample) pdfs.
 
@@ -273,7 +273,7 @@ initialize, tune and operate \MCMC\ methods for good performance.
 The last few \sectionname s will provide advice for making decisions
 among the myriad \MCMC\ methods implementations, how to implement a good
 likelihood function and prior pdf function for inference, and how to
-trouble-shoot standard kinds of problems that arise in operating \MCMC\ 
+trouble-shoot standard kinds of problems that arise in operating \MCMC\
 methods on real problems.
 We will leave parenthetical and philosophical matters to the end-notes,
 which appear after the main text.
@@ -309,13 +309,14 @@ Also, if there are elements or entries or components of $\pars$ that are discret
 then along those dimensions the integral becomes a discrete sum.
 This latter is a detail to which we return below.
 
-Given this pdf $p(\pars)$, we can define \emph{expectation values} $E[\pars]$
+Given this pdf $p(\pars)$, we can define \emph{expectation values}
+$E_{p(\pars)}[\pars]$
 for $\pars$ or for any quantity that can be expressed as a function $q(\pars)$
 of $\pars$:
 \begin{eqnarray}
-E[\pars] &\equiv& \int \pars\,p(\pars)\,\dd \pars
+E_{p(\pars)}[\pars] &\equiv& \int \pars\,p(\pars)\,\dd \pars
 \\
-E[q] &\equiv& \int q(\pars)\,p(\pars)\,\dd \pars
+E_{p(\pars)}[q(\pars)] &\equiv& \int q(\pars)\,p(\pars)\,\dd \pars
 \quad ,
 \end{eqnarray}
 where again the integrals are implicitly definite integrals over the
@@ -329,9 +330,9 @@ accurate.
 With a good sampling $\setof{\pars_k}_{k=1}^K$ the integrals get replaced
 with sums over samples $\pars_k$:
 \begin{eqnarray}
-E[\pars] &\approx& \frac{1}{K}\,\sum_{k=1}^K \pars_k
+E_{p(\pars)}[\pars] &\approx& \frac{1}{K}\,\sum_{k=1}^K \pars_k
 \\
-E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
+E_{p(\pars)}[q(\pars)] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
 \quad .
 \end{eqnarray}
 That is, a sampling is good when any expectation value of interest is
@@ -355,6 +356,9 @@ Z &=& \int f(\pars)\,\dd \pars \label{eq:proper}
 \quad .
 \end{eqnarray}
 
+DFM says: I don't agree with this section. Using MCMC you \emph{are} sampling
+from $p(\pars)$\ldots you \emph{can't} sample from $f(\pars)$.
+
 When the sampling $\setof{\pars_k}_{k=1}^K$ is of one of these badly
 normalized functions $f(\pars)$---as it usually will be---the
 sampling-approximation expectation values are the expectation values
@@ -364,9 +368,9 @@ When we run \MCMC\ sampling on $f(\pars)$, a function that differs from a
 pdf $p(\pars)$ by some unknown normalization constant, then the sampling
 permits computation of the following kinds of quantities:
 \begin{eqnarray}
-E[q] &\equiv& \frac{\int q(\pars)\,f(\pars)\,\dd \pars}{\int f(\pars)\,\dd \pars}
+E_{p(\pars)}[q(\pars)] &\equiv& \frac{\int q(\pars)\,f(\pars)\,\dd \pars}{\int f(\pars)\,\dd \pars}
 \\
-E[q] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
+E_{p(\pars)}[q(\pars)] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
 \label{eq:expectationvalue}
 \quad .
 \end{eqnarray}
@@ -938,7 +942,7 @@ There is a Goldilocks step size (proposal distribution root-variance) that is ``
 In one dimension this might be easy to find,
   but, as we say, in large numbers of dimensions,
   there is a lot of freedom in choosing the parameters of the distribution.
-  
+
 % BJB
 % Please suggest mixtures of scales for M-H proposals.
 % You can mimic the properties of slice sampling but with
@@ -997,7 +1001,7 @@ Because tuning the proposal distribution based on the past history of the chain
   that each step depends \emph{only} on the state at the previous step.
 Violating the Markov property can be very bad;
   when you violate it,
-  you lose all the provable properties of \MCMC\ 
+  you lose all the provable properties of \MCMC\
   on which all our righteous power is based.
 
 Another proxy for autocorrelation time useful for tuning is the
@@ -1235,7 +1239,7 @@ report as our \emph{results}?
 
 One thing we can keep in mind to guide us in this is what we said above (\sectionname~\ref{sec:sampling}),
   which is that samplings are good for doing \emph{integrals}.
-We should endeavor to use as our ``results'' outputs from the \MCMC\ 
+We should endeavor to use as our ``results'' outputs from the \MCMC\
   that are based on integrals computed with the sampling.
 This includes expectations, medians, quantiles, one-dimensional histograms,
   and multi-dimensional histograms.
@@ -1637,7 +1641,7 @@ function times a non-trivial prior:
 It is easy to sample from a Gaussian likelihood times a Gaussian
 prior, even without \MCMC, but it might be hard to do the same sampling
 under a more complex prior.
-Importance sampling is a direct sampling method (not really an \MCMC\ 
+Importance sampling is a direct sampling method (not really an \MCMC\
 method at all):
 You take a sampling from the approximate function (which by assumption
 was easy) and then you re-weight the sampling (or do a subsequent
@@ -1820,7 +1824,7 @@ it is a good idea to have proper priors.\note{This point---that you
   practice, often violated but never for good reasons.}
 Proper priors obey the integral constraint (\ref{eq:proper}),
 with $Z$ finite.
-It isn't a requirement that priors be proper for the posterior to 
+It isn't a requirement that priors be proper for the posterior to
 be proper, so many investigators and projects violate this rule.
 This is outside the current scope, except for the following point:
 It is a great functional test of your sampler and your data analysis
@@ -1868,7 +1872,7 @@ Is it the \MCMC\ code, the priors, the likelihood function,
 \paragraph{functional testing:}
 In addition to a full set of unit tests for every part of your code
   (yeah \emph{right}\note{If you aren't unit testing, you are probably making some very big mistakes.}),
-  we recommend building some end-to-end functional tests that permit you to perform \MCMC\ 
+  we recommend building some end-to-end functional tests that permit you to perform \MCMC\
   runs with output that must meet certain expectations.
 The simplest kind of functional test is to sample a known distribution,
   and check that the sampling has the moments you expect (to within tolerances).
