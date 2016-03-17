@@ -1,4 +1,4 @@
-ALL_FILES=p1.pdf p2.pdf p3.pdf p4a.pdf p4b.pdf p5.pdf p6.pdf
+ALL_FILES=p1.pdf p2.pdf p3.pdf p4a.pdf p4b.pdf p5.pdf p6.pdf p7.pdf
 
 default: $(ALL_FILES)
 
