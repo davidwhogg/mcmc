@@ -787,27 +787,22 @@ C(0) &=& 1
 \end{eqnarray}
 and by definition, the autocorrelation ``time'' $\tau$ is
 \begin{eqnarray}
-\tau = 2\,\sum_{\Delta = 0}^{\infty} C(\Delta)
+\tau = 1 + 2\,\sum_{\Delta = 1}^{\infty} C(\Delta)
 \label{eq:autocorrelationtime}\quad .
 \end{eqnarray}
-%% DFM: IS THIS DEFINITION CORRECT OR IS THERE A FACTOR OF 2 OR SOMETHING? OR A SUM FROM -infty to +infty?
 Heuristically, the autocorrelation time is the number of samples you
 need to take before you get a new independent sample.
 More precisely, the autocorrelation time is the factor by which you
 have to reduce the number of samples when you compute the variance on
 a sampling-based expectation value estimate.
 
-DFM: Here or in a note, can you give an empirical estimator of the
-autocorrelation time?  The naive estimator is good to give, and we
-could also give a good estimator too.
-
 That is, if the expectation value $E[q]$ is computed by the sampling
 approximation given in \equationname~(\ref{eq:expectationvalue}),
 there is an uncertainty on that expectation given by
 \begin{eqnarray}
-  \mbox{$E[q]$ uncertainty} &=& \left[\frac{\tau}{K}\,\Var[q]\right]^{1/2}
+  \Var[E[q]] &=& \frac{\tau}{K}\,\Var[q]
   \\
-  &\approx& \left[\frac{\tau}{K^2}\,\sum_{k=1}^K \left(q(\pars_k) - E[q]\right)^2\right]^{1/2}
+  &\approx& \frac{\tau}{K^2}\,\sum_{k=1}^K \left(q(\pars_k) - E[q]\right)^2
   \quad ,
 \end{eqnarray}
 where we are being a bit loose with terminology because this is the
@@ -849,14 +844,29 @@ on which we compare performance.\note{%
 Of course, the autocorrelation-time definition
 (\ref{eq:autocorrelationtime}) does not by itself provide an
 \emph{estimator} for the time.
-Usually, we just take the naive estimator---the ratio of empirical
-expectations implied by \equationname~(\ref{eq:autocorrelationfn}),
-and then perform a naive sum to get the autocorrelation time.
-However, almost all empirical estimators of the autocorrelation time
-will end up being under-estimates (biased low), because the finite
-length of the chain makes any subset seem more representative than it
-truly is; indeed this is a sub-problem of the problem that convergence
-can never be known empirically with good confidence.
+We might first try the na\"ive estimator
+\begin{eqnarray}\label{eq:tauestnaive}
+\tau &\stackrel{?}{=}& 1 + 2\,\sum_{\Delta = 1}^{N} C(\Delta)
+\end{eqnarray}
+where the sum is over the autocorrelation function estimated based the chain
+using \equationname~(\ref{eq:autocorrelationfn}).
+In practice, this is a high variance estimator of the integrated
+autocorrelation time and this variance doesn't go to zero for an infinitely
+long chain.\note{%
+  A.~Sokal has a clear discussion of this topic and several proposals for
+  robust autocorrelation time estimation in a set of lecture notes
+  \url{http://www.stat.unc.edu/faculty/cji/Sokal.pdf}.}
+Instead, we can get a much more robust estimate of the autocorrelation time by
+restricting the sum in \equationname~(\ref{eq:tauestnaive}) to $\Delta \le M$
+where
+$\tau \le M \ll N$
+\begin{eqnarray}\label{eq:tauest}
+\tau &=& 1 + 2\,\sum_{\Delta = 1}^{N} C(\Delta)
+\end{eqnarray}
+In practice, $M$ can be chosen iteratively to satisfy these constraints but it
+will only be as reliable as the chain itself.
+An estimate of $\tau$ using \equationname~(\ref{eq:tauest}) should only be
+trusted if the chain is many times ($\sim 10$) longer than $\tau$.
 
 One simple and sensible test of convergence is the Gelman--Rubin
 diagnostic \note{\citet{gelmanrubin}.}, which compares the variance
@@ -898,18 +908,23 @@ convergence from these heuristics?
 
 \begin{problem}\label{prob:estimatetau}
 Write a piece of code that computes the empirical autocorrelation
-function and the empirical autocorrelation time from a chain using the na\"ive method DFM:WHERE?  Run
-this on the chain you obtained from \problemname~\ref{prob:MH}.
-Plot the autocorrelation function you get and over-plot the
-autocorrelation time as an indicator on the plot.  What do you
-conclude?
+function.
+You can speed this computation up considerably by using a fast Fourier
+transform.
+Run this on the chain you obtained from \problemname~\ref{prob:MH}.
+Plot the autocorrelation function you find at short lags ($\Delta < 100$).
 \end{problem}
 
 \begin{problem}
-Look at the source code of \project{emcee} \citep{emcee}, and see if you can
-re-code or extract the autocorrelation-time estimator called DFM:WHAT?
-This code should take a \MCMC\ chain of parameter vectors as input and
-return a vector of autocorrelation times as output.
+Write a peice of code that estiamtes the integrated autocorrelation time for a
+chain of samples using an estimate of the autocorrelation function and a given
+``window'' size $M$ (see \equationname~\ref{eq:tauest}).
+Plot the estimated $\tau$ as a function of $M$.
+What can you conclude from this plot?
+Implement an iterative procedure for automatically choosing $M$.\note{%
+The recipe given on page 16 of A.~Sokal's notes
+(\url{http://www.stat.unc.edu/faculty/cji/Sokal.pdf}) might be helpful.}
+Overplot this estimate on the plot of $\tau(M)$.
 \end{problem}
 
 \section{Tuning}\label{sec:tuning}
