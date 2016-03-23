@@ -41,11 +41,11 @@ if __name__ == "__main__":
     ax.plot(N, taus, ".-", color=COLORS["MODEL_2"])
     ax.axhline(tau, color=COLORS["MODEL_2"], ls="dashed")
 
-    ax.set_title(r"$\hat{{\tau}}_\mathrm{{int}} = {0:.2f}$".format(tau))
+    ax.set_title(r"$\tau_x = {0:.2f}$".format(tau))
     ax.set_ylim(0, 25)
     ax.set_xlim(2, 5e5)
     ax.set_xscale("log")
-    ax.set_ylabel(r"$\hat{\tau}_\mathrm{int}$")
+    ax.set_ylabel(r"$\tau_x$")
     ax.set_xlabel("window size")
 
     fig.savefig("p9.pdf")
