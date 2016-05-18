@@ -6,7 +6,7 @@ from __future__ import division, print_function
 import numpy as np
 import matplotlib.pyplot as pl
 
-from plot_setup import SQUARE_FIGSIZE
+from plot_setup import SQUARE_FIGSIZE, savefig
 
 from p7 import chain
 
@@ -28,4 +28,4 @@ if __name__ == "__main__":
     ax.set_ylabel("$C_x(\Delta)$")
     ax.set_xlabel("$\Delta$")
 
-    fig.savefig("p8.pdf")
+    savefig(fig, "p8.pdf")

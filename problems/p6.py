@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as pl
 
 from p4a import log_p_gauss
-from plot_setup import setup, COLORS, SQUARE_FIGSIZE
+from plot_setup import setup, COLORS, SQUARE_FIGSIZE, savefig
 
 setup()  # initialize the plotting styles
 np.random.seed(42)
@@ -57,4 +57,4 @@ for broken, ax in zip([True, False], axes):
 
 axes[0].set_ylabel("$y$")
 
-fig.savefig("p6.pdf")
+savefig(fig, "p6.pdf")

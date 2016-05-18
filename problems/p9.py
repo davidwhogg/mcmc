@@ -6,7 +6,7 @@ from __future__ import division, print_function
 import numpy as np
 import matplotlib.pyplot as pl
 
-from plot_setup import SQUARE_FIGSIZE, COLORS
+from plot_setup import SQUARE_FIGSIZE, COLORS, savefig
 
 from p8 import autocorr_function
 
@@ -50,4 +50,4 @@ if __name__ == "__main__":
     ax.set_ylabel(r"$\tau_x$")
     ax.set_xlabel("window size")
 
-    fig.savefig("p9.pdf")
+    savefig(fig, "p9.pdf")

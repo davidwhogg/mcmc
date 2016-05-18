@@ -96,6 +96,7 @@ David~W.~Hogg\\
        New~York~University}\\
 \affil{Max-Planck-Institut~f\"ur~Astronomie, Heidelberg}\\[1ex]
 Daniel~Foreman-Mackey\\
+\affil{Sagan Fellow}\\
 \affil{Department~of~Astronomy, University~of~Washington}
 
 \begin{abstract}
@@ -692,6 +693,8 @@ density with zero mean and variance tensor set to the two-dimensional
 identity matrix.
 Plot the two one-dimensional histograms and also a two-dimensional scatter
 plot for each sampling.
+\figurename~\ref{fig:twod-a} shows the expected results for the Gaussian.
+Make a similar plot for the top-hat.
 \end{problem}
 
 \begin{figure}[!htbp]
@@ -701,42 +704,22 @@ plot for each sampling.
 \caption{Solution to \problemname~\ref{prob:twod}a:
 MCMC samples from a two-dimensional Gaussian (scatter plot) and the
 one-dimensional marginalized distributions (histograms).}
-\label{fig:twod}
-\end{figure}
-
-\begin{figure}[!htbp]
-\begin{center}
-\includegraphics[width=0.7\textwidth]{problems/p4b}
-\end{center}
-\caption{Solution to \problemname~\ref{prob:twod}b:
-MCMC samples from a two-dimensional top hat distribution (scatter plot) and the
-one-dimensional marginalized distributions (histograms).}
-\label{fig:twod}
+\label{fig:twod-a}
 \end{figure}
 
 \begin{problem}\label{prob:MH-sigma}
-Re-do \problemname~\ref{prob:MH} but with different values for
+Re-do \problemname~\ref{prob:twod}a but with different values for
 the variance of the proposal distribution $q(x'\given x)$.
 What happens when you go to very extreme values (like for instance
-$10^{-8}$ or $10^6$)?
+$10^{-1}$ or $10^2$)?
 \end{problem}
 
-\begin{figure}[!htbp]
-\begin{center}
-\includegraphics[width=\textwidth]{problems/p5}
-\end{center}
-\caption{Solution to \problemname~\ref{prob:MH-sigma}:
-MCMC samples from a two-dimensional top hat distribution (scatter plot) and the
-one-dimensional marginalized distributions (histograms).}
-\label{fig:MH-sigma}
-\end{figure}
-
 \begin{problem}
-Why, in \problemname~\ref{prob:MH}, did we give the proposal
-distribution $q(x'\given x)$ zero mean?
+Why, in all the previous problems, did we give the proposal
+distributions $q(x'\given x)$ zero mean?
 What would be bad if we hadn't done that?
-Try setting the mean of $q(x'\given x)$ to something non-zero and see
-what happens.
+Re-do \problemname~\ref{prob:twod}a with a proposal $q(x'\given x)$ with a
+non-zero mean and see what happens.
 Bonus points: Modify the acceptance--rejection criterion to deal with
 the messed-up $q(x'\given x)$ and show that everything works once
 again.
@@ -964,7 +947,7 @@ crossed the domain of $\pars$ fully many times during the \MCMC\ run.
 Often some parameter directions are much worse than others; it is
 worth looking at the chain in all parameter directions.
 
-\begin{problem}
+\begin{problem}\label{prob:convergence}
 Re-do \problemname~\ref{prob:MH} but now look at convergence:
 Plot the $x$ chain as a function of timestep.  Also split the chain
 into four contiguous segments (the first, second, third, and fourth
@@ -980,9 +963,19 @@ You can speed this computation up considerably by using a fast Fourier
 transform.
 Run this on the chain you obtained from \problemname~\ref{prob:MH}.
 Plot the autocorrelation function you find at short lags ($\Delta < 100$).
+This plot should resemble \figurename~\ref{fig:estimatetau}.
 \end{problem}
 
-\begin{problem}
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{problems/p8}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:estimatetau}:
+The autocorrelation function of the chain from \problemname~\ref{prob:MH}.}
+\label{fig:estimatetau}
+\end{figure}
+
+\begin{problem}\label{prob:itertau}
 Write a peice of code that estiamtes the integrated autocorrelation time for a
 chain of samples using an estimate of the autocorrelation function and a given
 ``window'' size $M$ (see \equationname~\ref{eq:tauest}).
@@ -994,8 +987,22 @@ The recipe given on page 16 of A.~Sokal's notes
 (\url{http://www.stat.unc.edu/faculty/cji/Sokal.pdf}) might be helpful.
 Note that the definition of $\tau$ in that document is half of the definition
 that we use.}
-Overplot this estimate on the plot of $\tau(M)$.
+Overplot this estimate on the plot of $\tau(M)$ and the result should look
+like \figurename~\ref{fig:itertau}.
 \end{problem}
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{problems/p9}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:itertau}:
+Estimates of the integrated autocorrelation time of different segments of the
+MCMC chain from \problemname~\ref{prob:MH} (black lines) and for the full
+chain (orange line) as a function of window size $M$.
+The ``optimized'' value computed using an iterative procedure is overplotted
+as a dashed line and its value is listed in the title.}
+\label{fig:itertau}
+\end{figure}
 
 \section{Tuning}\label{sec:tuning}
 

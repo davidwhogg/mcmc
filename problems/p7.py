@@ -6,7 +6,7 @@ from __future__ import division, print_function
 import numpy as np
 import matplotlib.pyplot as pl
 
-from plot_setup import setup, SQUARE_FIGSIZE, COLORS
+from plot_setup import setup, SQUARE_FIGSIZE, COLORS, savefig
 
 setup()  # initialize the plotting styles
 np.random.seed(42)
@@ -50,4 +50,4 @@ if __name__ == "__main__":
     ax2.set_ylabel("$p(x)$")
     ax2.set_xlabel("$x$")
 
-    fig.savefig("p7.pdf", dpi=300)
+    savefig(fig, "p7.pdf", dpi=300)

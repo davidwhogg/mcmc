@@ -6,7 +6,7 @@ from __future__ import division, print_function
 import corner
 import numpy as np
 
-from plot_setup import setup
+from plot_setup import setup, savefig
 
 setup()  # initialize the plotting styles
 np.random.seed(42)
@@ -21,19 +21,22 @@ def log_p_gauss(x):
 def run_mcmc(log_p, x, prop_sigma=1.0, nsteps=2e4):
     lp = log_p(x)
     chain = np.empty((nsteps, len(x)))
+    acc = 0
     for step in range(len(chain)):
         x_prime = np.array(x)
         x_prime[np.random.randint(len(x))] += prop_sigma * np.random.randn()
         lp_prime = log_p(x_prime)
         if np.random.rand() <= np.exp(lp_prime - lp):
+            acc += 1
             x[:] = x_prime
             lp = lp_prime
         chain[step] = x
-    return chain
+    return chain, acc / len(chain)
 
 
-chain = run_mcmc(log_p_gauss, np.array([0.0, 0.0]))
-fig = corner.corner(chain, labels=["$x$", "$y$"],
-                    range=[(-4.5, 4.5), (-4.5, 4.5)],
-                    plot_density=False, plot_contours=False)
-fig.savefig("p4a.pdf", dpi=300)
+if __name__ == "__main__":
+    chain, _ = run_mcmc(log_p_gauss, np.array([0.0, 0.0]))
+    fig = corner.corner(chain, labels=["$x$", "$y$"],
+                        range=[(-4.5, 4.5), (-4.5, 4.5)],
+                        plot_density=False, plot_contours=False)
+    savefig(fig, "p4a.pdf", dpi=300)
