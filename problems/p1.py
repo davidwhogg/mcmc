@@ -50,6 +50,7 @@ for i, (ax, title) in enumerate(zip(
     ax.set_ylim(mu + d * np.array([-1, 1]))
     ax.set_ylabel(title)
     ax.yaxis.set_label_coords(-0.3, 0.5)
+    ax.yaxis.set_major_locator(pl.MaxNLocator(5))
     ax.xaxis.set_major_locator(pl.MaxNLocator(6))
 
 [ax.set_xlabel(r"$\log_2 K$") for ax in axes[1]]

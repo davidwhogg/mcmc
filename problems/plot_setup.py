@@ -18,10 +18,14 @@ SQUARE_FIGSIZE = np.array((4, 4))
 
 
 def setup():
-    rcParams["font.size"] = 20
-    rcParams["font.family"] = "serif"
-    rcParams["font.serif"] = "Computer Sans"
+    rcParams["agg.path.chunksize"] = 10000  # huh?
+    rcParams["font.size"] = 16
+    rcParams["font.family"] = "sans-serif"
+    rcParams["font.sans-serif"] = ["Computer Modern Sans"]
+    # rcParams["font.family"] = "serif"
+    # rcParams["font.serif"] = ["Computer Modern Roman"]
     rcParams["text.usetex"] = True
+    rcParams["text.latex.preamble"] = r"\usepackage{cmbright}"
     rcParams["figure.autolayout"] = True
     rcParams["axes.prop_cycle"] = cycler("color", (
         "#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b",

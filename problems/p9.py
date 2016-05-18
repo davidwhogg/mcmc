@@ -8,7 +8,7 @@ import matplotlib.pyplot as pl
 
 from plot_setup import SQUARE_FIGSIZE, COLORS
 
-from p8 import chain, autocorr_function
+from p8 import autocorr_function
 
 
 def autocorr_time_simple(acf, window):
@@ -19,12 +19,14 @@ def autocorr_time_iterative(acf, c=10, low=10):
     high = int(len(acf) / c)
     for M in np.arange(low, high).astype(int):
         tau = autocorr_time_simple(acf, M)
-        if M > c * tau:
+        if tau > 1.0 and M > c * tau:
             return tau
     raise RuntimeError("chain too short to estimate tau reliably")
 
 
 if __name__ == "__main__":
+    from p8 import chain
+
     m = len(chain)
     N = 2 ** np.arange(2, 19)
 

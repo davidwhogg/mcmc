@@ -33,6 +33,7 @@ ax.hist(chain, 100, histtype="step", color=COLORS["DATA"], normed=True)
 x = 2 + np.linspace(-4.5, 4.5, 5000)
 ax.plot(x, np.exp(log_p(x)), color=COLORS["MODEL_1"])
 ax.set_xlim(x.min(), x.max())
+ax.yaxis.set_major_locator(pl.MaxNLocator(4))
 ax.set_xlabel("$x$")
 ax.set_ylabel("$p(x)$")
 
