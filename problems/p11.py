@@ -19,7 +19,7 @@ def log_p_gauss(x):
     return -0.5 * np.dot(x, alpha)
 
 
-def run_mcmc(log_p, x, prop_sigma=1.0, nsteps=5e6):
+def run_mcmc(log_p, x, prop_sigma=1.0, nsteps=1e5):
     lp = log_p(x)
     chain = np.empty((nsteps, len(x)))
     acc = 0

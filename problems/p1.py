@@ -6,7 +6,7 @@ from __future__ import division, print_function
 
 import numpy as np
 import matplotlib.pyplot as pl
-from plot_setup import setup, SQUARE_FIGSIZE, COLORS
+from plot_setup import setup, SQUARE_FIGSIZE, COLORS, savefig
 
 setup()  # initialize the plotting styles
 
@@ -39,7 +39,8 @@ def compute_stats(K, a=0.0, b=1.0):
 K = 4**np.arange(1, 11)
 a_stats, s_stats = map(np.array, zip(*(compute_stats(k) for k in K)))
 
-fig, axes = pl.subplots(2, 2, sharex=True, figsize=2*SQUARE_FIGSIZE)
+shape = np.array([2, 1.5])*SQUARE_FIGSIZE
+fig, axes = pl.subplots(2, 2, sharex=True, figsize=shape)
 
 for i, (ax, title) in enumerate(zip(
         axes.flat, ("mean", "variance", "skewness", "kurtosis"))):
@@ -55,4 +56,4 @@ for i, (ax, title) in enumerate(zip(
 
 [ax.set_xlabel(r"$\log_2 K$") for ax in axes[1]]
 
-fig.savefig("p1.pdf")
+savefig(fig, "p1.pdf")

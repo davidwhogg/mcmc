@@ -2,15 +2,15 @@ include Makefile.inc
 
 # Enter the name(s) of the .tex file(s) that you want to compile.
 TEX_FILES = mcmc
-DIRS      =
+DIRS      = problems
 
 # You shouldn't need to edit below here.
-default: subdirs ${DOCS}
+default: subdirs mcmc.pdf
 
-.tex.pdf:
-	${LATEX} $*.tex
-	( ${CHECK_RERUN} && ${LATEX} $*.tex ) || echo "Done."
-	( ${CHECK_RERUN} && ${LATEX} $*.tex ) || echo "Done."
+mcmc.pdf: mcmc.tex problems/*.pdf
+	${LATEX} mcmc.tex
+	( ${CHECK_RERUN} && ${LATEX} mcmc.tex ) || echo "Done."
+	( ${CHECK_RERUN} && ${LATEX} mcmc.tex ) || echo "Done."
 
 subdirs: force_look
 	$(foreach d, ${DIRS}, (echo "Looking into ${d}:"; cd ${d}; ${MAKE} ${MFLAGS}) )

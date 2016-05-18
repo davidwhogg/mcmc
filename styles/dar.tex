@@ -9,7 +9,7 @@
 \makeatletter
 \newsavebox{\tempbox}
 \newcommand{\@makefigcaption}[2]{%
-\vspace{10pt}{#1.--- #2\par}}%
+\vspace{-10pt}{#1.--- #2\par}}%
 \renewcommand{\figure}{\let\@makecaption\@makefigcaption\@float{figure}}
 \makeatother
 

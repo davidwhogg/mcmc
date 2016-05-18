@@ -646,25 +646,47 @@ Give the sampler a proposal distribution $q(x'\given x)$ a Gaussian
 pdf with mean zero and variance 1.
 Initialize the sampler with $x=0$ and run the sampler for more than $10^4$ steps.
 Plot the results as a histogram, with the true density over-plotted sensibly.
+The resulting  plot should look something like \figurename~\ref{fig:MH}.
 \end{problem}
 
-\begin{problem}
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{problems/p2}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:MH}:
+MCMC samples from a Gaussian (black) and the true distribution (blue).}
+\label{fig:MH}
+\end{figure}
+
+\begin{problem}\label{prob:MH2}
 Re-do \problemname~\ref{prob:MH} but now with an input density
 that is uniform on $3<x<7$ and zero everywhere else.
+The plot should look like \figurename~\ref{fig:MH2}.
 What change did you have to make to the initialization, and why?
 \end{problem}
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{problems/p3}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:MH2}:
+MCMC samples from a uniform distribution (black) and the true distribution
+(blue).}
+\label{fig:MH2}
+\end{figure}
 
 \begin{problem}\label{prob:twod}
 Re-do \problemname~\ref{prob:MH} but now with an input density
 that is a function of two variables $(x, y)$.
 For the density function use two different functions.
-The first density function is a covariant two-dimensional Gaussian density with variance tensor
+\emph{(a)} The first density function is a covariant two-dimensional Gaussian
+density with variance tensor
 \begin{eqnarray}
 V &=& \left[\begin{array}{cc} 2.0 & 1.2 \\ 1.2 & 2.0 \end{array}\right]
 \quad.
 \end{eqnarray}
-The second density function is a rectangular top-hat function that is uniform on
-the joint constraint $3<x<7$ and $1<y<9$ and zero everywhere else.
+\emph{(b)} The second density function is a rectangular top-hat function that
+is uniform on the joint constraint $3<x<7$ and $1<y<9$ and zero everywhere else.
 For the proposal distribution $q(x', y'\given x, y)$ a two-dimensional Gaussian
 density with zero mean and variance tensor set to the two-dimensional
 identity matrix.
@@ -672,12 +694,42 @@ Plot the two one-dimensional histograms and also a two-dimensional scatter
 plot for each sampling.
 \end{problem}
 
-\begin{problem}
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{problems/p4a}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:twod}a:
+MCMC samples from a two-dimensional Gaussian (scatter plot) and the
+one-dimensional marginalized distributions (histograms).}
+\label{fig:twod}
+\end{figure}
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{problems/p4b}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:twod}b:
+MCMC samples from a two-dimensional top hat distribution (scatter plot) and the
+one-dimensional marginalized distributions (histograms).}
+\label{fig:twod}
+\end{figure}
+
+\begin{problem}\label{prob:MH-sigma}
 Re-do \problemname~\ref{prob:MH} but with different values for
 the variance of the proposal distribution $q(x'\given x)$.
 What happens when you go to very extreme values (like for instance
 $10^{-8}$ or $10^6$)?
 \end{problem}
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=\textwidth]{problems/p5}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:MH-sigma}:
+MCMC samples from a two-dimensional top hat distribution (scatter plot) and the
+one-dimensional marginalized distributions (histograms).}
+\label{fig:MH-sigma}
+\end{figure}
 
 \begin{problem}
 Why, in \problemname~\ref{prob:MH}, did we give the proposal
