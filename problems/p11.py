@@ -17,7 +17,7 @@ np.random.seed(42)
 taus = np.empty((len(sigs), 2))
 for i, sig in enumerate(sigs):
     chain, acc = run_mcmc(log_p_gauss, np.array([0.0, 0.0]), prop_sigma=sig,
-                          nsteps=1e6)
+                          nsteps=2e5)
     for j in range(2):
         acf = autocorr_function(chain[:, j])
         taus[i, j] = autocorr_time_iterative(acf)
@@ -30,4 +30,6 @@ ax.set_xscale("log")
 ax.set_xlabel(r"$\sigma_q$")
 ax.set_ylabel(r"$\tau_x$")
 ax.set_xlim(0.2, 40)
+ax.set_ylim(0, 450)
+ax.yaxis.set_major_locator(pl.MaxNLocator(5))
 savefig(fig, "p11.pdf")

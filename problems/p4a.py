@@ -18,20 +18,22 @@ def log_p_gauss(x):
     return -0.5 * np.dot(x, alpha)
 
 
-def run_mcmc(log_p, x, prop_sigma=1.0, nsteps=2e4):
+def run_mcmc(log_p, x, prop_sigma=1.0, nsteps=2e4, thin=1):
     lp = log_p(x)
-    chain = np.empty((nsteps, len(x)))
+    chain = np.empty((nsteps // thin, len(x)))
     acc = 0
     for step in range(len(chain)):
-        x_prime = np.array(x)
-        x_prime[np.random.randint(len(x))] += prop_sigma * np.random.randn()
-        lp_prime = log_p(x_prime)
-        if np.random.rand() <= np.exp(lp_prime - lp):
-            acc += 1
-            x[:] = x_prime
-            lp = lp_prime
-        chain[step] = x
-    return chain, acc / len(chain)
+        for i in range(thin):
+            x_prime = np.array(x)
+            x_prime[np.random.randint(len(x))] += prop_sigma*np.random.randn()
+            lp_prime = log_p(x_prime)
+            if np.random.rand() <= np.exp(lp_prime - lp):
+                acc += 1
+                x[:] = x_prime
+                lp = lp_prime
+            if i == thin - 1:
+                chain[step] = x
+    return chain, acc / (len(chain) * thin)
 
 
 if __name__ == "__main__":

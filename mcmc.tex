@@ -1141,7 +1141,7 @@ on a logarithmic grid of $Q$ with values of $Q$ separated by factors
 of 2.
 \end{problem}
 
-\begin{problem}
+\begin{problem}\label{prob:tuningtau}
 Re-do \problemname~\ref{prob:tuning} but instead of trying to reach a
 certain acceptance fraction, try to minimize the autocorrelation time.
 You will need one of the autocorrelation-time estimators you might have
@@ -1150,6 +1150,20 @@ built in a previous \problemname.
 What do you get as the best value of $Q$ in this case?
 Again, just evaluate on a coarse logarithmic grid.
 \end{problem}
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.48\textwidth]{problems/p10}
+\includegraphics[width=0.48\textwidth]{problems/p11}
+\end{center}
+\caption{Solutions to \problemname s~\ref{prob:tuning} and~\ref{prob:tuningtau}:
+Two methods of tuning the M--H proposal parameters.
+\emph{left:} The acceptance fraction as a function of proposal scale for the
+distribution from \problemname~\ref{prob:twod}a.
+\emph{right:} The integrated autocorrelation time for each parameter
+(indicated by the different colors) as a function of proposal scale parameter.}
+\label{fig:tuning}
+\end{figure}
 
 \begin{problem}
 In \problemname~\ref{prob:tuning} you varied only the parameter $Q$, but
@@ -1160,7 +1174,7 @@ be, in principle?
 
 \begin{problem}\label{prob:rosenbrock}
 Look up the Rosenbrock density used as the demonstration case for the
-\project{emcee} sampler (see \citealt{emcee}).
+\project{emcee} sampler (see DFM: should cite G\&W here).
 Tune the Gaussian proposal distribution in your \MH\ \MCMC\ sampler to sample this density efficiently.
 What autocorrelation time do you get?
 Compare to what \project{emcee} gets.
@@ -2310,8 +2324,8 @@ about what changes to make or what new directions to explore.
   \href{http://www.mcmchandbook.net/HandbookTableofContents.html}{\textit{Handbook of Markov Chain Monte Carlo}},
   Chapman and Hall~/~CRC Press
   \isbn{978-1-4200-7941-8}.
-\bibitem[Foreman-Mackey \etal(2012)]{emcee}
-  Foreman-Mackey,~D., Hogg,~D.~W., Lang,~D., \& Goodman,~J.\ 2012,
+\bibitem[Foreman-Mackey \etal(2013)]{emcee}
+  Foreman-Mackey,~D., Hogg,~D.~W., Lang,~D., \& Goodman,~J.\ 2013,
   \project{emcee}: The \MCMC\ Hammer,
   \textit{Pubs.\ Astron.\ Soc.\ Pac.}\ \textbf{125} 306--312
   \doi{10.1086/670067}
