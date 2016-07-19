@@ -474,7 +474,7 @@ Over-plot the analytic answers.
 What can you conclude?
 \end{problem}
 
-\section{Likelihoods and priors}
+\section{Likelihoods and priors}\label{sec:likelihood}
 
 \MCMC\ is used to obtain samples $\pars_k$ from a pdf $p(\pars)$,
   or a badly normalized all-positive function $f(\pars)$
@@ -561,20 +561,6 @@ than one) or multiply the log-likelihood by a very small number (much
 less than one) and check that the sampler samples, properly and
 correctly, the prior pdf.
 This test is only possible if the prior pdf is proper.
-
-\begin{problem}
-Run your M-H \MCMC\ sampler from \problemname~\ref{prob:MH}, but now
-with a density function that is precisely unity \emph{everywhere}
-(that is, at any input value of $x$ it returns unity).  That is, an
-improper function.  Run it for longer and longer and plot the chain
-value $x$ as a function of timestep.  What happens?
-\end{problem}
-
-\begin{problem}
-For a real-world inference problem, read enough of
-\citet{fittingaline} to understand and execute Exercise~6 in that
-document.
-\end{problem}
 
 \section{Metropolis--Hastings MCMC}\label{sec:MH}
 
@@ -840,6 +826,21 @@ $\ln x$ $q(\ln x'\given \ln x)$, but---incorrectly---make no other
 changes.  What about your answers change?  How wrong is your answer?
 Bonus points: Compute the analytic function that you have sampled from
 (that is, not $p(x)$) and over-plot it on your histogram.
+\end{problem}
+
+\begin{problem}
+Run your M-H \MCMC\ sampler from \problemname~\ref{prob:MH}, but now
+with a density function that is precisely unity \emph{everywhere}
+(that is, at any input value of $x$ it returns unity).  That is, an
+improper function (as discussed in \sectionname~\ref{sec:likelihood}).
+Run it for longer and longer and plot the chain value $x$ as a
+function of timestep.  What happens?
+\end{problem}
+
+\begin{problem}
+For a real-world inference problem, read enough of
+\citet{fittingaline} to understand and execute Exercise~6 in that
+document.
 \end{problem}
 
 \section{Convergence}\label{sec:convergence}
