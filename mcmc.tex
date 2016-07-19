@@ -636,9 +636,30 @@ That is, even if---in the end---%
     the ambitious reader will find in that \documentname\ a solid example project
     for using \MCMC\ in a real context.}
 
-DFM says: should we say something about using the log density here?
+Because many problems involve a huge amount of dynamic range in the
+density function $f(\pars)$, and we like to avoid underflows and overflows
+(in, say, ratios computed for accept--reject steps), it is often advisable
+to work in the (natural) logarithm of the density rather than the density.
+When working in logarithmic density, 
+the accept--reject step would change from a comparison of a random
+deviate with a ratio of probabilities to comparison of the log of a
+random deviate with a difference of log probabilities.
+That is, the accept--reject step becomes:
+\begin{itemize}
+\item If $\ln f(\pars') - \ln f(\pars_k) > \ln r$ then $\pars_{k+1} \leftarrow \pars'$;
+      otherwise $\pars_{k+1} \leftarrow \pars_k$.
+\end{itemize}
+This protects you from underflow, but exposes you to some (negative)
+infinities, if you end up taking the logarithm of a zero.  It is
+important to write your code to be infinity-safe.\note{Most code will
+  be infinity safe if written in the form in this paragraph. However,
+  there can be issues if \emph{both} $f(\pars')$ \emph{and}
+  $f(\pars_k)$ are negative infinity; in (present-day) Python this
+  will return a \texttt{NaN} rather than an infinity or zero. That's a
+  problem and is a case that should get caught (probably way before
+  the accept--reject step!).}
 
-HOGG: ...You must describe your priors in the same parameterization that you ``step'' in.
+HOGG SAY HERE: ...You must describe your priors in the same parameterization that you ``step'' in.
 That is, if you change your parameters, you \emph{must} change your priors correspondingly.
 Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
 
@@ -733,47 +754,22 @@ again.
 \section{Likelihoods and priors}\label{sec:likelihood}
 
 \MCMC\ is used to obtain samples $\pars_k$ from a pdf $p(\pars)$,
-  or a badly normalized all-positive function $f(\pars)$
+  given a badly normalized all-positive function $f(\pars)$
   that is different from the pdf by an unknown factor $Z$.
 In the context of data analysis,
   \MCMC\ is usually being used to obtain samples $\pars_k$
   that are \emph{parameter values} $\pars$ for a probabilistic model of some data.
 That is, \MCMC\ is sampling a pdf \emph{for the parameters}.
-If it is returning parameter values, then it is not sampling a pdf for the data.
-That is, \MCMC\ can only sample a posterior (or prior) pdf for the parameters.
-\emph{It cannot sample a likelihood.}%
-\note{Well, technically, \MCMC\ \emph{can} be used to sample a likelihood function,
-  but the samples would be samples of possible \emph{data} not possible \emph{parameters}.
-  The purist might say that even this is not sampling a likelihood function,
-  because you should only call it a ``likelihood function'' in contexts in which you are
-  treating the data as fixed (at the true data values) and the parameters as variable.
-  In this context, the likelihood function is \emph{not} a pdf for the parameters,
-  so it can't be sampled.}
-
-Despite all this, in many cases,
-  data analysts believe they are sampling the likelihood.
-This is because (we presume) they have put a likelihood function
-  (or log-likelihood function)
-  in as the input to the \MCMC\ code, where the probability function
-  (or log-probability function) should go.
-Then is it the likelihood that is being sampled?
-No, not really;
-  it is a posterior probability that is directly proportional to the likelihood function.
-That is, it is a posterior probability for some implicit (and improper) ``flat'' priors.
 
 Ideally, if you are using \MCMC\ for inference, your code should input
 to the \MCMC\ function or routine a probability function which is a
 product of a prior times a likelihood.
-In terms of implementation, it is usually advisable to work in the
+As we noted above---in terms of implementation---it is usually advisable to work in the
 logarithm of the density function, so the function input to the \MCMC\ code
 would be called something like \code{ln_f()}.
 This function \code{ln_f()} internally would compute and return the
 sum of a log prior pdf \code{ln_prior()} and a log likelihood function
 \code{ln_likelihood()}.
-(When working in logarithmic probability, in M--H-like \MCMC\ methods,
-the accept--reject step would change from a comparison of a random
-deviate with a ratio of probabilities to comparison of the log of a
-random deviate with a difference of log probabilities.)
 
 If you are using ``flat'' (improper) priors, the \code{ln_prior()}
 function can just return a zero no matter what the parameters.
@@ -801,6 +797,25 @@ that doesn't have an \code{Inf} or doesn't evaluate comparisons correctly
 when the \code{Inf} appears, you might have to write some case code, and
 have your \code{ln_f} function return a value \emph{and} some kind of flag
 which indicates ``zero probability'' or $f(\pars)=0$.}
+
+\MCMC\ \emph{cannot sample a likelihood} (which is a probability \emph{for the data} given
+parameters).\note{Well, technically, \MCMC\ \emph{can} be used to sample a likelihood function,
+  but the samples would be samples of possible \emph{data} not possible \emph{parameters}.
+  The purist might say that even this is not sampling a likelihood function,
+  because you should only call it a ``likelihood function'' in contexts in which you are
+  treating the data as fixed (at the true data values) and the parameters as variable.
+  In this context, the likelihood function is \emph{not} a pdf for the parameters,
+  so it can't be sampled.}
+Despite this, in many cases,
+  data analysts believe they are sampling the likelihood.
+This is because (we presume) they have put a likelihood function
+  (or log-likelihood function)
+  in as the input to the \MCMC\ code, where the probability function
+  (or log-probability function) should go.
+Then is it the likelihood that is being sampled?
+No, not really;
+  it is a posterior probability that is directly proportional to the likelihood function.
+That is, it is a posterior probability for some implicit (and improper) ``flat'' priors.
 
 It should be outside of the scope of this document to note here that
 it is a good idea to have proper priors.\note{This point---that you
