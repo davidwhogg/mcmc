@@ -20,7 +20,8 @@ s[0] *= 2
 s[1] *= 0.8
 fig, axes = pl.subplots(1, 3, sharex=True, sharey=True, figsize=s)
 for n, ax in zip([0.0, -1.0, 2.0], axes):
-    chain = run_mcmc(log_p_gauss, np.array(x0), nsteps=2e3, prop_sigma=10**n)
+    chain, _ = run_mcmc(log_p_gauss, np.array(x0), nsteps=2e3,
+                        prop_sigma=10**n)
     ax.plot(chain[:, 0], chain[:, 1], "o-", color=COLORS["DATA"], ms=2)
     ax.plot(x0[0], x0[1], "o", color=COLORS["MODEL_1"])
     ax.set_xlim(-6.3, 6.3)
