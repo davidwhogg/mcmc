@@ -7,8 +7,8 @@ import numpy as np
 import matplotlib.pyplot as pl
 from plot_setup import setup, SQUARE_FIGSIZE, COLORS, savefig
 
-from p9 import autocorr_function, autocorr_time_iterative
-from p10 import log_p_gauss, run_mcmc, sigs
+from itertau import autocorr_function, autocorr_time_iterative
+from tuning import log_p_gauss, run_mcmc, sigs
 
 setup()  # initialize the plotting styles
 np.random.seed(42)
@@ -32,4 +32,4 @@ ax.set_ylabel(r"$\tau_x$")
 ax.set_xlim(0.2, 40)
 ax.set_ylim(0, 450)
 ax.yaxis.set_major_locator(pl.MaxNLocator(5))
-savefig(fig, "p11.pdf")
+savefig(fig, "tuningtau.pdf")

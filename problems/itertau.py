@@ -8,7 +8,7 @@ import matplotlib.pyplot as pl
 
 from plot_setup import SQUARE_FIGSIZE, COLORS, savefig
 
-from p8 import autocorr_function
+from estimatetau import autocorr_function
 
 
 def autocorr_time_simple(acf, window):
@@ -25,7 +25,7 @@ def autocorr_time_iterative(acf, c=10, low=10):
 
 
 if __name__ == "__main__":
-    from p8 import chain
+    from estimatetau import chain
 
     m = len(chain)
     N = 2 ** np.arange(2, 19)
@@ -50,4 +50,4 @@ if __name__ == "__main__":
     ax.set_ylabel(r"$\tau_x$")
     ax.set_xlabel("window size")
 
-    savefig(fig, "p9.pdf")
+    savefig(fig, "itertau.pdf")

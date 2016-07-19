@@ -1,6 +1,6 @@
-ALL_FILES=simple_stats.pdf MH.pdf MH2.pdf twod_a.pdf twod_b.pdf prop_mean.pdf \
-		  p6.pdf p7.pdf p8.pdf \
-		  p9.pdf p10.pdf p11.pdf
+ALL_FILES=simple_stats.pdf MH.pdf MH2.pdf twod_a.pdf twod_b.pdf MH_sigma.pdf \
+		  prop_mean.pdf convergence.pdf estimatetau.pdf \
+		  itertau.pdf tuning.pdf tuningtau.pdf
 
 default: $(ALL_FILES)
 

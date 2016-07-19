@@ -6,7 +6,7 @@ from __future__ import division, print_function
 import numpy as np
 import matplotlib.pyplot as pl
 
-from p4a import log_p_gauss
+from twod_a import log_p_gauss
 from plot_setup import setup, COLORS, SQUARE_FIGSIZE, savefig
 
 setup()  # initialize the plotting styles
@@ -57,4 +57,4 @@ for broken, ax in zip([True, False], axes):
 
 axes[0].set_ylabel("$y$")
 
-savefig(fig, "p6.pdf")
+savefig(fig, "prop_mean.pdf")

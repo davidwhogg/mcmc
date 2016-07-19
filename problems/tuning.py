@@ -7,7 +7,7 @@ import numpy as np
 import matplotlib.pyplot as pl
 from plot_setup import setup, SQUARE_FIGSIZE, COLORS, savefig
 
-from p4a import log_p_gauss, run_mcmc
+from twod_a import log_p_gauss, run_mcmc
 
 setup()  # initialize the plotting styles
 np.random.seed(42)
@@ -28,4 +28,4 @@ if __name__ == "__main__":
     ax.set_xlabel(r"$\sigma_q$")
     ax.set_ylabel("acceptance fraction")
     ax.set_xlim(0.2, 40)
-    savefig(fig, "p10.pdf")
+    savefig(fig, "tuning.pdf")

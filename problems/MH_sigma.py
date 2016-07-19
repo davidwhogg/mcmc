@@ -36,4 +36,4 @@ for n, ax in zip([0.0, -1.0, 2.0], axes):
 
 axes[0].set_ylabel("$y$")
 
-savefig(fig, "p5.pdf")
+savefig(fig, "MH_sigma.pdf")

@@ -50,4 +50,4 @@ if __name__ == "__main__":
     ax2.set_ylabel("$p(x)$")
     ax2.set_xlabel("$x$")
 
-    savefig(fig, "p7.pdf", dpi=300)
+    savefig(fig, "convergence.pdf", dpi=300)

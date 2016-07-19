@@ -8,7 +8,7 @@ import matplotlib.pyplot as pl
 
 from plot_setup import SQUARE_FIGSIZE, savefig
 
-from p7 import chain
+from convergence import chain
 
 
 def autocorr_function(x):
@@ -28,4 +28,4 @@ if __name__ == "__main__":
     ax.set_ylabel("$C_x(\Delta)$")
     ax.set_xlabel("$\Delta$")
 
-    savefig(fig, "p8.pdf")
+    savefig(fig, "estimatetau.pdf")
