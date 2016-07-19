@@ -72,6 +72,7 @@
         We would like to thank
           Jo Bovy (IAS),
           Brendon Brewer (Auckland),
+          Will Farr (Birmingham),
           Jonathan Goodman (NYU),
           Fengji Hou (NYU),
           Dustin Lang (CMU),
@@ -289,7 +290,7 @@ in a finely binned $\pars$-space histogram, the histogram would look---up
 to a total normalization---just like the original function $p(\pars)$.
 
 Not being mathematicians, we don't know the precise definition of a
-pdf\note{Seriously.  We don't.  It has something to do with measure theory.}, but for our purposes here a pdf is
+pdf\note{Seriously.  It has something to do with measure theory.}, but for our purposes here a pdf is
 any single-valued (scalar) function that is non-negative everywhere
 (the entire domain of $\pars$), and obeys a normalization condition
 \begin{eqnarray}
@@ -473,6 +474,108 @@ Over-plot the analytic answers.
 What can you conclude?
 \end{problem}
 
+\section{Likelihoods and priors}
+
+\MCMC\ is used to obtain samples $\pars_k$ from a pdf $p(\pars)$,
+  or a badly normalized all-positive function $f(\pars)$
+  that is different from the pdf by an unknown factor $Z$.
+In the context of data analysis,
+  \MCMC\ is usually being used to obtain samples $\pars_k$
+  that are \emph{parameter values} $\pars$ for a probabilistic model of some data.
+That is, \MCMC\ is sampling a pdf \emph{for the parameters}.
+If it is returning parameter values, then it is not sampling a pdf for the data.
+That is, \MCMC\ can only sample a posterior (or prior) pdf for the parameters.
+\emph{It cannot sample a likelihood.}%
+\note{Well, technically, \MCMC\ \emph{can} be used to sample a likelihood function,
+  but the samples would be samples of possible \emph{data} not possible \emph{parameters}.
+  The purist might say that even this is not sampling a likelihood function,
+  because you should only call it a ``likelihood function'' in contexts in which you are
+  treating the data as fixed (at the true data values) and the parameters as variable.
+  In this context, the likelihood function is \emph{not} a pdf for the parameters,
+  so it can't be sampled.}
+
+Despite all this, in many cases,
+  data analysts believe they are sampling the likelihood.
+This is because (we presume) they have put a likelihood function
+  (or log-likelihood function)
+  in as the input to the \MCMC\ code, where the probability function
+  (or log-probability function) should go.
+Then is it the likelihood that is being sampled?
+No, not really;
+  it is a posterior probability that is directly proportional to the likelihood function.
+That is, it is a posterior probability for some implicit (and improper) ``flat'' priors.
+
+Ideally, if you are using \MCMC\ for inference, your code should input
+to the \MCMC\ function or routine a probability function which is a
+product of a prior times a likelihood.
+In terms of implementation, it is usually advisable to work in the
+logarithm of the density function, so the function input to the \MCMC\ code
+would be called something like \code{ln_f()}.
+This function \code{ln_f()} internally would compute and return the
+sum of a log prior pdf \code{ln_prior()} and a log likelihood function
+\code{ln_likelihood()}.
+(When working in logarithmic probability, in M--H-like \MCMC\ methods,
+the accept--reject step would change from a comparison of a random
+deviate with a ratio of probabilities to comparison of the log of a
+random deviate with a difference of log probabilities.)
+
+If you are using ``flat'' (improper) priors, the \code{ln_prior()}
+function can just return a zero no matter what the parameters.
+If it is flat with bounds (that is, proper), the \code{ln_prior()}
+should check the bounds and return \code{-Inf} values if the parameter
+vector is out of bounds.
+The pseudo-code for the \code{ln_f()} function should look something
+like this:
+% DFM: Do you have a preferred environment for code other than verbatim?
+\begin{verbatim}
+def ln_f(pars, data):
+    x = ln_prior(pars)
+    if not is_finite(x):
+        return -Inf
+    return x + ln_likelihood(data, pars)
+\end{verbatim}
+This pseudo-code ensures that you only compute the likelihood when the
+parameters are within the prior bounds; it assumes implicitly that the
+prior pdf is easier to compute than the likelihood.
+If you find yourself in the opposite regime, adjust accordingly.
+Of course the above pseudo-code presumes that when you perform the
+accept--reject step of the \MCMC\ method, the programming language handles
+properly the \code{-Inf} values.\footnote{If you are working in a language
+that doesn't have an \code{Inf} or doesn't evaluate comparisons correctly
+when the \code{Inf} appears, you might have to write some case code, and
+have your \code{ln_f} function return a value \emph{and} some kind of flag
+which indicates ``zero probability'' or $f(\pars)=0$.}
+
+It should be outside of the scope of this document to note here that
+it is a good idea to have proper priors.\note{This point---that you
+  should be using proper priors---is just basic Bayesian good
+  practice, often violated but never for good reasons.}
+Proper priors obey the integral constraint (\ref{eq:proper}),
+with $Z$ finite.
+It isn't a requirement that priors be proper for the posterior to
+be proper, so many investigators and projects violate this rule.
+This is outside the current scope, except for the following point:
+It is a great functional test of your sampler and your data analysis
+setup to take the likelihood function to a very small power (much less
+than one) or multiply the log-likelihood by a very small number (much
+less than one) and check that the sampler samples, properly and
+correctly, the prior pdf.
+This test is only possible if the prior pdf is proper.
+
+\begin{problem}
+Run your M-H \MCMC\ sampler from \problemname~\ref{prob:MH}, but now
+with a density function that is precisely unity \emph{everywhere}
+(that is, at any input value of $x$ it returns unity).  That is, an
+improper function.  Run it for longer and longer and plot the chain
+value $x$ as a function of timestep.  What happens?
+\end{problem}
+
+\begin{problem}
+For a real-world inference problem, read enough of
+\citet{fittingaline} to understand and execute Exercise~6 in that
+document.
+\end{problem}
+
 \section{Metropolis--Hastings MCMC}\label{sec:MH}
 
 The simplest algorithm for \MCMC\ is the Metropolis--Hastings algorithm (\MH\ \MCMC).\note{%
@@ -637,6 +740,10 @@ That is, even if---in the end---%
 
 DFM says: should we say something about using the log density here?
 
+HOGG: ...You must describe your priors in the same parameterization that you ``step'' in.
+That is, if you change your parameters, you \emph{must} change your priors correspondingly.
+Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
+
 \begin{problem}\label{prob:MH}
 In your scientific programming language of choice, write a very simple
 M-H \MCMC\ sampler.
@@ -723,6 +830,16 @@ non-zero mean and see what happens.
 Bonus points: Modify the acceptance--rejection criterion to deal with
 the messed-up $q(x'\given x)$ and show that everything works once
 again.
+\end{problem}
+
+\begin{problem}
+Modify the sampler you wrote in \problemname~\ref{prob:MH} to take
+steps not in $x$ but in $\ln x$.  That is, replace the Gaussian
+proposal distribution $q(x'\given x)$ with a Gaussian distribution in
+$\ln x$ $q(\ln x'\given \ln x)$, but---incorrectly---make no other
+changes.  What about your answers change?  How wrong is your answer?
+Bonus points: Compute the analytic function that you have sampled from
+(that is, not $p(x)$) and over-plot it on your histogram.
 \end{problem}
 
 \section{Convergence}\label{sec:convergence}
@@ -1849,122 +1966,6 @@ but there are criteria for creating reversible-jump proposals between
 the parameter spaces.
 These methods are best built and operated under the supervision of a
 trained professional.
-
-\section{Likelihoods and priors}
-
-\MCMC\ is used to obtain samples $\pars_k$ from a pdf $p(\pars)$,
-  or a badly normalized all-positive function $f(\pars)$
-  that is different from the pdf by an unknown factor $Z$.
-In the context of data analysis,
-  \MCMC\ is usually being used to obtain samples $\pars_k$
-  that are \emph{parameter values} $\pars$ for a probabilistic model of some data.
-That is, \MCMC\ is sampling a pdf \emph{for the parameters}.
-If it is returning parameter values, then it is not sampling a pdf for the data.
-That is, \MCMC\ can only sample a posterior (or prior) pdf for the parameters.
-\emph{It cannot sample a likelihood.}%
-\note{Well, technically, \MCMC\ \emph{can} be used to sample a likelihood function,
-  but the samples would be samples of possible \emph{data} not possible \emph{parameters}.
-  The purist might say that even this is not sampling a likelihood function,
-  because you should only call it a ``likelihood function'' in contexts in which you are
-  treating the data as fixed (at the true data values) and the parameters as variable.
-  In this context, the likelihood function is \emph{not} a pdf for the parameters,
-  so it can't be sampled.}
-
-Despite all this, in many cases,
-  data analysts believe they are sampling the likelihood.
-This is because (we presume) they have put a likelihood function
-  (or log-likelihood function)
-  in as the input to the \MCMC\ code, where the probability function
-  (or log-probability function) should go.
-Then is it the likelihood that is being sampled?
-No, not really;
-  it is a posterior probability that is directly proportional to the likelihood function.
-That is, it is a posterior probability for some implicit (and improper) ``flat'' priors.
-
-Ideally, if you are using \MCMC\ for inference, your code should input
-to the \MCMC\ function or routine a probability function which is a
-product of a prior times a likelihood.
-In terms of implementation, it is usually advisable to work in the
-logarithm of the density function, so the function input to the \MCMC\ code
-would be called something like \code{ln_f()}.
-This function \code{ln_f()} internally would compute and return the
-sum of a log prior pdf \code{ln_prior()} and a log likelihood function
-\code{ln_likelihood()}.
-(When working in logarithmic probability, in M--H-like \MCMC\ methods,
-the accept--reject step would change from a comparison of a random
-deviate with a ratio of probabilities to comparison of the log of a
-random deviate with a difference of log probabilities.)
-
-If you are using ``flat'' (improper) priors, the \code{ln_prior()}
-function can just return a zero no matter what the parameters.
-If it is flat with bounds (that is, proper), the \code{ln_prior()}
-should check the bounds and return \code{-Inf} values if the parameter
-vector is out of bounds.
-The pseudo-code for the \code{ln_f()} function should look something
-like this:
-% DFM: Do you have a preferred environment for code other than verbatim?
-\begin{verbatim}
-def ln_f(pars, data):
-    x = ln_prior(pars)
-    if not is_finite(x):
-        return -Inf
-    return x + ln_likelihood(data, pars)
-\end{verbatim}
-This pseudo-code ensures that you only compute the likelihood when the
-parameters are within the prior bounds; it assumes implicitly that the
-prior pdf is easier to compute than the likelihood.
-If you find yourself in the opposite regime, adjust accordingly.
-Of course the above pseudo-code presumes that when you perform the
-accept--reject step of the \MCMC\ method, the programming language handles
-properly the \code{-Inf} values.\footnote{If you are working in a language
-that doesn't have an \code{Inf} or doesn't evaluate comparisons correctly
-when the \code{Inf} appears, you might have to write some case code, and
-have your \code{ln_f} function return a value \emph{and} some kind of flag
-which indicates ``zero probability'' or $f(\pars)=0$.}
-
-It should be outside of the scope of this document to note here that
-it is a good idea to have proper priors.\note{This point---that you
-  should be using proper priors---is just basic Bayesian good
-  practice, often violated but never for good reasons.}
-Proper priors obey the integral constraint (\ref{eq:proper}),
-with $Z$ finite.
-It isn't a requirement that priors be proper for the posterior to
-be proper, so many investigators and projects violate this rule.
-This is outside the current scope, except for the following point:
-It is a great functional test of your sampler and your data analysis
-setup to take the likelihood function to a very small power (much less
-than one) or multiply the log-likelihood by a very small number (much
-less than one) and check that the sampler samples, properly and
-correctly, the prior pdf.
-This test is only possible if the prior pdf is proper.
-
-HOGG: ...You must describe your priors in the same parameterization that you ``step'' in.
-That is, if you change your parameters, you \emph{must} change your priors correspondingly.
-Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
-
-\begin{problem}
-Run your M-H \MCMC\ sampler from \problemname~\ref{prob:MH}, but now
-with a density function that is precisely unity \emph{everywhere}
-(that is, at any input value of $x$ it returns unity).  That is, an
-improper function.  Run it for longer and longer and plot the chain
-value $x$ as a function of timestep.  What happens?
-\end{problem}
-
-\begin{problem}
-Modify the sampler you wrote in \problemname~\ref{prob:MH} to take
-steps not in $x$ but in $\ln x$.  That is, replace the Gaussian
-proposal distribution $q(x'\given x)$ with a Gaussian distribution in
-$\ln x$ $q(\ln x'\given \ln x)$, but---incorrectly---make no other
-changes.  What about your answers change?  How wrong is your answer?
-Bonus points: Compute the analytic function that you have sampled from
-(that is, not $p(x)$) and over-plot it on your histogram.
-\end{problem}
-
-\begin{problem}
-For a real-world inference problem, read enough of
-\citet{fittingaline} to understand and execute Exercise~6 in that
-document.
-\end{problem}
 
 \section{Troubleshooting and advice}\label{sec:trouble}
 
