@@ -19,7 +19,7 @@ def log_p_uniform(x):
     return -np.inf
 
 
-chain = run_mcmc(log_p_uniform, np.array([5.0, 5.0]), nsteps=1e5)
+chain, _ = run_mcmc(log_p_uniform, np.array([5.0, 5.0]), nsteps=1e5)
 fig = corner.corner(chain, labels=["$x$", "$y$"],
                     range=[(2.5, 7.5), (0.5, 9.5)],
                     plot_density=False, plot_contours=False)
