@@ -56,4 +56,4 @@ for i, (ax, title) in enumerate(zip(
 
 [ax.set_xlabel(r"$\log_2 K$") for ax in axes[1]]
 
-savefig(fig, "p1.pdf")
+savefig(fig, "simple_stats.pdf")

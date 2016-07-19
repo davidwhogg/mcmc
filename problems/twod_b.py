@@ -6,7 +6,7 @@ from __future__ import division, print_function
 import corner
 import numpy as np
 
-from p4a import run_mcmc
+from twod_a import run_mcmc
 from plot_setup import setup, savefig
 
 setup()  # initialize the plotting styles
@@ -23,4 +23,4 @@ chain, _ = run_mcmc(log_p_uniform, np.array([5.0, 5.0]), nsteps=1e5)
 fig = corner.corner(chain, labels=["$x$", "$y$"],
                     range=[(2.5, 7.5), (0.5, 9.5)],
                     plot_density=False, plot_contours=False)
-savefig(fig, "p4b.pdf", dpi=300)
+savefig(fig, "twod_b.pdf", dpi=300)

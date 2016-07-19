@@ -6,7 +6,7 @@ from __future__ import division, print_function
 import numpy as np
 import matplotlib.pyplot as pl
 
-from p4a import run_mcmc, log_p_gauss
+from twod_a import run_mcmc, log_p_gauss
 from plot_setup import setup, COLORS, SQUARE_FIGSIZE, savefig
 
 setup()  # initialize the plotting styles

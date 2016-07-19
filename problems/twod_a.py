@@ -41,4 +41,4 @@ if __name__ == "__main__":
     fig = corner.corner(chain, labels=["$x$", "$y$"],
                         range=[(-4.5, 4.5), (-4.5, 4.5)],
                         plot_density=False, plot_contours=False)
-    savefig(fig, "p4a.pdf", dpi=300)
+    savefig(fig, "twod_a.pdf", dpi=300)

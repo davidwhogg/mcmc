@@ -456,7 +456,7 @@ prior pdf and a likelihood is only necessary for what follows in
 the context of advanced sampling techniques like tempering or
 nested sampling, both mentioned briefly below (\sectionname~\ref{sec:methods}).
 
-\begin{problem}
+\begin{problem}\label{prob:simple-stats}
 Look up (or choose) definitions for the mean, variance, skewness,
 and kurtosis of a distribution.
 Also look up or compute the analytic values of these four statistics
@@ -657,7 +657,7 @@ The resulting  plot should look something like \figurename~\ref{fig:MH}.
 
 \begin{figure}[!htbp]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{problems/p2}
+\includegraphics[width=0.5\textwidth]{problems/MH}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:MH}:
 MCMC samples from a Gaussian (black) and the true distribution (blue).}
@@ -673,7 +673,7 @@ What change did you have to make to the initialization, and why?
 
 \begin{figure}[!htbp]
 \begin{center}
-\includegraphics[width=0.5\textwidth]{problems/p3}
+\includegraphics[width=0.5\textwidth]{problems/MH2}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:MH2}:
 MCMC samples from a uniform distribution (black) and the true distribution
@@ -704,7 +704,7 @@ Make a similar plot for the top-hat.
 
 \begin{figure}[!htbp]
 \begin{center}
-\includegraphics[width=0.7\textwidth]{problems/p4a}
+\includegraphics[width=0.7\textwidth]{problems/twod_a}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:twod}a:
 MCMC samples from a two-dimensional Gaussian (scatter plot) and the
@@ -719,7 +719,7 @@ What happens when you go to very extreme values (like for instance
 $10^{-1}$ or $10^2$)?
 \end{problem}
 
-\begin{problem}
+\begin{problem}\label{prob:prop-mean}
 Why, in all the previous problems, did we give the proposal
 distributions $q(x'\given x)$ zero mean?
 What would be bad if we hadn't done that?

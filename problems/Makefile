@@ -1,4 +1,5 @@
-ALL_FILES=p1.pdf p2.pdf p3.pdf p4a.pdf p4b.pdf p5.pdf p6.pdf p7.pdf p8.pdf \
+ALL_FILES=simple_stats.pdf MH.pdf MH2.pdf twod_a.pdf twod_b.pdf prop_mean.pdf \
+		  p6.pdf p7.pdf p8.pdf \
 		  p9.pdf p10.pdf p11.pdf
 
 default: $(ALL_FILES)
