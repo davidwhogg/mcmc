@@ -833,7 +833,7 @@ less than one) and check that the sampler samples, properly and
 correctly, the prior pdf.
 This test is only possible if the prior pdf is proper.
 
-\begin{problem}
+\begin{problem}\label{prob:improper}
 Run your M-H \MCMC\ sampler from \problemname~\ref{prob:MH}, but now
 with a density function that is precisely unity \emph{everywhere}
 (that is, at any input value of $x$ it returns unity).  That is, an
@@ -842,21 +842,34 @@ Run it for longer and longer and plot the chain value $x$ as a
 function of timestep.  What happens?
 \end{problem}
 
-\begin{problem}
+\begin{problem}\label{prob:fittingaline}
+DFM: do this problem.
 For a real-world inference problem, read enough of
 \citet{fittingaline} to understand and execute Exercise~6 in that
 document.
 \end{problem}
 
-\begin{problem}
+\begin{problem}\label{prob:logprior}
 Modify the sampler you wrote in \problemname~\ref{prob:MH} to take
 steps not in $x$ but in $\ln x$.  That is, replace the Gaussian
 proposal distribution $q(x'\given x)$ with a Gaussian distribution in
-$\ln x$ $q(\ln x'\given \ln x)$, but---incorrectly---make no other
-changes.  What about your answers change?  How wrong is your answer?
-Bonus points: Compute the analytic function that you have sampled from
-(that is, not $p(x)$) and over-plot it on your histogram.
+$\ln x$ $q(\ln x'\given \ln x)$, but make no other changes.
+By doing this, you are no longer sampling the Gaussian $p(x)$ that you were in
+\problemname~\ref{prob:MH}.
+What about your answers change?  What distribution are you sampling now?
+Compute the analytic function that you have sampled from~--~this will no longer
+be the same $p(x)$~--~and over-plot it on your histogram.
 \end{problem}
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.5\textwidth]{problems/logprior}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:logprior}:
+The black histogram shows the MCMC samples and the blue curve is the analytic
+target density.}
+\label{fig:estimatetau}
+\end{figure}
 
 \section{Convergence}\label{sec:convergence}
 
