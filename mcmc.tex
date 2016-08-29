@@ -1104,8 +1104,12 @@ convergence from these heuristics?
 \begin{problem}\label{prob:estimatetau}
 Write a piece of code that computes the empirical autocorrelation
 function.
-You can speed this computation up considerably by using a fast Fourier
-transform.
+You will probably want to speed this computation up by using a fast Fourier
+transform\note{%
+The calculation of the autocorrelation function can be seen as a convolution
+and it can, therefore, be computed using the fast Fourier transform in
+$\mathcal{O}(N\,\log N)$ operations instead of $\mathcal{O}(N^2)$ for a naive
+implementation.}.
 Run this on the chain you obtained from \problemname~\ref{prob:MH}.
 Plot the autocorrelation function you find at short lags ($\Delta < 100$).
 This plot should resemble \figurename~\ref{fig:estimatetau}.

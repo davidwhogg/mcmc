@@ -11,6 +11,20 @@ from plot_setup import SQUARE_FIGSIZE, savefig
 from convergence import chain
 
 
+# This method is really very slow! Probably best to just avoid calling it.
+def autocorr_function_naive(x):
+    print("Warning: running naive autocorrelation function method. "
+          "This will be slow!")
+    mu = np.mean(x)
+    r = x - mu
+    C = np.empty(len(r) // 2)
+    for i in range(1, len(C)):
+        C[i] = np.mean(r[i:] * r[:-i])
+    C /= np.mean(r ** 2)
+    C[0] = 1.0
+    return C
+
+
 def autocorr_function(x):
     n = len(x)
     f = np.fft.fft(x - np.mean(x), n=2*n)
