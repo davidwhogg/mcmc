@@ -1438,8 +1438,6 @@ Re-do \problemname~\ref{prob:MH} but with different starting
 positions.
 What happens as you make the starting position extremely far from the
 origin?
-Did you write the algorithm in terms of $\ln p(x)$ or $p(x)$?
-This makes a difference for extreme initializations!
 What is the scaling:  As you move the initialization further away,
 how much longer does it take for the sampler to reach reasonable
 density?
@@ -1451,7 +1449,7 @@ with a higher-dimensional Gaussian (try, for example, a 10-d Gaussian).
 The same or worse?
 \end{problem}
 
-\begin{problem}
+\begin{problem}\label{prob:optimization}
 Import (or write) an optimizer, and upgrade the code you wrote for
 \problemname~\ref{prob:initialization} to begin by optimizing $\ln
 p(x)$ and only then start the \MCMC\ sampler from that optimum.
