@@ -1331,7 +1331,7 @@ proposal distribution, most (though not all) require a choice about
 initialization:
 The walker needs (or walkers need) to be started somewhere in the
 parameter space.
-In many use cases for \MCMC, the investigator wants to use it to obtain
+In many use cases for \MCMC, the investigator wants to use \MCMC\ to obtain
 uncertainty information about or propagate uncertainty into parameter
 estimates.
 In these cases, it makes sense to initialize the walker or walkers at
@@ -1395,15 +1395,14 @@ different modes!
 You can either wait a \emph{very long time} so that you see a single
 walker in a single \MCMC\ run traverse from mode to mode enough times to
 make a representative sampling (dozens or hundreds of times, ideally),
-or you can use a high-end sampler (like nested sampling) that is
+or you can use a high-end sampler (like nested sampling; see \sectionname~\ref{sec:methods}) that is
 designed for such problems.
 In principle there are methods that involve splitting the space into
 two spaces, sampling them separately, and then combining the chains
 according to their relative evidence afterwards.
 That's a research project beyond the scope of this \documentname.
 
-DFM: IS THIS PARAGRAPH USEFUL OR CLEAR?
-Of course there are some kinds of multi-modalities that aren't a
+Of course there are some kinds of multi-modalities that might not be a
 problem.
 For example, you can have two solutions to a problem that differ only
 in the \emph{labeling} of the components---say the Gaussians making up
@@ -1619,8 +1618,8 @@ This optimal-posterior parameter value is called the
 It is an estimator with some good (and some bad) properties, but it is not the point of \MCMC,
   and therefore outside the scope of this \documentname.
 
-The parameter space $\pars$ is usually multi-dimensional, and more
-than one of those parameters is of interest.
+The parameter space $\pars$ is usually multi-dimensional, and usually it is more
+than one of those parameters that is of interest.
 In this case, the mean or median of sampling can be produced for each
 dimension.
 Because the sampling projected onto any dimension is a marginalization
