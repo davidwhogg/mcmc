@@ -38,7 +38,7 @@ script:
     - make
 
 after_success: |
-    if [ "$PYTHON_VERSION" -eq 2.7 ] && [ -n "$GITHUB_API_KEY" ]; then
+    if [ "$PYTHON_VERSION" -eq "2.7" ] && [ -n "$GITHUB_API_KEY" ]; then
         git checkout --orphan pdf
         git rm -rf .
         git add -f mcmc.pdf
