@@ -1,5 +1,10 @@
 sudo: false
 
+env:
+    matrix:
+        - PYTHON_VERSION=2.7
+        - PYTHON_VERSION=3.5
+
 addons:
     apt:
         packages:
