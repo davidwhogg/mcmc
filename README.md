@@ -2,4 +2,4 @@
 
 [![Build Status](https://travis-ci.org/davidwhogg/mcmc.svg?branch=master)](https://travis-ci.org/davidwhogg/mcmc)
 
-[Get the current PDF.](https://github.com/davidwhogg/mcmc/raw/pdf/mcmc.pdf)
+[Get the current PDF.](https://github.com/davidwhogg/mcmc/blob/pdf/mcmc.pdf)
