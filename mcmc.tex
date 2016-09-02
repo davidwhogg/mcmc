@@ -102,7 +102,7 @@
 
 \begin{abstract}
 Markov Chain Monte Carlo (\MCMC) methods for sampling probability
-distribution functions (combined with abundant computational resources)
+density functions (combined with abundant computational resources)
 have transformed the sciences.
 Here we give a brief overview of the most basic \MCMC\ method and then turn to
 practical advice for the use of \MCMC\ in real inference problems.
@@ -346,7 +346,7 @@ approximation becomes exact as $K$ goes to infinity.
 The size $K$ of the sampling you need \emph{in practice} will depend
 on the expectations you want to compute, and the accuracies you need.
 
-As we noted above (\sectionname~\ref{sec:when}), in the context of \MCMC, we are often sampling or
+As we noted above (\sectionname~\ref{sec:when}), in the context of \MCMC, we are often
 using some \emph{badly normalized} function $f(\pars)$.
 This function is just the pdf $p(\pars)$ multiplied by some unknown and
 hard-to-compute scalar.
@@ -358,9 +358,6 @@ be non-negative everywhere and have \emph{finite} integral $Z$
 Z &=& \int f(\pars)\,\dd \pars \label{eq:proper}
 \quad .
 \end{eqnarray}
-
-DFM says: I don't agree with this section. Using MCMC you \emph{are} sampling
-from $p(\pars)$\ldots you \emph{can't} sample from $f(\pars)$.
 
 When the sampling $\setof{\pars_k}_{k=1}^K$ is of one of these badly
 normalized functions $f(\pars)$---as it usually will be---the
@@ -778,7 +775,6 @@ should check the bounds and return \code{-Inf} values if the parameter
 vector is out of bounds.
 The pseudo-code for the \code{ln_f()} function should look something
 like this:
-% DFM: Do you have a preferred environment for code other than verbatim?
 \begin{verbatim}
 def ln_f(pars, data):
     x = ln_prior(pars)
@@ -1322,8 +1318,7 @@ be, in principle?
 \end{problem}
 
 \begin{problem}\label{prob:rosenbrock}
-Look up the Rosenbrock density used as the demonstration case for the
-\project{emcee} sampler (see DFM: should cite G\&W here).
+Look up the Rosenbrock density used as a demonstration case for many samplers (see, for example, \citealt{gw}).
 Tune the Gaussian proposal distribution in your \MH\ \MCMC\ sampler to sample this density efficiently.
 What autocorrelation time do you get?
 Compare to what \project{emcee} gets.
@@ -2390,6 +2385,10 @@ about what changes to make or what new directions to explore.
   Geyer,~C.~J., 2011,
   \href{http://www.mcmchandbook.net/HandbookChapter1.pdf}{Introduction to Markov Chain Monte Carlo},
   in \citet{mcmchandbook}, 3--48.
+\bibitem[Goodman \& Weare(2010)]{gw}
+  Goodman, J. \& Weare, J., 2010,
+  Ensemble samplers with affine invariance,
+  \textit{Comm.\.Appl.\,Math.\,Comp.\,Sci.}, \textbf{5}(1), 65–-80.
 \bibitem[Hogg \etal(2010a)]{fittingaline}
   Hogg,~D.~W., Bovy,~J., \& Lang,~D., 2010a,
   Data analysis recipes: Fitting a model to data,
