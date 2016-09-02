@@ -37,3 +37,8 @@ before_script: # configure a headless display to test plot generation
 script:
     - make
 
+after_success:
+    - git checkout -b pdf
+    - git add mcmc.pdf
+    - git push origin pdf --force
+
