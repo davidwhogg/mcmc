@@ -39,10 +39,9 @@ script:
 
 after_success: |
     if [ -n "$GITHUB_API_KEY" ]; then
-        git checkout -b pdf
+        git checkout --orphan pdf
         git add -f mcmc.pdf
         git -c user.name='travis' -c user.email='travis' commit -m init
-        git push -f -q https://dfm:$GITHUB_API_KEY@github.com/davidwhogg/mcmc pdf
-        # git push -f -q https://dfm:$GITHUB_API_KEY@github.com/davidwhogg/mcmc pdf &2>/dev/null
+        git push -f -q https://dfm:$GITHUB_API_KEY@github.com/davidwhogg/mcmc pdf &2>/dev/null
     fi
 
