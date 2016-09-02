@@ -43,7 +43,6 @@ after_success: |
         git rm -rf .
         git add -f mcmc.pdf
         git -c user.name='travis' -c user.email='travis' commit -m init
-        git push -f https://dfm:$GITHUB_API_KEY@github.com/davidwhogg/mcmc pdf &2>/dev/null
-        echo "done"
+        git push -q -f https://dfm:$GITHUB_API_KEY@github.com/davidwhogg/mcmc pdf
     fi
 
