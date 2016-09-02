@@ -1,7 +1,7 @@
 .SUFFIXES:
 .SUFFIXES: .pdf .tex
 
-LATEX       = pdflatex
+LATEX       = pdflatex -interaction=nonstopmode -halt-on-error
 RM          = rm -rf
 
 TMP_SUFFS   = pdf aux bbl blg log dvi ps eps out ent
