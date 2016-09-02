@@ -1,5 +1,7 @@
 sudo: false
 
+language: python
+
 env:
     matrix:
         - PYTHON_VERSION=2.7
@@ -11,6 +13,8 @@ addons:
             - texlive-latex-recommended
             - texlive-latex-extra
             - texlive-fonts-recommended
+            - texlive-fonts-extra
+            - dvipng
 
 install:
     - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
