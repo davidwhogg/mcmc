@@ -43,7 +43,7 @@
 % - Should we use the word ``walker'' everywhere and do we?
 
 \documentclass[12pt,twoside,pdftex]{article}
-\usepackage{styles/dar_endnotes}
+\usepackage[backref=true]{enotez}
 
 \newcommand{\chaptertitle}{Using Markov Chain Monte Carlo}
 \include{styles/dar}
@@ -55,6 +55,16 @@
 \newcommand{\pars}{\theta}
 \newcommand{\best}{{\mathrm{(best)}}}
 \newcommand{\better}{{\mathrm{(better)}}}
+
+\let\note=\endnote
+
+\DeclareInstance{enotez-list}{custom}{paragraph}
+{
+  number = \makebox[0pt][r]{\textsuperscript{#1}},
+  format = \indent\normalfont,
+  number-format = \bfseries,
+}
+
 
 \begin{document}\sloppy\sloppypar\raggedbottom\thispagestyle{plain}%
 %
@@ -2336,7 +2346,7 @@ about what changes to make or what new directions to explore.
 %% sample a posterior pdf!
 
 \clearpage
-\markright{Notes}\theendnotes
+\markright{Notes}\printendnotes[custom]
 
 \clearpage
 \raggedright
