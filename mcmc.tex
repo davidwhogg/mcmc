@@ -1802,7 +1802,8 @@ directions at which new proposals should be made, obviating or greatly
 reducing the tuning requirements.
 We are co-authors on one of these methods,
 \project{emcee}\note{\citet{emcee}}, which is popular in the
-astrophysical sciences.
+astrophysical sciences, but there are others\note{One that we are
+  interested in is \project{Kombine} (Farr \& Farr, in preparation).}.
 It is worty of note that ensemble methods have particular
 peculiarities about initialization and convergence diagnostics that
 are worth understanding before use.\note{For example, we find
@@ -1885,7 +1886,7 @@ of dimensions?  If so, we should say so.  And cite \citep{hamiltonian}.
 
 \paragraph{Importance:}
 Sometimes it is possible to sample efficiently from a distribution
-that is close to the target function $f(\pars)$ you care about but
+that is close to the target function $f(\pars)$ you care about, even when the target $f(\pars)$ itself is
 hard to sample efficiently with \MCMC.
 An example is a problem that has a simple (Gaussian, say) likelihood
 function times a non-trivial prior:
@@ -1959,9 +1960,12 @@ distribution being sampled is not exactly $f(\pars)$, but the results
 of the sampling are only kept for those samples taken at unit
 temperature; these in the end make a fair sampling.
 
+% DFM: Is the last sentence of the above paragraph correct??
+
 \paragraph{Nested:}
 Similar to tempering-like methods are a class of methods called ``nested''
-samplers, which also smoothly change the target distribution away from $f(\pars)$.
+samplers\note{For example, see \citet{skilling} and \citet{dnest}},
+which also smoothly change the target distribution away from $f(\pars)$.
 In the nested case, instead of increasing the temperature, the
 samplings are of a censored version of the prior, censored by the
 value of the likelihoood function.
@@ -2345,10 +2349,15 @@ about what changes to make or what new directions to explore.
   \textit{Empirical Model Building and Response Surfaces},
   John Wiley \& Sons, New York, NY
   \isbn{978-0471810339}.
+\bibitem[Brewer \etal(2011)]{dnest}
+  Brewer,~B.~J., P\'artay,~L.~B. & Cs\'anyi,~G., 2011,
+  {Diffusive nested sampling},
+  \textit{Stat.\,Comput.}\ \textbf{21} 649
+  \doi{10.1007/s11222-010-9198-8}.
 \bibitem[Brewer \etal(2013)]{brewer}
   Brewer,~B.~J., Foreman-Mackey,~D., \& Hogg,~D.~W., 2013,
   {Probabilistic catalogs for crowded stellar fields},
-  \textit{Astron.\,J.} \textbf{146} 7
+  \textit{Astron.\,J.}\ \textbf{146} 7
   \doi{10.1088/0004-6256/146/1/7}.
 \bibitem[Brooks \etal(2011)]{mcmchandbook}
   Brooks,~S., Gelman~A., Jones~G., \& Meng,~X.-L., eds.\ 2011,
@@ -2393,7 +2402,8 @@ about what changes to make or what new directions to explore.
 \bibitem[Goodman \& Weare(2010)]{gw}
   Goodman, J. \& Weare, J., 2010,
   Ensemble samplers with affine invariance,
-  \textit{Comm.\.Appl.\,Math.\,Comp.\,Sci.}, \textbf{5}(1), 65–-80.
+  \textit{Comm.\.Appl.\,Math.\,Comp.\,Sci.}, \textbf{5}(1), 65–-80
+  \doi{10.2140/camcos.2010.5.65}.
 \bibitem[Hogg \etal(2010a)]{fittingaline}
   Hogg,~D.~W., Bovy,~J., \& Lang,~D., 2010a,
   Data analysis recipes: Fitting a model to data,
