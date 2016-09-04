@@ -863,7 +863,7 @@ be the same $p(x)$~--~and over-plot it on your histogram.
 \caption{Solution to \problemname~\ref{prob:logprior}:
 The black histogram shows the MCMC samples and the blue curve is the analytic
 target density.}
-\label{fig:estimatetau}
+\label{fig:logprior}
 \end{figure}
 
 \section{Convergence}\label{sec:convergence}
@@ -1052,7 +1052,7 @@ restricting the sum in \equationname~(\ref{eq:tauestnaive}) to $\Delta \le M$
 where
 $\tau \le M \ll N$
 \begin{eqnarray}\label{eq:tauest}
-\tau &=& 1 + 2\,\sum_{\Delta = 1}^{N} C(\Delta)
+\tau &=& 1 + 2\,\sum_{\Delta = 1}^{M} C(\Delta)
 \end{eqnarray}
 In practice, $M$ can be chosen iteratively to satisfy these constraints but it
 will only be as reliable as the chain itself.
@@ -1318,7 +1318,13 @@ be, in principle?
 \end{problem}
 
 \begin{problem}\label{prob:rosenbrock}
-Look up the Rosenbrock density used as a demonstration case for many samplers (see, for example, \citealt{gw}).
+The Rosenbrock density used as a demonstration case for many samplers (see, for example, \citealt{gw}).
+Test your sampler on this density:
+\begin{eqnarray}
+p(\theta_1,\,\theta_2) &\propto&
+    \exp\left(-\frac{100\,(\theta_2-{\theta_1}^2)^2+(1-\theta_1)^2}{20}\right)
+\quad.
+\end{eqnarray}
 Tune the Gaussian proposal distribution in your \MH\ \MCMC\ sampler to sample this density efficiently.
 What autocorrelation time do you get?
 Compare to what \project{emcee} gets.
@@ -1698,7 +1704,7 @@ locating expected and unexpected parameter relationships, and often
 invaluable for suggesting re-parameterizations and transformations
 that simplify your problem.
 
-\begin{problem}
+\begin{problem}\label{prob:rosenbrock2}
 Execute \problemname~\ref{prob:rosenbrock}, or---if you are lazy---%
 just install and use \project{emcee} to do the hard work.
 Now plot the $x$ and $y$ histograms of a 10,000-point sampling of this

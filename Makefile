@@ -5,15 +5,20 @@ TEX_FILES = mcmc
 DIRS      = problems
 
 # You shouldn't need to edit below here.
-default: subdirs mcmc.pdf
+default: mcmc.pdf
 
-mcmc.pdf: mcmc.tex problems/*.pdf
+.PHONY: problems
+
+problems: force_look
+	$(foreach d, ${DIRS}, (echo "Looking into ${d}:"; cd ${d}; ${MAKE} ${MFLAGS}) )
+
+mcmc.pdf: mcmc.tex problems
 	${LATEX} mcmc.tex
 	( ${CHECK_RERUN} && ${LATEX} mcmc.tex ) || echo "Done."
 	( ${CHECK_RERUN} && ${LATEX} mcmc.tex ) || echo "Done."
 
-subdirs: force_look
-	$(foreach d, ${DIRS}, (echo "Looking into ${d}:"; cd ${d}; ${MAKE} ${MFLAGS}) )
+# subdirs: force_look
+# 	$(foreach d, ${DIRS}, (echo "Looking into ${d}:"; cd ${d}; ${MAKE} ${MFLAGS}) )
 
 force_look:
 	true
