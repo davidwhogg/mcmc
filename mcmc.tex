@@ -53,6 +53,7 @@
 \newcommand{\Var}{\mathrm{Var}}
 \newcommand{\data}{D}
 \newcommand{\pars}{\theta}
+\newcommand{\bl}[1]{{\color{red}{[BL:] #1}}}
 \newcommand{\best}{{\mathrm{(best)}}}
 \newcommand{\better}{{\mathrm{(better)}}}
 
@@ -110,6 +111,15 @@ We give advice on method choice, tuning for performance,
 methods for initialization, tests of convergence, troubleshooting, and use of the chain
 output to produce or report parameter estimates with associated uncertainties.
 \end{abstract}
+
+\bl{
+Overall comments:
+\begin{itemize}
+\item Would it be useful to mention that MCMC is useful when you cannot or don't want to evaluate the posterior on a grid?
+\item $p(\theta)$ is used in place of $p(\theta|D)$ in various places. This is mildly perturbing - I would either change it to $p(\theta|D)$ everywhere or explicitly say that the shorter convention $p(\theta)$ is used.
+\item How much do you want to go into non Metropolis-H algorithms? At the moment this is either not sufficiently or too detailed. I would either reduce it to a brief enumeration or to a discussion of features, advantages and drawbacks of various methods. I am happy to help with that. However, it might be hard to avoid discussing specific technologies and codes. Worse: I am not convinced by the practical usefulness of a generic summary of all sampling methods.
+\end{itemize}
+}
 
 \section{When do you need MCMC?}\label{sec:when}
 
@@ -480,7 +490,7 @@ The simplest algorithm for \MCMC\ is the Metropolis--Hastings algorithm (\MH\ \M
   The original paper is \citet{metropolis}, and there are a few sketchy historical notes
   in \citet{geyer}.}
 It is so simple that we recommend that any reader of this document
-  who has not previously implemented the algorithm take a break at the end
+  who has not previously implemented the algorithm takes a break at the end
   of this \sectionname\ and implement it forthwith, in a short piece of computer code,
   in the context of some simple problems.\note{%
     We request this in a trivial case below in
@@ -658,7 +668,7 @@ important to write your code to be infinity-safe.\note{Most code will
 
 HOGG SAY HERE: ...You must describe your priors in the same parameterization that you ``step'' in.
 That is, if you change your parameters, you \emph{must} change your priors correspondingly.
-Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
+Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$. \bl{Isn't that discussed somewhere below?}
 
 \begin{problem}\label{prob:MH}
 In your scientific programming language of choice, write a very simple
@@ -1121,7 +1131,7 @@ The autocorrelation function of the chain from \problemname~\ref{prob:MH}.}
 \end{figure}
 
 \begin{problem}\label{prob:itertau}
-Write a peice of code that estiamtes the integrated autocorrelation time for a
+Write a piece of code that estimates the integrated autocorrelation time for a
 chain of samples using an estimate of the autocorrelation function and a given
 ``window'' size $M$ (see \equationname~\ref{eq:tauest}).
 Plot the estimated $\tau$ as a function of $M$ for several contiguous segments
@@ -1820,7 +1830,7 @@ are often easy to parallelize to make use of multiple cores.
 In many problems, the parameters---the components or entries of the
 blob $\pars$---are not equivalent at all.
 Some are global parameters, which touch or have an effect on every
-sub-part of the data blob $\data$, while others are local parameteres,
+sub-part of the data blob $\data$, while others are local parameters,
 which only touch a small subset of the data.
 Or, in another use case, some parameters are linear parameters
 that---at fixed values of the other parameters---will have a Gaussian
