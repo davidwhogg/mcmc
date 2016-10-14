@@ -1924,13 +1924,13 @@ What is the proper prior to apply to $x, y$?
 It is not just $p(A)\,p(\phi)$ with $A=\sqrt{x^2 + y^2}$ and $\phi=\arctan(y,x)$!
 That's close, though! There is a correction factor which is the
 absolute value of the determinant of the Jacobian matrix
-$||\frac{\dd(A,\phi}{\dd(x,y)}||$.
+$||{\dd(A,\phi)}/{\dd(x,y)}||$.
 That is, it is the determinant of the full derivative of one set of
 parameters with respect to the other.
 Keep your units straight!\note{See \citet{hoggcalculus} for advice on
   how to check and test these transformations using dimensional
   analysis.}
-In this particular case, the Jacobian is equal to $A$, such that
+In this particular case, the Jacobian is equal to $1/A$, such that
 \begin{eqnarray}
   p(x,y) &=& \frac{1}{A}\,p(A)\,p(\phi)
   \quad ,
@@ -1958,7 +1958,7 @@ custom proposal distributions for the integer parameters that make sure
 only integers are proposed (provided care is taken to make sure that detailed
 balance is preserved).
 An example is to have a proposal that has some probability of
-incrementing the parameter up, and an equal (ie, the same) probability
+incrementing the parameter up, and an equal (that is, the same) probability
 of incrementing it down.
 Some samplers implicitly or explicitly assume that all parameters are
 continuous\note{Once again, \citet{emcee}.}; these should be avoided
