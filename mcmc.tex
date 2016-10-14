@@ -1690,6 +1690,30 @@ might find users who want to make serious use of them.\note{We have
   is rarely correct or specific enough for another investigator to
   duplicate exactly.  So just augment your samples!}
 
+There are several figures that are useful and should be made every time you
+run MCMC and we'll describe a few here.
+
+\begin{itemize}
+
+\item \emph{Trace plots}~---~The first set of plots are the ``trace
+plots''~--~the parameter values as a function of step number.
+These plots can be used to select burn-in lengths, indicate problems with the
+model or sampler, and qualitatively judge convergence.
+This being said, it is important to remember that \emph{good looking trace
+plots do not guarantee converged sampling} and, even if the traces look okay,
+the convergence diagnostics discussed in \sectionname~\ref{sec:convergence}
+might identify problems.
+
+\item \emph{Posterior predictive plots}~---~Another useful plot is the
+predictive distribution for the model in data space.
+For this plot, you take some $K$ random samples from your chain, plot the
+prediction that each sample makes for the data and over-plot the observed
+data.
+This plot gives a qualitative sense of the ``quality'' of the fit and it can
+identify problems with sampling or convergence.
+
+\end{itemize}
+
 Of course figures are always better than tables, at least in the
 printed form of scientific publications.
 In a $D$-dimensional parameter space, we recommend plotting all $D$
@@ -1697,9 +1721,10 @@ one-dimensional sample histograms, on a pretty fine binning, and all
 $D$-choose-2 two-dimensional histograms (scatter plots) to show the
 low-level covariances and non-linearities.
 If you are clever, all these plots can be arranged into a lovely and
-informative triangle.\note{Our favorite package these days is our own \project{corner.py}.  Find it on the internets.}
+informative triangle.\note{Our favorite package these days is our own
+\project{corner.py}.  Find it on the internets.}
 These two-dimensional plots do not in any sense contain all the
-information in the sampling!  However, they are remarkable for
+information in the sampling.  However, they are remarkable for
 locating expected and unexpected parameter relationships, and often
 invaluable for suggesting re-parameterizations and transformations
 that simplify your problem.
