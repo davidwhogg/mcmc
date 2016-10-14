@@ -1969,6 +1969,17 @@ operation into the likelihood and prior functions.
 This makes for a stepwise-constant posterior pdf. It is a hack, but it
 works in most circumstances.
 
+For yet another example, there might be constraints such that all
+acceptable models lie on a non-trivial, non-linear subspace of your
+parameter space.
+Here almost no arbitrary steps in parameter space could lead to an
+acceptance, since if you move arbitrarily, you are very unlikely to
+hit the subspace!
+Your best move here is to re-parameterize so there are only models on
+that subspace.
+We're not claiming that that re-parameterization is always easy to
+find; the mathematics of Lagrange multipliers can be useful here.
+
 \paragraph{model checking:}
 \emph{All models are wrong, but some are useful.}
 That's not a quote from Box, but it's close.\note{The real quotation
@@ -2052,24 +2063,6 @@ to reach for).
 If your model is wrong, the richer tests of visualization of residuals
 or sensitivity to assumptions are much more likely to lead to insight
 about what changes to make or what new directions to explore.
-
-%% HOGG DELETED / COMMENTED OUT THE BELOW
-%% - make sure everything below is discussed somewhere above and then delete it below.
-
-%% ...breaking Markov-ness.
-%% % ***** BJB
-%% % "Diminishing adaptations" is an idea that is quite easy
-%% % to explain. There are other ways to break Markov-ness but
-%% % this probably covers enough of them for an intro document
-%% % ***** Hogg
-%% % I was going to say you should NEVER break Markov-ness
-%% % unless you REALLY understand what you are doing.
-
-%% ...Posteriors:  You can do anything you like (within
-%% reason) to the output samples and be sampling the posterior in that
-%% transformed quantity.
-
-%% ...How to deal with constraints that pin you to a subspace of the parameter space?  Method-dependent.
 
 %% ...Finally, to repeat: You can't sample the likelihood!  You can only
 %% sample a posterior pdf!
