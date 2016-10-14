@@ -6,13 +6,8 @@
 % -----
 % - Deal with all mentions of ``DFM'' or ``HOGG''
 % - Go through github issues, if any.
-% - Systematically cite chapters of Brooks \etal in each section.
-% - Skim MacKay and make sure we cite him in any relevant place.
-% - Mention & cite STAN in methods section
 % - Need to mention case where there is an MC integral INSIDE the likelihood function
 % - Need to mention testing the likelihood function, by, say, 1-d scans back and forth.
-% - Make sure we say ``don't use MCMC for 1-d problems or if you have alternatives to directly integrate!''
-% - Would love to have the Note symbols to be links to the notes and the notes to have links back to the main text...!
 % - Send to friendlies for comments
 %   - Gelman
 %   - Goodman
@@ -606,6 +601,9 @@ These think-os can get subtle;
   and your prior pdf function and your proposal distribution
   all in precisely the same parameterization.
 We will return to this point below in our comments on testing (\sectionname~\ref{sec:trouble}).
+The point is that if you \emph{do} change coordinates between
+  the statement of your priors and the specific variables you
+  step in, you have to introduce Jacobian factors.
 
 As we discuss briefly below (\sectionname~\ref{sec:methods}),
   there are many \MCMC\ methods more advanced than M--H.
@@ -656,10 +654,6 @@ important to write your code to be infinity-safe.\note{Most code will
   problem and is a case that should get caught (probably way before
   the accept--reject step!).}
 
-HOGG SAY HERE: ...You must describe your priors in the same parameterization that you ``step'' in.
-That is, if you change your parameters, you \emph{must} change your priors correspondingly.
-Give the example of going from $A$, $\phi$ to $A\,\cos\phi$, $A\,\sin\phi$.
-
 \begin{problem}\label{prob:MH}
 In your scientific programming language of choice, write a very simple
 M-H \MCMC\ sampler.
@@ -678,7 +672,7 @@ The resulting  plot should look something like \figurename~\ref{fig:MH}.
 \includegraphics[width=0.5\textwidth]{problems/MH}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:MH}:
-MCMC samples from a Gaussian (black) and the true distribution (blue).}
+\MCMC\ samples from a Gaussian (black) and the true distribution (blue).}
 \label{fig:MH}
 \end{figure}
 
@@ -694,7 +688,7 @@ What change did you have to make to the initialization, and why?
 \includegraphics[width=0.5\textwidth]{problems/MH2}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:MH2}:
-MCMC samples from a uniform distribution (black) and the true distribution
+\MCMC\ samples from a uniform distribution (black) and the true distribution
 (blue).}
 \label{fig:MH2}
 \end{figure}
@@ -725,7 +719,7 @@ Make a similar plot for the top-hat.
 \includegraphics[width=0.7\textwidth]{problems/twod_a}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:twod}a:
-MCMC samples from a two-dimensional Gaussian (scatter plot) and the
+\MCMC\ samples from a two-dimensional Gaussian (scatter plot) and the
 one-dimensional marginalized distributions (histograms).}
 \label{fig:twod-a}
 \end{figure}
@@ -861,7 +855,7 @@ be the same $p(x)$~--~and over-plot it on your histogram.
 \includegraphics[width=0.5\textwidth]{problems/logprior}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:logprior}:
-The black histogram shows the MCMC samples and the blue curve is the analytic
+The black histogram shows the \MCMC\ samples and the blue curve is the analytic
 target density.}
 \label{fig:logprior}
 \end{figure}
@@ -998,7 +992,7 @@ samples), you will get just as good sampling-based estimates as if you
 had used all $K$ samples.
 
 It is also worth noting that there is not just one autocorrelation function or
-autocorrelation time for an MCMC chain.
+autocorrelation time for an \MCMC\ chain.
 Instead, there is an autocorrelation time $\tau_f$ for every function
 $f(\pars)$ and these will, in general, be different.
 Therefore, the autocorrelation time used in \equationname~(\ref{eq:tauvar}) is
@@ -1142,7 +1136,7 @@ like \figurename~\ref{fig:itertau}.
 \end{center}
 \caption{Solution to \problemname~\ref{prob:itertau}:
 Estimates of the integrated autocorrelation time of different segments of the
-MCMC chain from \problemname~\ref{prob:MH} (black lines) and for the full
+\MCMC\ chain from \problemname~\ref{prob:MH} (black lines) and for the full
 chain (orange line) as a function of window size $M$.
 The ``optimized'' value computed using an iterative procedure is overplotted
 as a dashed line and its value is listed in the title.}
@@ -1813,15 +1807,6 @@ If the priors don't look as you expect,
   or else a think-o about how your priors ought to look.
 Either way, diagnosis in order.
 
-\paragraph{visualization:}
-HOGG: What plots do you make to diagnose problems?
-
-HOGG: Plot parameters vs ``time'' in the chain.
-
-HOGG: Plot a cut through the density function and the samples near that cut.
-
-HOGG:...Make triangle plots.  Great value!...  Show example here... Mentioned above; drop here or reiterate?
-
 \paragraph{likelihood issues:}
 Sometimes there can be problems with the likelihood function itself.
 For example,
@@ -1951,29 +1936,58 @@ Of course this re-parameterization changes significantly the \emph{form} of the 
   (the transformation brings in a Jacobian);
   it has to be adjusted with care.
 
-DFM: SHOULD WE DO THIS ALL EXPLICITLY HERE IN MATH?
-Choose a $p(A)$ and a $p(\phi) = [2\pi]^{-1}$,
-   and then transform to $p(a, b)$.
-
-%% ...Priors: Once again:
-%% If you describe your priors in one parameterization but
-%% then perform sampling in a different space, it is easy to make
-%% mistakes.  For example: Flat prior in amplitude and phase, sample in
-%% $A\,\cos\phi$ and $A\,\sin\phi$.  There are many ways to do this
-%% wrong.
+To be explicit, imagine that you have parameters $A$ and $\phi$ and
+priors $p(A)$ and $p(\phi)$.
+Now imagine that instead (and very sensibly) you want to sample in
+parameters $x\equiv A\,\cos(\phi)$ and $y\equiv A\,\sin(\phi)$.
+What is the proper prior to apply to $x, y$?
+It is not just $p(A)\,p(\phi)$ with $A=\sqrt{x^2 + y^2}$ and $\phi=\arctan(y,x)$!
+That's close, though! There is a correction factor which is the
+absolute value of the determinant of the Jacobian matrix
+$||\frac{\dd(A,\phi}{\dd(x,y)}||$.
+That is, it is the determinant of the full derivative of one set of
+parameters with respect to the other.
+Keep your units straight!\note{See \citet{hoggcalculus} for advice on
+  how to check and test these transformations using dimensional
+  analysis.}
+In this particular case, the Jacobian is equal to $A$, such that 
+\begin{eqnarray}
+  p(x,y) &=& \frac{1}{A}\,p(A)\,p(\phi)
+  \quad ,
+\end{eqnarray}
+where $A=\sqrt{x^2 + y^2}$ and $\phi=\arctan(y,x)$.\note{Exercise to
+  the reader: Do the same but with $x\equiv \sqrt{A}\,\cos(\phi)$ and
+  $y\equiv\sqrt{A}\,\sin(\phi)$.}
 
 For another example, sometimes there is almost an exact degeneracy between two parameters,
   say $a$ and $b$.  Then it makes sense to switch to parameters $a+b$ and $a-b$,
   or some other linear combinations where correlations or near-degeneracies are likely to be reduced.
 Again, such transformations require also prior transformations, which must be made with care.
-There are some affine invariant samplers\note{Note how much we like to cite \citet{emcee}!} that are invariant to such transformations,
-  but if you aren't using such a sampler,
-  it is worth getting out ahead of these problems.
+There are some affine invariant samplers\note{Note how much we like to
+  cite \citet{emcee}!} that are invariant to such transformations, but
+if you aren't using such a sampler, it is worth getting out ahead of
+these problems.
 They can be found by performing an exploratory sampling,
   making a triangle plot as described above,
   and looking for narrow diagonal lines in the two-dimentional scatter plots.
 
-HOGG: ...How to deal with discrete or integer or binary parameters?
+For another example, sometimes some parameters are continuous, and some
+are integer (or discrete).
+In this case, it is sufficient, in the context of M-H \MCMC, to make
+custom proposal distributions for the integer parameters that make sure
+only integers are proposed (provided care is taken to make sure that detailed
+balance is preserved).
+An example is to have a proposal that has some probability of
+incrementing the parameter up, and an equal (ie, the same) probability
+of incrementing it down.
+Some samplers implicitly or explicitly assume that all parameters are
+continuous\note{Once again, \citet{emcee}.}; these should be avoided
+when some parameters are integer.
+If you \emph{really} want to use such samplers when some parameters
+are discrete, you have to put a \code{round()} or \code{int()}
+operation into the likelihood and prior functions.
+This makes for a stepwise-constant posterior pdf. It is a hack, but it
+works in most circumstances.
 
 \paragraph{model checking:}
 \emph{All models are wrong, but some are useful.}
