@@ -1718,289 +1718,6 @@ samples.
 Comment on the results.
 \end{problem}
 
-\section{Gibbs, ensemble, Hamiltonian, and so on}\label{sec:methods}
-
-As we have discussed above (\sectionname~\ref{sec:MH}),
-\MCMC\ methods are proven to be correct ``in the limit''; that is, when
-an infinite number of samples have been taken.
-When the function $f(\pars)$ has challenging properties, the results
-can approach this limit very slowly (or not at all\note{You can get
-  essentially infinite autocorrelation times if the function has
-  isolated regions of finite density separated by large seas of zero
-  or near-zero density.  One disturbing thing about these situations
-  is that any empirical measure of autocorrelation time will give a
-  finite answer, but the density won't be properly sampled, ever.  In
-  principle you can find these with multiple re-starts of the chain
-  and (things like) the Gelman--Rubin diagnostic \citep{gelmanrubin}.}).
-For this reason, in the finite duration of a scientific project, most
-users of \MCMC\ have one of two (related) problems:
-Either \textsl{(1)}~it is taking too long---it is taking too many steps or
-executing too many calls of the function $f(\pars)$ to get independent
-samples---or \textsl{(2)}~it is not
-exploring the full parameter space---there are local optima (or bad
-local geometry around those optima) ``trapping'' the algorithm.
-
-There is no general, problem-independent solution for either of these
-problems.
-Indeed, there are many different strategies that work well or badly
-for different functions $f(\pars)$.
-In this \sectionname, we will try to guide the reader towards methods
-that might help in different circumstances.
-We will not give a full description of all the \MCMC\ algorithms out
-there, but just provide some field notes and pointers to references.
-New \MCMC\ methods are being developed all the time, so a reader with a
-serious problem would do well to consult with the applied-mathematics
-or statistics literature.\note{Your best interface to these
-  literatures is often a colleague in another department, like applied
-  mathematics, statistics, or computer science.  Break down those
-  walls!}
-The different methods to which we refer here are (in general) very
-different in their difficulty of implementation.
-We won't help with that either, except to say that there are more and
-more open-source or distributed packages every year.
-We will try to name some current implementations in the notes, but any
-list compiled today will be incomplete tomorrow.\note{One check-point
-  in this literature is the compilation volume by
-  \citet{mcmchandbook}, but much has been developed and changed even
-  since that was written.}
-The spaces of \MCMC\ methods and \MCMC\ method implementations are both
-growing rapidly, in part because \MCMC\ has become such a core
-technology in the empirical sciences.
-
-All we are going to do here is give a cursory mention to some methods
-we know about, with some keywords that can be used to search more
-deeply.
-
-% *********** BJB talking:
-% I suggest partitioning the discussion of different methods into the following
-% two categories:
-%
-%  i) Methods for getting around the target distribution
-% ii) Methods that change the target distribution to something
-% other than the posterior pdf, to help the sampling somehow
-%
-% i) Would include things like M-H, the stretch move,
-% Hamiltonian, slice sampling (maybe skip the latter)
-% ii) would include things like annealing and Nested Sampling
-
-%%%% Hogg talking:
-% DFM: In this section, I think we should just summarize the other
-% methods, not describe them in detail.  Then we can cite the relevant
-% papers for the enthusiastic.
-
-\paragraph{Ensembles:}
-As we discussed (\sectionname~\ref{sec:tuning}), one of the critical challenges in the use of
-\MCMC\ is tuning the proposal pdf $q(\pars'\given\pars)$.
-In problems in which all of the parameters (all of the components or entries of $\pars$) are somehow ``equivalent'',
-or the parameters can be seen as components of a vector in a vector
-space, there are \emph{ensemble methods} that make use of not just one
-random-walker but instead many walkers to automatically generate a properly tuned
-proposal distribution.
-These methods make use of the distribution of a set of independent
-walkers in the parameter space ($\pars$-space) to gauge the typical step-sizes and
-directions at which new proposals should be made, obviating or greatly
-reducing the tuning requirements.
-We are co-authors on one of these methods,
-\project{emcee}\note{\citet{emcee}}, which is popular in the
-astrophysical sciences, but there are others\note{One that we are
-  interested in is \project{Kombine} (Farr \& Farr, in preparation).}.
-It is worty of note that ensemble methods have particular
-peculiarities about initialization and convergence diagnostics that
-are worth understanding before use.\note{For example, we find
-  empirically that it is better to initialize the ensemble in a ball
-  that is smaller than the full posterior pdf width, not larger.  For
-  another example, the ensemble produces a set of chains that can be
-  used to compute the Gelman--Rubin diagnostic \citep{gelmanrubin},
-  but this is not a conservative test if the initialization was made
-  in a small ball.}
-Because ensemble methods are updating independent \MCMC\ chains, they
-are often easy to parallelize to make use of multiple cores.
-
-\paragraph{Gibbs:}
-In many problems, the parameters---the components or entries of the
-blob $\pars$---are not equivalent at all.
-Some are global parameters, which touch or have an effect on every
-sub-part of the data blob $\data$, while others are local parameteres,
-which only touch a small subset of the data.
-Or, in another use case, some parameters are linear parameters
-that---at fixed values of the other parameters---will have a Gaussian
-likelihood or posterior pdf.
-In these problems, there are some directions in parameter space that
-are hard to move in (they require complete re-calculation of the full
-non-linear function $f(\pars)$, and other directions that are very
-easy to move in (they require only partial re-calculations or the
-sampling could even be analytic and exact).
-For problems with these structures, Gibbs samplers are ideal, and
-there are good implementations.\note{For example, \project{JAGS}; find it on the internets.}
-
-A trivial kind of Gibbs sampling was mentioned above (\sectionname~\ref{sec:MH}) in the
-discussion of \MH\ \MCMC:
-Even when running vanilla \MH\ \MCMC, it is often useful to update only
-one parameter at a time; that is, do only axis-aligned moves in the
-$\pars$-space, cycling through axes as you go from step to step.
-This helps with tuning and diagnosis, but it also permits a good
-implementation to capitalize on simpler calculations for the simpler
-parameter directions.\note{%
-  The point is that sometimes there are some parameters that only
-  affect a very small number of data points, or parameters that change
-  the model or the likelihood function and prior values in a very
-  simple-to-compute way.  If such simple parameters exist, it makes
-  sense to write your likelihood and prior code to capitalize on these
-  simplicities.  This is not always trivial, because it may involve
-  caching parts of the calculation and so on.  Details would be beyond
-  our scope.}
-
-Gibbs sampling can be very good for exploiting multiprocessing:
-Global parameter updates might require a serial re-calculation of the
-full likelihood, but local parameter updates can be done in parallel,
-with each local parameter working on its local bit of data all at the
-same time.
-This kind of structure is common in hierarchical inference, where
-local parameters touch only individual objects in some population,
-say, and global parameters are parameters \emph{of} that population as
-a whole.
-Parallelization is built in to some Gibbs implementations.\note{For
-  example, \project{JAGS} automatically
-  parallelizes Gibbs problems.}
-
-\paragraph{Hamiltonian or Hybrid:}
-In many cases of interest, the function $f(\pars)$ can be analytically
-differentiated, such that it is possible to quickly execute a gradient
-$\dd f/\dd\pars$ evaluation.
-Indeed, in the modern world of computing, there are even
-auto-differentiation systems that deliver automatically code that
-produces the gradient of any function you can write.\note{%
-  The idea is that for (almost) any function you can write,
-  a robot can write the function that is the derivative of that
-  function, using simple differentiation rules and the magic of the
-  chain rule. Differentiation is a typographic operation on computer
-  functions!  The idea is \emph{not} to take numerical (small
-  difference) derivatives of the code; there is no way that
-  finite-difference differentiation could help your sampling in the
-  long run.}
-There is a class of \MCMC\ methods that make use of gradient information
-to effectively inform the proposal distribution and thus speed sampling.
-
-DFM: more here!  For example, does this work better in large numbers
-of dimensions?  If so, we should say so.  And cite \citep{hamiltonian}.
-
-\paragraph{Importance:}
-Sometimes it is possible to sample efficiently from a distribution
-that is close to the target function $f(\pars)$ you care about, even when the target $f(\pars)$ itself is
-hard to sample efficiently with \MCMC.
-An example is a problem that has a simple (Gaussian, say) likelihood
-function times a non-trivial prior:
-It is easy to sample from a Gaussian likelihood times a Gaussian
-prior, even without \MCMC, but it might be hard to do the same sampling
-under a more complex prior.
-Importance sampling is a direct sampling method (not really an \MCMC\
-method at all):
-You take a sampling from the approximate function (which by assumption
-was easy) and then you re-weight the sampling (or do a subsequent
-rejection of samples) using the ratio of the true function to the
-approximate function as a weight or probability.
-We use this quite a bit in our hierarchical inferences.\note{%
-  For example, we use importance sampling to convert individual-planet
-  exoplanet inferences (all performed with dumb priors) into a full-population
-  consistent hierarchical model in \citet{eccentricity}.}
-
-Two of the significant technical details for importance sampling are the
-following:
-The approximate function must have the same (or greater) support as
-the true function, and the method degrades in efficiency as the two
-functions diverge.
-If the ratio of the true function to the approximate function is to be
-used as a probability for rejection of samples, then the true function
-must be greater than or equal to the approximate function everywhere!
-
-\paragraph{Slice:}
-DFM ... When is slice sampling a good idea?  DFM, can you help here?
-
-Slice sampling makes use of the point that (in one dimension) a fair
-sampling of $f(\pars)$ is a projection onto the $\pars$ axis of a
-uniform sampling of the two-dimensional region under the
-two-dimensional plot of $f(\pars)$ \vs\ $\pars$.
-The $D$-dimensional generalization is that a fair sampling of
-$f(\pars)$ is a projection onto the $\pars$ $D$-dimensional
-hypersurface of $\pars$ of a uniform sampling of the $D+1$-dimensional
-hypervolume under the hypersurface $f(\pars)$ in a hypothetical plot
-of $f(\pars)$ over the whole parameter space.
-Thinking in terms of the two-dimensional case (for simplicity), slice
-samplers make both ``horizontal'' moves in the $\pars$ direction at
-fixed $f(\pars)$ and also ``vertical'' moves in the $f(\pars)$
-direction.
-Because the sampling in the higher-dimensional space is uniform, it is
-easy to make moves to very different parts of parameter space, or
-different peaks or modes in the function $f(\pars)$.
-In our own research, we use a variant of slice sampling for problems
-involving samplings governed by Gaussian Processes.\note{DFM: Cite us
-  and Murray here.}
-
-\paragraph{Tempering:}
-A huge problem for \MCMC\ samplers---which make local moves based on
-local positioning in the parameter space---is that there can be
-multiple modes in the function $f(\pars)$, separated by valleys of
-zero or near-zero density.
-A vanilla \MCMC\ method cannot easily cross such valleys with local
-moves.
-The idea behind simulated tempering and related methods is to ``smooth
-out'' the function $f(\pars)$ or reduce its dynamic range, to make the
-peaks less tall and the valleys less deep, to permit the \MCMC\ random
-walk to cross the valleys.
-The standard method is to introduce a ``temperature'' variable and,
-while sampling, take the likelihood function to the power of the
-inverse temperature (or, if working in the logarithm, multiply the log
-likelihood by the inverse temperature).
-When the temperature is high, this reduces the influence of the
-likelihood function relative to the prior pdf, and (assuming that the
-prior pdf is easy to sample) makes movement in the parameter space
-easier.
-At each step, when the temperature has moved away from unity, the
-distribution being sampled is not exactly $f(\pars)$, but the results
-of the sampling are only kept for those samples taken at unit
-temperature; these in the end make a fair sampling.
-
-% DFM: Is the last sentence of the above paragraph correct??
-
-\paragraph{Nested:}
-Similar to tempering-like methods are a class of methods called ``nested''
-samplers\note{For example, see \citet{skilling} and \citet{dnest}},
-which also smoothly change the target distribution away from $f(\pars)$.
-In the nested case, instead of increasing the temperature, the
-samplings are of a censored version of the prior, censored by the
-value of the likelihoood function.
-When the likelihood censoring is strong, only the most high-likelihood
-parts of the prior get sampled; when the likelihood censoring is weak,
-almost all of the prior gets sampled.
-The idea behind nested sampling---like tempering---is that it is
-designed to be a good method for exploring the full parameter space or
-searching for all of the modes of the posterior pdf.
-It is also designed such that it produces not just a sampling but also
-an estimate of the integral $Z$ of the likelihood times the prior
-(the Bayes factor or fully marginalized likelihood).
-
-\paragraph{Data augmentation:}
-...HOGG Look at the relevant chapter in Brooks.
-
-\paragraph{Reversible-jump:}
-Finally, there are some extreme problems in which it is not just hard
-to sample in the parameter space, but the parameter space itself is
-not of fixed dimension.
-
-For example, if you are modeling an astronomical image with a
-collection of stars, and you don't know how many stars to use; in this
-case the number of stars itself is a parameter, so the number of
-parameters is itself a function of the parameters.\note{Our attempt to sample this very problem is \citet{brewer}.}
-In these cases you can only use certain kinds of samplers (though M--H
-\MCMC\ is one you can choose), and, in addition, you need to make
-special kinds of proposals that permit the system to jump from one
-parameter space to another that has different dimensionality.
-In these cases, the concept of detailed balance becomes non-trivial,
-but there are criteria for creating reversible-jump proposals between
-the parameter spaces.
-These methods are best built and operated under the supervision of a
-trained professional.
-
 \section{Troubleshooting and advice}\label{sec:trouble}
 
 When issues arise with \MCMC\ sampling,
@@ -2337,6 +2054,289 @@ about what changes to make or what new directions to explore.
 
 %% ...Finally, to repeat: You can't sample the likelihood!  You can only
 %% sample a posterior pdf!
+
+\section{Gibbs, ensemble, Hamiltonian, and so on}\label{sec:methods}
+
+As we have discussed above (\sectionname~\ref{sec:MH}),
+\MCMC\ methods are proven to be correct ``in the limit''; that is, when
+an infinite number of samples have been taken.
+When the function $f(\pars)$ has challenging properties, the results
+can approach this limit very slowly (or not at all\note{You can get
+  essentially infinite autocorrelation times if the function has
+  isolated regions of finite density separated by large seas of zero
+  or near-zero density.  One disturbing thing about these situations
+  is that any empirical measure of autocorrelation time will give a
+  finite answer, but the density won't be properly sampled, ever.  In
+  principle you can find these with multiple re-starts of the chain
+  and (things like) the Gelman--Rubin diagnostic \citep{gelmanrubin}.}).
+For this reason, in the finite duration of a scientific project, most
+users of \MCMC\ have one of two (related) problems:
+Either \textsl{(1)}~it is taking too long---it is taking too many steps or
+executing too many calls of the function $f(\pars)$ to get independent
+samples---or \textsl{(2)}~it is not
+exploring the full parameter space---there are local optima (or bad
+local geometry around those optima) ``trapping'' the algorithm.
+
+There is no general, problem-independent solution for either of these
+problems.
+Indeed, there are many different strategies that work well or badly
+for different functions $f(\pars)$.
+In this \sectionname, we will try to guide the reader towards methods
+that might help in different circumstances.
+We will not give a full description of all the \MCMC\ algorithms out
+there, but just provide some field notes and pointers to references.
+New \MCMC\ methods are being developed all the time, so a reader with a
+serious problem would do well to consult with the applied-mathematics
+or statistics literature.\note{Your best interface to these
+  literatures is often a colleague in another department, like applied
+  mathematics, statistics, or computer science.  Break down those
+  walls!}
+The different methods to which we refer here are (in general) very
+different in their difficulty of implementation.
+We won't help with that either, except to say that there are more and
+more open-source or distributed packages every year.
+We will try to name some current implementations in the notes, but any
+list compiled today will be incomplete tomorrow.\note{One check-point
+  in this literature is the compilation volume by
+  \citet{mcmchandbook}, but much has been developed and changed even
+  since that was written.}
+The spaces of \MCMC\ methods and \MCMC\ method implementations are both
+growing rapidly, in part because \MCMC\ has become such a core
+technology in the empirical sciences.
+
+All we are going to do here is give a cursory mention to some methods
+we know about, with some keywords that can be used to search more
+deeply.
+
+% *********** BJB talking:
+% I suggest partitioning the discussion of different methods into the following
+% two categories:
+%
+%  i) Methods for getting around the target distribution
+% ii) Methods that change the target distribution to something
+% other than the posterior pdf, to help the sampling somehow
+%
+% i) Would include things like M-H, the stretch move,
+% Hamiltonian, slice sampling (maybe skip the latter)
+% ii) would include things like annealing and Nested Sampling
+
+%%%% Hogg talking:
+% DFM: In this section, I think we should just summarize the other
+% methods, not describe them in detail.  Then we can cite the relevant
+% papers for the enthusiastic.
+
+\paragraph{Ensembles:}
+As we discussed (\sectionname~\ref{sec:tuning}), one of the critical challenges in the use of
+\MCMC\ is tuning the proposal pdf $q(\pars'\given\pars)$.
+In problems in which all of the parameters (all of the components or entries of $\pars$) are somehow ``equivalent'',
+or the parameters can be seen as components of a vector in a vector
+space, there are \emph{ensemble methods} that make use of not just one
+random-walker but instead many walkers to automatically generate a properly tuned
+proposal distribution.
+These methods make use of the distribution of a set of independent
+walkers in the parameter space ($\pars$-space) to gauge the typical step-sizes and
+directions at which new proposals should be made, obviating or greatly
+reducing the tuning requirements.
+We are co-authors on one of these methods,
+\project{emcee}\note{\citet{emcee}}, which is popular in the
+astrophysical sciences, but there are others\note{One that we are
+  interested in is \project{Kombine} (Farr \& Farr, in preparation).}.
+It is worty of note that ensemble methods have particular
+peculiarities about initialization and convergence diagnostics that
+are worth understanding before use.\note{For example, we find
+  empirically that it is better to initialize the ensemble in a ball
+  that is smaller than the full posterior pdf width, not larger.  For
+  another example, the ensemble produces a set of chains that can be
+  used to compute the Gelman--Rubin diagnostic \citep{gelmanrubin},
+  but this is not a conservative test if the initialization was made
+  in a small ball.}
+Because ensemble methods are updating independent \MCMC\ chains, they
+are often easy to parallelize to make use of multiple cores.
+
+\paragraph{Gibbs:}
+In many problems, the parameters---the components or entries of the
+blob $\pars$---are not equivalent at all.
+Some are global parameters, which touch or have an effect on every
+sub-part of the data blob $\data$, while others are local parameteres,
+which only touch a small subset of the data.
+Or, in another use case, some parameters are linear parameters
+that---at fixed values of the other parameters---will have a Gaussian
+likelihood or posterior pdf.
+In these problems, there are some directions in parameter space that
+are hard to move in (they require complete re-calculation of the full
+non-linear function $f(\pars)$, and other directions that are very
+easy to move in (they require only partial re-calculations or the
+sampling could even be analytic and exact).
+For problems with these structures, Gibbs samplers are ideal, and
+there are good implementations.\note{For example, \project{JAGS}; find it on the internets.}
+
+A trivial kind of Gibbs sampling was mentioned above (\sectionname~\ref{sec:MH}) in the
+discussion of \MH\ \MCMC:
+Even when running vanilla \MH\ \MCMC, it is often useful to update only
+one parameter at a time; that is, do only axis-aligned moves in the
+$\pars$-space, cycling through axes as you go from step to step.
+This helps with tuning and diagnosis, but it also permits a good
+implementation to capitalize on simpler calculations for the simpler
+parameter directions.\note{%
+  The point is that sometimes there are some parameters that only
+  affect a very small number of data points, or parameters that change
+  the model or the likelihood function and prior values in a very
+  simple-to-compute way.  If such simple parameters exist, it makes
+  sense to write your likelihood and prior code to capitalize on these
+  simplicities.  This is not always trivial, because it may involve
+  caching parts of the calculation and so on.  Details would be beyond
+  our scope.}
+
+Gibbs sampling can be very good for exploiting multiprocessing:
+Global parameter updates might require a serial re-calculation of the
+full likelihood, but local parameter updates can be done in parallel,
+with each local parameter working on its local bit of data all at the
+same time.
+This kind of structure is common in hierarchical inference, where
+local parameters touch only individual objects in some population,
+say, and global parameters are parameters \emph{of} that population as
+a whole.
+Parallelization is built in to some Gibbs implementations.\note{For
+  example, \project{JAGS} automatically
+  parallelizes Gibbs problems.}
+
+\paragraph{Hamiltonian or Hybrid:}
+In many cases of interest, the function $f(\pars)$ can be analytically
+differentiated, such that it is possible to quickly execute a gradient
+$\dd f/\dd\pars$ evaluation.
+Indeed, in the modern world of computing, there are even
+auto-differentiation systems that deliver automatically code that
+produces the gradient of any function you can write.\note{%
+  The idea is that for (almost) any function you can write,
+  a robot can write the function that is the derivative of that
+  function, using simple differentiation rules and the magic of the
+  chain rule. Differentiation is a typographic operation on computer
+  functions!  The idea is \emph{not} to take numerical (small
+  difference) derivatives of the code; there is no way that
+  finite-difference differentiation could help your sampling in the
+  long run.}
+There is a class of \MCMC\ methods that make use of gradient information
+to effectively inform the proposal distribution and thus speed sampling.
+
+DFM: more here!  For example, does this work better in large numbers
+of dimensions?  If so, we should say so.  And cite \citep{hamiltonian}.
+
+\paragraph{Importance:}
+Sometimes it is possible to sample efficiently from a distribution
+that is close to the target function $f(\pars)$ you care about, even when the target $f(\pars)$ itself is
+hard to sample efficiently with \MCMC.
+An example is a problem that has a simple (Gaussian, say) likelihood
+function times a non-trivial prior:
+It is easy to sample from a Gaussian likelihood times a Gaussian
+prior, even without \MCMC, but it might be hard to do the same sampling
+under a more complex prior.
+Importance sampling is a direct sampling method (not really an \MCMC\
+method at all):
+You take a sampling from the approximate function (which by assumption
+was easy) and then you re-weight the sampling (or do a subsequent
+rejection of samples) using the ratio of the true function to the
+approximate function as a weight or probability.
+We use this quite a bit in our hierarchical inferences.\note{%
+  For example, we use importance sampling to convert individual-planet
+  exoplanet inferences (all performed with dumb priors) into a full-population
+  consistent hierarchical model in \citet{eccentricity}.}
+
+Two of the significant technical details for importance sampling are the
+following:
+The approximate function must have the same (or greater) support as
+the true function, and the method degrades in efficiency as the two
+functions diverge.
+If the ratio of the true function to the approximate function is to be
+used as a probability for rejection of samples, then the true function
+must be greater than or equal to the approximate function everywhere!
+
+\paragraph{Slice:}
+DFM ... When is slice sampling a good idea?  DFM, can you help here?
+
+Slice sampling makes use of the point that (in one dimension) a fair
+sampling of $f(\pars)$ is a projection onto the $\pars$ axis of a
+uniform sampling of the two-dimensional region under the
+two-dimensional plot of $f(\pars)$ \vs\ $\pars$.
+The $D$-dimensional generalization is that a fair sampling of
+$f(\pars)$ is a projection onto the $\pars$ $D$-dimensional
+hypersurface of $\pars$ of a uniform sampling of the $D+1$-dimensional
+hypervolume under the hypersurface $f(\pars)$ in a hypothetical plot
+of $f(\pars)$ over the whole parameter space.
+Thinking in terms of the two-dimensional case (for simplicity), slice
+samplers make both ``horizontal'' moves in the $\pars$ direction at
+fixed $f(\pars)$ and also ``vertical'' moves in the $f(\pars)$
+direction.
+Because the sampling in the higher-dimensional space is uniform, it is
+easy to make moves to very different parts of parameter space, or
+different peaks or modes in the function $f(\pars)$.
+In our own research, we use a variant of slice sampling for problems
+involving samplings governed by Gaussian Processes.\note{DFM: Cite us
+  and Murray here.}
+
+\paragraph{Tempering:}
+A huge problem for \MCMC\ samplers---which make local moves based on
+local positioning in the parameter space---is that there can be
+multiple modes in the function $f(\pars)$, separated by valleys of
+zero or near-zero density.
+A vanilla \MCMC\ method cannot easily cross such valleys with local
+moves.
+The idea behind simulated tempering and related methods is to ``smooth
+out'' the function $f(\pars)$ or reduce its dynamic range, to make the
+peaks less tall and the valleys less deep, to permit the \MCMC\ random
+walk to cross the valleys.
+The standard method is to introduce a ``temperature'' variable and,
+while sampling, take the likelihood function to the power of the
+inverse temperature (or, if working in the logarithm, multiply the log
+likelihood by the inverse temperature).
+When the temperature is high, this reduces the influence of the
+likelihood function relative to the prior pdf, and (assuming that the
+prior pdf is easy to sample) makes movement in the parameter space
+easier.
+At each step, when the temperature has moved away from unity, the
+distribution being sampled is not exactly $f(\pars)$, but the results
+of the sampling are only kept for those samples taken at unit
+temperature; these in the end make a fair sampling.
+
+% DFM: Is the last sentence of the above paragraph correct??
+
+\paragraph{Nested:}
+Similar to tempering-like methods are a class of methods called ``nested''
+samplers\note{For example, see \citet{skilling} and \citet{dnest}},
+which also smoothly change the target distribution away from $f(\pars)$.
+In the nested case, instead of increasing the temperature, the
+samplings are of a censored version of the prior, censored by the
+value of the likelihoood function.
+When the likelihood censoring is strong, only the most high-likelihood
+parts of the prior get sampled; when the likelihood censoring is weak,
+almost all of the prior gets sampled.
+The idea behind nested sampling---like tempering---is that it is
+designed to be a good method for exploring the full parameter space or
+searching for all of the modes of the posterior pdf.
+It is also designed such that it produces not just a sampling but also
+an estimate of the integral $Z$ of the likelihood times the prior
+(the Bayes factor or fully marginalized likelihood).
+
+\paragraph{Data augmentation:}
+...HOGG Look at the relevant chapter in Brooks.
+
+\paragraph{Reversible-jump:}
+Finally, there are some extreme problems in which it is not just hard
+to sample in the parameter space, but the parameter space itself is
+not of fixed dimension.
+
+For example, if you are modeling an astronomical image with a
+collection of stars, and you don't know how many stars to use; in this
+case the number of stars itself is a parameter, so the number of
+parameters is itself a function of the parameters.\note{Our attempt to sample this very problem is \citet{brewer}.}
+In these cases you can only use certain kinds of samplers (though M--H
+\MCMC\ is one you can choose), and, in addition, you need to make
+special kinds of proposals that permit the system to jump from one
+parameter space to another that has different dimensionality.
+In these cases, the concept of detailed balance becomes non-trivial,
+but there are criteria for creating reversible-jump proposals between
+the parameter spaces.
+These methods are best built and operated under the supervision of a
+trained professional.
 
 \clearpage
 \markright{Notes}\theendnotes
