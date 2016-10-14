@@ -2095,7 +2095,7 @@ about what changes to make or what new directions to explore.
 %% ...Finally, to repeat: You can't sample the likelihood!  You can only
 %% sample a posterior pdf!
 
-\section{Gibbs, ensemble, Hamiltonian, and so on}\label{sec:methods}
+\section{More sophisticated sampling methods}\label{sec:methods}
 
 As we have discussed above (\sectionname~\ref{sec:MH}),
 \MCMC\ methods are proven to be correct ``in the limit''; that is, when
@@ -2179,8 +2179,9 @@ directions at which new proposals should be made, obviating or greatly
 reducing the tuning requirements.
 We are co-authors on one of these methods,
 \project{emcee}\note{\citet{emcee}}, which is popular in the
-astrophysical sciences, but there are others\note{One that we are
-  interested in is \project{Kombine} (Farr \& Farr, in preparation).}.
+astrophysical sciences, but there are others\note{A few ensemble methods that
+are being used in astronomy: Differential Evolution MCMC (\citealt{demcmc,
+run-dmc}) and \project{kombine} (Farr \& Farr, in preparation).}.
 It is worty of note that ensemble methods have particular
 peculiarities about initialization and convergence diagnostics that
 are worth understanding before use.\note{For example, we find
@@ -2479,6 +2480,13 @@ trained professional.
   Neal,~R.~M., 2011,
   \href{http://www.mcmchandbook.net/HandbookChapter5.pdf}{\MCMC\ Using Hamiltonian Dynamics},
   in \citet{mcmchandbook}, 113--162.
+\bibitem[Nelson \etal(2014)]{run-dmc}
+  Nelson, B., Ford, E.~B., \& Payne, M.~J., 2014,
+  \href{http://adsabs.harvard.edu/abs/2014ApJS..210...11N}{RUN DMC: An
+Efficient, Parallel Code for Analyzing Radial Velocity Observations Using
+N-body Integrations and Differential Evolution Markov Chain Monte Carlo}
+  \textbf{210}, 11.
+  \doi{10.1088/0067-0049/210/1/11}.
 \bibitem[Pasarica \& Gelman(2010)]{esjd}
   Pasarica,~C. \& Gelman,~A., 2010
   \href{http://www.jstor.org/stable/24308995}{Adaptively scaling the Metropolis algorithm using expected squared jumped distance},
@@ -2488,6 +2496,13 @@ trained professional.
   Nested sampling for general bayesian computation,
   \textit{Bayes.\,Anal.}\ \textbf{1}(4) 833-–860
   \doi{10.1214/06-BA127}.
+\bibitem[Ter Braak(2006)]{demcmc}
+  Ter Braak, C.~J.~F., 2006,
+  A Markov Chain Monte Carlo version of the genetic algorithm
+  Differential Evolution: easy Bayesian computing for real
+  parameter spaces
+  \textit{Stat.\,Comp.}\ \textbf{16} 239--249.
+  \doi{10.1007/s11222-006-8769-1}.
 \bibitem[van~der~Walt \etal(2011)]{numpy}
   van~der~Walt,~S., Colbert,~S.~C., \& Varoquaux,~G., 2011,
   The NumPy Array: A structure for efficient numerical computation,
