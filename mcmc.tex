@@ -6,13 +6,8 @@
 % -----
 % - Deal with all mentions of ``DFM'' or ``HOGG''
 % - Go through github issues, if any.
-% - Systematically cite chapters of Brooks \etal in each section.
-% - Skim MacKay and make sure we cite him in any relevant place.
-% - Mention & cite STAN in methods section
 % - Need to mention case where there is an MC integral INSIDE the likelihood function
 % - Need to mention testing the likelihood function, by, say, 1-d scans back and forth.
-% - Make sure we say ``don't use MCMC for 1-d problems or if you have alternatives to directly integrate!''
-% - Would love to have the Note symbols to be links to the notes and the notes to have links back to the main text...!
 % - Send to friendlies for comments
 %   - Gelman
 %   - Goodman
@@ -678,7 +673,7 @@ The resulting  plot should look something like \figurename~\ref{fig:MH}.
 \includegraphics[width=0.5\textwidth]{problems/MH}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:MH}:
-MCMC samples from a Gaussian (black) and the true distribution (blue).}
+\MCMC\ samples from a Gaussian (black) and the true distribution (blue).}
 \label{fig:MH}
 \end{figure}
 
@@ -694,7 +689,7 @@ What change did you have to make to the initialization, and why?
 \includegraphics[width=0.5\textwidth]{problems/MH2}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:MH2}:
-MCMC samples from a uniform distribution (black) and the true distribution
+\MCMC\ samples from a uniform distribution (black) and the true distribution
 (blue).}
 \label{fig:MH2}
 \end{figure}
@@ -725,7 +720,7 @@ Make a similar plot for the top-hat.
 \includegraphics[width=0.7\textwidth]{problems/twod_a}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:twod}a:
-MCMC samples from a two-dimensional Gaussian (scatter plot) and the
+\MCMC\ samples from a two-dimensional Gaussian (scatter plot) and the
 one-dimensional marginalized distributions (histograms).}
 \label{fig:twod-a}
 \end{figure}
@@ -861,7 +856,7 @@ be the same $p(x)$~--~and over-plot it on your histogram.
 \includegraphics[width=0.5\textwidth]{problems/logprior}
 \end{center}
 \caption{Solution to \problemname~\ref{prob:logprior}:
-The black histogram shows the MCMC samples and the blue curve is the analytic
+The black histogram shows the \MCMC\ samples and the blue curve is the analytic
 target density.}
 \label{fig:logprior}
 \end{figure}
@@ -998,7 +993,7 @@ samples), you will get just as good sampling-based estimates as if you
 had used all $K$ samples.
 
 It is also worth noting that there is not just one autocorrelation function or
-autocorrelation time for an MCMC chain.
+autocorrelation time for an \MCMC\ chain.
 Instead, there is an autocorrelation time $\tau_f$ for every function
 $f(\pars)$ and these will, in general, be different.
 Therefore, the autocorrelation time used in \equationname~(\ref{eq:tauvar}) is
@@ -1142,7 +1137,7 @@ like \figurename~\ref{fig:itertau}.
 \end{center}
 \caption{Solution to \problemname~\ref{prob:itertau}:
 Estimates of the integrated autocorrelation time of different segments of the
-MCMC chain from \problemname~\ref{prob:MH} (black lines) and for the full
+\MCMC\ chain from \problemname~\ref{prob:MH} (black lines) and for the full
 chain (orange line) as a function of window size $M$.
 The ``optimized'' value computed using an iterative procedure is overplotted
 as a dashed line and its value is listed in the title.}
