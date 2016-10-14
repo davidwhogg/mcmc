@@ -1746,7 +1746,7 @@ Is it the \MCMC\ code, the priors, the likelihood function,
 
 \paragraph{functional testing:}
 In addition to a full set of unit tests for every part of your code
-  (yeah \emph{right}\note{If you aren't unit testing, you are probably making some very big mistakes.}),
+  (yeah \emph{right}\note{If you aren't unit testing, you are probably making some very big mistakes. It makes sense to put in unit tests for every part of your code, especially the parts of your code that are relied upon for correctness in multiple locations, like your \MCMC\ sampler.}),
   we recommend building some end-to-end functional tests that permit you to perform \MCMC\
   runs with output that must meet certain expectations.
 The simplest kind of functional test is to sample a known distribution,
@@ -1754,25 +1754,6 @@ The simplest kind of functional test is to sample a known distribution,
 For example, you can sample a $D$-dimensional Gaussian distribution with known non-trivial covariance,
   and check that the empirical covariance comes out as expected.
 This is an easy test to fail, so a success builds confidence in any \MCMC\ code.
-
-In the most extreme form of this test,
-  for a Gaussian in $D$ dimensions,
-  build the covariance matrix input to the Gaussian distribution
-  by taking the sum of the outer product of $D+1$ randomly generated vectors.
-Then, before sampling, get the eigenvalues and eigenvectors of the matrix.
-Set up the \MCMC\ sampler with the Gaussian function with this covariance matrix
-  as the probability function (or the log of it as the log-probability function).
-Sample for many autocorrelation times,
-  or until you are confident you are getting good samples.
-Check that the empirical $D$-dimensional covariance of the samples
-  has the same (or similar) eigenvectors and eigenvlues to the input matrix.
-Also check that the individual one-dimensional samplings
-  (along each axis or any projection in the $D$-space)
-  look Gaussian and have nearly vanishing skew and kurtosis.
-It takes some thinking and some calculating to see ``how well'' these things all ought to match
-  expectations, but one thing that can be said with confidence is that agreement should improve
-  as the sampling proceeds.
-If it doesn't, it is likely that there is something broken about the sampler itself.
 
 Another important functional test is to \emph{sample the prior pdf}.
 This tests the sampler,
@@ -1814,7 +1795,7 @@ For example,
   do you get \emph{exactly} the same answer?
 If you don't, your likelihood function effectively depends on some random numbers;
   maybe it includes within it an integral performed by Monte Carlo method?
-In general, you want to change your likelihood function such that,
+In general, you want to write your likelihood function such that,
   even if it includes a numerical or stochastic integral,
   it is designed such that it produces \emph{precisely} the same
   value when it returns to the same point in parameter space.
@@ -1843,21 +1824,21 @@ These problems hurt optimizers more than samplers,
 In general, plotting the likelihood function as a function of parameter along
   slices in parameter space often reveals bugs or think-os.
 
-DFM:...SHOW EXAMPLES?
-
 \paragraph{low acceptance fraction:}
 If you find that you are getting low acceptance fraction
   (in standard M-H \MCMC\ or other varieties for which there is such a concept)
   you can simply reduce the sizes of the steps you consider to increase the fraction that are accepted.
 This means decreasing the variance of the proposal distribution,
   or whatever parameter or parameters control the width of that distribution.
-If reducing the variance of the proposal distribution does \emph{not} increase the acceptance fraction,
-  then \emph{you have a bug}.
-You must find that bug by auditing your code or else returning to the functional tests listed above.
+If reducing the variance of the proposal distribution does \emph{not}
+increase the acceptance fraction, then \emph{you have a bug}.
+You must find that bug by auditing your code or else returning to the
+functional tests listed above.
 
 Similarly for high acceptance fraction:
-If you are finding a high acceptance fraction,
-  then increasing the variance of the proposal distributon \emph{must} decrease the acceptance fraction.
+If you are finding a high acceptance fraction, then increasing the
+variance of the proposal distributon \emph{must} decrease the
+acceptance fraction.
 If it does \emph{not}, then \emph{you have a bug}.
 
 \paragraph{sticky chains:}
@@ -1873,8 +1854,6 @@ If you are using an ensemble sampler\note{Such as \project{emcee} \citep{emcee};
   make plots showing all $M$ walkers, each a different color.
 A converged run for an ensemble sampler will show every single walker traversing the parameter space
   in every dimension many times.
-
-DFM: SHOW EXAMPLES OF GOOD AND BAD?
 
 \paragraph{initialization-dependence:}
 If you initialize your \MCMC\ runs in different places in parameter space,
@@ -1964,9 +1943,9 @@ For another example, sometimes there is almost an exact degeneracy between two p
   or some other linear combinations where correlations or near-degeneracies are likely to be reduced.
 Again, such transformations require also prior transformations, which must be made with care.
 There are some affine invariant samplers\note{Note how much we like to
-  cite \citet{emcee}!} that are invariant to such transformations, but
-if you aren't using such a sampler, it is worth getting out ahead of
-these problems.
+  cite \project{emcee} \citep{emcee}!} that are invariant to such
+transformations, but if you aren't using such a sampler, it is worth
+getting out ahead of these problems.
 They can be found by performing an exploratory sampling,
   making a triangle plot as described above,
   and looking for narrow diagonal lines in the two-dimentional scatter plots.
