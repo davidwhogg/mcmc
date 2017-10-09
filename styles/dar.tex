@@ -34,10 +34,8 @@
 \newcommand{\acronym}[1]{{\small{#1}}}
 
 % Notes
-\newcommand{\notename}{note}
-\newcommand{\note}[1]{\endnote{#1}}
-\def\enotesize{\normalsize}
-\renewcommand{\thefootnote}{\fnsymbol{footnote}} % the ONE footnote needs this
+\newcommand{\notename}{footnote}
+\newcommand{\note}[1]{\footnote{#1}}
 
 % Problems
 \newcommand{\problemname}{Problem}
@@ -56,11 +54,14 @@
 \newcommand{\given}{\,|\,}
 \newcommand{\mean}[1]{\left<{#1}\right>}
 
-% Headers
+% Headers and margins
 \renewcommand{\MakeUppercase}[1]{#1}
 \pagestyle{myheadings}
 \renewcommand{\sectionmark}[1]{\markright{\thesection.~#1}}
 \markboth{\chaptertitle}{}
+\addtolength{\topmargin}{-0.80in}
+\addtolength{\textheight}{1.80in}
+\addtolength{\headsep}{-0.10in}
 
 % References.
 \usepackage{color,hyperref}

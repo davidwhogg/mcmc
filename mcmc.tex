@@ -1,6 +1,6 @@
 % This file is part of the MCMC project,
 %   which is (in turn) part of the Data Analysis Recipes project.
-% Copyright 2013, 2014, 2015, 2016 David W. Hogg (NYU) and Dan Foreman-Mackey (NYU, UW).
+% Copyright 2013, 2014, 2015, 2016, 2017 David W. Hogg (NYU) and Dan Foreman-Mackey (NYU, UW).
 
 % to-do
 % -----
@@ -19,11 +19,6 @@
 %   - Post on arXiv
 %   - Blog about it
 
-% low priority
-% ------------
-% - Make endnote numbers clickable links to endnotes and back.  Relevant ideas here:
-%   http://tex.stackexchange.com/questions/8452/making-endnotes-clickable-links-with-hyperref
-
 % style notes
 % -----------
 % - \MCMC not MCMC
@@ -37,8 +32,7 @@
 % - Always $\pars$ never $x$; $K$ samples $\pars_k$ and $\pars$ space is $D$-dimensional
 % - Should we use the word ``walker'' everywhere and do we?
 
-\documentclass[12pt,twoside,pdftex]{article}
-\usepackage{styles/dar_endnotes}
+\documentclass[12pt,pdftex]{article}
 
 \newcommand{\chaptertitle}{Using Markov Chain Monte Carlo}
 \include{styles/dar}
@@ -53,46 +47,23 @@
 
 \begin{document}\sloppy\sloppypar\raggedbottom\frenchspacing\thispagestyle{plain}%
 %
-\section*{Data analysis recipes:\\ \chaptertitle\footnotemark}
-%
-\footnotetext{%
-    The notes begin on page~\pageref{note:first}, including the
-    license\note{\label{note:first}
-        Copyright 2013, 2014, 2015, 2016 the authors (OMG this took us a long time).
+\section*{Data analysis recipes:\\ \chaptertitle\note{%
+\label{note:first}%
+Copyright 2013, 2014, 2015, 2016, 2017 the authors (OMG this took us a long time).
         This work is licensed under a
         \href{http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en\_US}{%
             Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported
-            License}.}
-    and the acknowledgements\note{%
-        We would like to thank
-          Jo Bovy (IAS),
-          Brendon Brewer (Auckland),
-          Will Farr (Birmingham),
-          Jonathan Goodman (NYU),
-          Fengji Hou (NYU),
-          Dustin Lang (CMU),
-          Phil Marshall (KIPAC), and
-          Iain Murray (Edinburgh)
-        for valuable advice and comments over the years, and
-          Alessandro Gentilini
-        for a very close read.
-        This project benefitted from various research grants, especially
-          NSF grants AST-0908357, IIS-1124794, and AST-1517237,
-          NASA grant NNX12AI50G,
-          and the The Moore-Sloan Data Science Environment at NYU.}
-}
-
+            License}.}}%
 \noindent
 \textbf{David~W.~Hogg}\\
-\affil{Simons~Center~for~Data~Analysis,
-       Simons~Foundation}\\
+\affil{Flatiron Institute, a division of the Simons~Foundation}\\
 \affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,
        New~York~University}\\
 \affil{Center~for~Data~Science,
        New~York~University}\\
 \affil{Max-Planck-Institut~f\"ur~Astronomie, Heidelberg}\\[1ex]
 \textbf{Daniel~Foreman-Mackey}\\
-\affil{Sagan Fellow}\\
+\affil{Flatiron Institute, a division of the Simons~Foundation}\\
 \affil{Department~of~Astronomy, University~of~Washington}
 
 \begin{abstract}
@@ -273,7 +244,7 @@ among the myriad \MCMC\ methods implementations, how to implement a good
 likelihood function and prior pdf function for inference, and how to
 trouble-shoot standard kinds of problems that arise in operating \MCMC\
 methods on real problems.
-We will leave parenthetical and philosophical matters to the end-notes,
+We will leave parenthetical and philosophical matters to the footnotes,
 which appear after the main text.
 
 \section{What is a sampling?}\label{sec:sampling}
@@ -2352,9 +2323,25 @@ These methods are best built and operated under the supervision of a
 trained professional.
 
 \clearpage
-\markright{Notes}\theendnotes
+\paragraph{Acknowledgements:}
+We would like to thank
+          Alex Barnett (Flatiron),
+          Jo Bovy (Toronto),
+          Brendon Brewer (Auckland),
+          Will Farr (Flatiron)
+          Jonathan Goodman (NYU),
+          Fengji Hou (NYU),
+          Dustin Lang (Toronto),
+          Phil Marshall (KIPAC), and
+          Iain Murray (Edinburgh)
+        for valuable advice and comments over the years, and
+          Alessandro Gentilini
+        for a very close read.
+        This project benefitted from various research grants, especially
+          NSF grants AST-0908357, IIS-1124794, and AST-1517237,
+          NASA grant NNX12AI50G,
+          and the The Moore-Sloan Data Science Environment at NYU.
 
-\clearpage
 \raggedright
 \begin{thebibliography}{}\markright{References}
 \bibitem[Box \& Draper(1987)]{box}
