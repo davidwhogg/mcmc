@@ -20,7 +20,7 @@ def log_p(x, a=3.0, b=7.0):
 
 x = 5.0
 lp = log_p(x)
-chain = np.empty(2e4)
+chain = np.empty(int(2e4))
 for step in range(len(chain)):
     x_prime = x + np.random.randn()
     lp_prime = log_p(x_prime)

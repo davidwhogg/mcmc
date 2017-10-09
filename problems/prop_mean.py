@@ -16,7 +16,7 @@ np.random.seed(42)
 def run_broken_mcmc(log_p, x, prop_sigma=1.0, prop_mean=0.5, nsteps=2e3,
                     broken=True):
     lp = log_p(x)
-    chain = np.empty((nsteps, len(x)))
+    chain = np.empty((int(nsteps), len(x)))
     for step in range(len(chain)):
         x_prime = np.array(x)
         ind = np.random.randint(len(x))

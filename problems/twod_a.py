@@ -20,7 +20,7 @@ def log_p_gauss(x):
 
 def run_mcmc(log_p, x, prop_sigma=1.0, nsteps=2e4, thin=1):
     lp = log_p(x)
-    chain = np.empty((nsteps // thin, len(x)))
+    chain = np.empty((int(nsteps) // int(thin), len(x)))
     acc = 0
     for step in range(len(chain)):
         for i in range(thin):

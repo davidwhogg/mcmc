@@ -18,7 +18,7 @@ def log_p(x, mean=2.0, variance=2.0):
 
 x = 0.0
 lp = log_p(x)
-chain = np.empty(2e4)
+chain = np.empty(int(2e4))
 for step in range(len(chain)):
     x_prime = x + np.random.randn()
     lp_prime = log_p(x_prime)

@@ -18,7 +18,7 @@ def log_p(x, mean=2.0, variance=2.0):
 
 x = 0.0
 lp = log_p(x)
-chain = np.empty(1e6)
+chain = np.empty(int(1e6))
 for step in range(len(chain)):
     x_prime = x + np.random.randn()
     lp_prime = log_p(x_prime)
@@ -41,8 +41,8 @@ if __name__ == "__main__":
     ax1.set_xlabel("thousands of steps")
 
     for i in range(4):
-        a = i*len(chain)/4
-        b = (i+1)*len(chain)/4
+        a = int(i*len(chain)/4)
+        b = int((i+1)*len(chain)/4)
         print(i+1, np.mean(chain[a:b]), np.var(chain[a:b]))
         ax2.hist(chain[a:b], 50, histtype="step")
     ax2.set_xlim(2-5.5, 2+5.5)
