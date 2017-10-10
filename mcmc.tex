@@ -4,19 +4,14 @@
 
 % to-do
 % -----
+% - deal with \MCMC\ macro in footnotes.
 % - Deal with all mentions of ``DFM'' or ``HOGG''
 % - Go through github issues, if any.
 % - Need to mention case where there is an MC integral INSIDE the likelihood function
 % - Need to mention testing the likelihood function, by, say, 1-d scans back and forth.
-% - Send to friendlies for comments
-%   - Gelman
-%   - Goodman
-%   - Lang
-%   - Rix
-%   - Bovy
-%   - Brewer
 % - Kill all issues in this list, above, and then:
 %   - Post on arXiv
+%   - Submit to ApJ special issue
 %   - Blog about it
 
 % style notes
@@ -58,14 +53,14 @@ Copyright 2013, 2014, 2015, 2016, 2017 the authors (OMG this took us a long time
             License}.}}%
 
 \author[0000-0003-2866-9403]{David W. Hogg}
-\affil{Center for Computational Astrophysics, Flatiron Institute, 162 Fifth Ave, New York, NY 10010, USA\hspace*{-1cm}}
+\affil{Center for Computational Astrophysics, Flatiron Institute, 162 Fifth Ave, New York, NY 10010, USA}
 \affil{Center for Cosmology and Particle Physics, Department of Physics, New York University, 726 Broadway, New York, NY 10003, USA}
 \affil{Center for Data Science, New York University, 60 Fifth Ave, New York, NY 10011, USA}
 \affil{Max-Planck-Institut f\"ur Astronomie, K\"onigstuhl 17, D-69117 Heidelberg}
 
 \author[0000-0002-9328-5652]{Dan Foreman-Mackey}
 \affil{Center for Computational Astrophysics, Flatiron Institute, 162 Fifth Ave, New York, NY 10010, USA\hspace*{-1cm}}
-\affil{Department~of~Astronomy, University~of~Washington}
+\affil{Department~of~Astronomy, University~of~Washington, Box 351580, Seattle, WA 98195, USA}
 
 \begin{abstract}
 Markov Chain Monte Carlo (\MCMC) methods for sampling probability
@@ -107,31 +102,17 @@ p(\pars\given\data) &=& \frac{1}{Z}\,p(\data\given\pars)\,p(\pars)
 In these contexts, the constant $Z$, sometimes written as
 $p(\data)$, is known by the names ``evidence'', ``marginal likelihood'',
 ``Bayes integral'', and ``prior predictive probability'', and is usually
-\emph{extremely hard to calculate}.\note{Some would call
-  the factor $Z$ in \equationname~(\ref{eq:bayes}) something like
-  ``$p(\data)$'' or ``the fully marginalized likelihood'' or the
-  probability of the data.
-  Of course it is only the probability of the data within the model
-  space under consideration!
-  We (intend to) discuss this object and these issues elsewhere
-  (in various things in preparation).
-  The factor $Z$ is often hugely difficult to compute, because the
+\emph{extremely hard to calculate}.\note{%
+  The factor $Z$ is often difficult to compute, because the
   likelihood (or the prior) can have extremely complex structure,
   with multiple arbitrarily compact modes, arbitrarily positioned
   in the (presumably high dimensional) parameter space $\pars$.
   Elsewhere, we discuss the computation of this object (\citealt{fengji}),
   and so have many others before us.
-  Perhaps more importantly, we also have views about why you probably never really
-  \emph{want} to compute it.
-  These views relate to the fact that the value of this integral
-  very rarely delivers the answer to a question you care about (see future \documentname s in this series).
-  These philosophical matters and the computational issues are both
-  outside the scope of this \documentname,
-  but suffice it to say:
-  If the computation of $Z$ is in your travel plans, you will need to
-  think about implementing some non-trivial integrating or sampling
-  technology; we will give some brief description of options in
-  \sectionname~\ref{sec:methods}.}
+  We also have (unpublished) philosophical arguments against calculating
+  this $Z$ if you can possibly avoid it, but these are
+  outside the scope of this \documentname.
+  The point is that \MCMC\ methods will not require that you know $Z$.}
 That is, you often know the function $p(\pars\given\data)$ up to a
 constant factor; you can compute ratios of the pdf at pairs of points,
 but not the precise value at any individual point.
@@ -145,15 +126,9 @@ the real situations in which scientists find themselves.
 
 Say you are in this situation:
 You have a huge blob of data $\data$ (think of this as a vector or
-list or heterogeneous collection of observations\note{In general in
-  this \documentname\ we will treat any variable as being capable of
-  containing not just a value but some huge arbitrarily structured set
-  of values in matrix, vector, or an ordered list of any set of such objects,
-  or perhaps some even more complex form.}).
+list or heterogeneous-but-ordered collection of observations).
 You also have a model sophisticated enough---a probabilistic,
-generative model, if you will\note{For more discussion
-  of our definition of a \emph{model}, see [some other as-yet-unwritten \documentname] in
-  this series.
+generative model, if you will\note{%
   Briefly, a ``model'' for us is a likelihood function (a pdf for the data given
   model parameters), and a prior pdf over the parameters.
   Because, under this definition, the model can always generate (by
@@ -162,12 +137,9 @@ generative model, if you will\note{For more discussion
   are a true subjective Bayesian) a probability distribution (pdf)
   over all possible data.%
 }---that, given a
-setting of a huge blob of parameters\note{Again, the parameter
-  blob $\pars$ should also be thought of as an immense, arbitrarily
-  structured set or list of parameters, possibly even with no fixed
-  dimension!} $\pars$, you can compute a pdf for data (or likelihood\note{We will
-  bash the terminology ``likelihood'' in another, as-yet-unwritten, \documentname\ in this
-  series.  Techically, this thing $p(\data\given\pars)$
+setting of a huge blob of parameters (again, think of this as a vector or list or heterogeneous-but-ordered collection of values) $\pars$,
+  you can compute a pdf for data (or likelihood\note{%
+  Techically, $p(\data\given\pars)$
   is only properly a likelihood function when
   we are thinking of the data $\data$ as being fixed, and the parameters $\pars$
   as being permitted
@@ -196,7 +168,7 @@ Because \MCMC\ provably (under assumptions\note{The assumptions include
   being sampled has some connectedness properties:  There aren't distant islands of finite density
   separated by regions of zero (or exceedingly low) density.}, some of which will be discussed) samples the full
 posterior pdf in all of parameter space, many investigators use \MCMC\
-because it will sample \emph{all} of the parameter space
+because (they believe) it will sample \emph{all} of the parameter space
 ($\pars$-space).
 That is, they are using \MCMC\ because they want to
 \emph{search the parameter space for good models}.
@@ -218,7 +190,7 @@ This is another bad reason!
 
 Both of these reasons for using \MCMC---that it is a parameter-space
 search algorithm, and that it is a simple-to-code effective
-optimizer---are \emph{not good reasons}.  \MCMC\ is first and foremost a
+optimizer---are \emph{not good reasons}.  \MCMC\ is a
 \emph{sampler}.  If you are trying to find the optimum of the
 likelihood or the posterior pdf, you should use an \emph{optimizer},
 not a sampler.  If you want to make sure you search all of parameter
@@ -252,7 +224,7 @@ which appear after the main text.
 \section{What is a sampling?}\label{sec:sampling}
 
 Heuristically, a sampling $\setof{\pars_k}_{k=1}^K$ from some pdf $p(\pars)$
-is a set of $K$ values $\pars_k$ that are independent draws from the pdf.
+is a set of $K$ values $\pars_k$ that are draws from the pdf.
 Heuristically, if an enormous (large $K$) sampling could be displayed
 in a finely binned $\pars$-space histogram, the histogram would look---up
 to a total normalization---just like the original function $p(\pars)$.
@@ -268,7 +240,7 @@ any single-valued (scalar) function that is non-negative everywhere
 \quad ,
 \end{eqnarray}
 where, implicitly, the integral is over the full domain of $\pars$.
-Importantly, although $p(\pars)$ is single-valued, $\pars$ can be a scalar or
+Importantly, although $p(\pars)$ is single-valued, $\pars$ can be
 a multi-element vector or list or blob; it can be arbitrarily large
 and complicated.
 In data-analysis contexts, $\pars$ will often be the full blob of free
@@ -278,7 +250,7 @@ has as many dimensions as there are elements or entries or components of $\pars$
 Also, if there are elements or entries or components of $\pars$ that are discrete
 (that is, take on only integer values or equivalent),
 then along those dimensions the integral becomes a discrete sum.
-This latter is a detail to which we return below.
+This latter is a detail to which we return below. HOGG DO WE?
 
 Given this pdf $p(\pars)$, we can define \emph{expectation values}
 $E_{p(\pars)}[\pars]$
@@ -326,6 +298,8 @@ be non-negative everywhere and have \emph{finite} integral $Z$
 Z &=& \int f(\pars)\,\dd \pars \label{eq:proper}
 \quad .
 \end{eqnarray}
+And recall that we don't actually know the value of $Z$, but we do know
+that it is finite.
 
 When the sampling $\setof{\pars_k}_{k=1}^K$ is of one of these badly
 normalized functions $f(\pars)$---as it usually will be---the
