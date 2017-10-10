@@ -32,10 +32,11 @@
 % - Always $\pars$ never $x$; $K$ samples $\pars_k$ and $\pars$ space is $D$-dimensional
 % - Should we use the word ``walker'' everywhere and do we?
 
-\documentclass[12pt,pdftex]{article}
-
-\newcommand{\chaptertitle}{Using Markov Chain Monte Carlo}
+\documentclass[modern]{aastex61}
 \include{styles/dar}
+
+\shorttitle{using markov chain monte carlo}
+\shortauthors{hogg \& foreman-mackey}
 
 \newcommand{\MCMC}{\acronym{MCMC}}
 \newcommand{\MH}{\acronym{M--H}}
@@ -47,23 +48,23 @@
 
 \begin{document}\sloppy\sloppypar\raggedbottom\frenchspacing\thispagestyle{plain}%
 %
-\section*{Data analysis recipes:\\ \chaptertitle\note{%
-\label{note:first}%
+\title{Data analysis recipes:\\
+       Using Markov Chain Monte Carlo%
+\note{\label{note:first}%
 Copyright 2013, 2014, 2015, 2016, 2017 the authors (OMG this took us a long time).
         This work is licensed under a
         \href{http://creativecommons.org/licenses/by-nc-nd/3.0/deed.en\_US}{%
             Creative Commons Attribution-NonCommercial-NoDerivs 3.0 Unported
             License}.}}%
-\noindent
-\textbf{David~W.~Hogg}\\
-\affil{Flatiron Institute, a division of the Simons~Foundation}\\
-\affil{Center~for~Cosmology~and~Particle~Physics, Department~of~Physics,
-       New~York~University}\\
-\affil{Center~for~Data~Science,
-       New~York~University}\\
-\affil{Max-Planck-Institut~f\"ur~Astronomie, Heidelberg}\\[1ex]
-\textbf{Daniel~Foreman-Mackey}\\
-\affil{Flatiron Institute, a division of the Simons~Foundation}\\
+
+\author[0000-0003-2866-9403]{David W. Hogg}
+\affil{Center for Computational Astrophysics, Flatiron Institute, 162 Fifth Ave, New York, NY 10010, USA\hspace*{-1cm}}
+\affil{Center for Cosmology and Particle Physics, Department of Physics, New York University, 726 Broadway, New York, NY 10003, USA}
+\affil{Center for Data Science, New York University, 60 Fifth Ave, New York, NY 10011, USA}
+\affil{Max-Planck-Institut f\"ur Astronomie, K\"onigstuhl 17, D-69117 Heidelberg}
+
+\author[0000-0002-9328-5652]{Dan Foreman-Mackey}
+\affil{Center for Computational Astrophysics, Flatiron Institute, 162 Fifth Ave, New York, NY 10010, USA\hspace*{-1cm}}
 \affil{Department~of~Astronomy, University~of~Washington}
 
 \begin{abstract}
@@ -176,11 +177,8 @@ That is, you can run \MCMC\
 (for a very long time---see \sectionname~\ref{sec:convergence} for how long)
 and you will be left with a set of $K$ parameter-blob settings $\pars_k$ such that the
 full set $\setof{\pars_k}_{k=1}^K$ constitutes a fair sampling from
-the posterior pdf $p(\pars\given\data$).
-% ************* BJB
-% Notions of "sampling" and "Monte Carlo" are interesting. You might like to
-% refer the interested reader to the paper "Monte Carlo is Fundamentally
-% Unsound" by Tony O'Hagan.
+the posterior pdf $p(\pars\given\data)$. We will give some sense of what ``fair'' means
+in this context, below.
 
 All that said, and adhering to the traditions of the \project{Data
   Analysis Recipes} project\note{Every \documentname\ in the \project{Data
