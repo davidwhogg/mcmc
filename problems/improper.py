@@ -13,7 +13,7 @@ np.random.seed(42)
 
 
 x = 0.0
-chain = np.empty(1e6)
+chain = np.empty(int(1e6))
 for step in range(len(chain)):
     x += np.random.randn()
     chain[step] = x
