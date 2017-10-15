@@ -1454,7 +1454,8 @@ to write in the title, the abstract, the tables, figures, and results
 section.  Given a \MCMC\ sampling of the posterior pdf, what do we
 report as our \emph{results}?
 
-One thing we can keep in mind to guide us in this is what we said above (\sectionname~\ref{sec:sampling}),
+One thing we can keep in mind to guide us in this is what we said above
+  (in \sectionname~\ref{sec:sampling}),
   which is that samplings are good for doing \emph{integrals}.
 We should endeavor to use as our ``results'' outputs from the \MCMC\
   that are based on integrals computed with the sampling.
@@ -1488,7 +1489,7 @@ The mean-of-sampling value $\mean{q}$ is just
 \quad ,
 \end{eqnarray}
   and the median-of-sampling value is just the $[K/2]$th value of $g(\pars_k)$
-  when the $g(\pars_k)$ have been ordered (sorted).
+  when the $g(\pars_k)$ have been ordered (sorted) from lowest to highest.
 These are both produced by integrals;
   the first is the value returned by the expectation integral estimate,
   the second is the value past which half of the integrated pdf lies.
@@ -1542,7 +1543,7 @@ The very conservative scientist would also show a histogram
   with the relevant quantiles (2.5, 16, 50, 84, and 97.5~percent) indicated.
 
 As we mentioned above, scientists often like to report the ``best sample'';
-  that is, the sample with the highest posterior pdf value.
+  that is, the sample with the highest posterior pdf or $f(\pars)$ value.
 This is not usually a good idea.
 For one, \MCMC\ is a sampling algorithm, not an optimization algorithm;
   there are no guarantees that it will find the optimum of the posterior pdf in reasonable time.%
@@ -1634,7 +1635,7 @@ need many samples; a dozen suffices to give you a reasonable posterior
 pdf mean and variance.\note{This point is made well by \citet{mackay}.}
 If you care about $K$ parameters or dimensions of the parameter space,
 in general the need for samples grows exponentially (or perhaps even
-factorially!)\ with the number of dimensions.
+factorially!) with the number of dimensions.
 So if you have a ten-dimensional space, expect to be publishing your
 samples in an electronic table on the web!
 
@@ -1662,7 +1663,6 @@ There are several figures that are useful and should be made every time you
 run MCMC and we'll describe a few here.
 
 \begin{itemize}
-
 \item \emph{Trace plots}~---~The first set of plots are the ``trace
 plots''~--~the parameter values as a function of step number.
 These plots can be used to select burn-in lengths, indicate problems with the
