@@ -254,19 +254,19 @@ This latter is a detail to which we return below. HOGG DO WE?
 
 Given this pdf $p(\pars)$, we can define \emph{expectation values}
 $E_{p(\pars)}[\pars]$
-for $\pars$ or for any quantity that can be expressed as a function $q(\pars)$
+for $\pars$ or for any quantity that can be expressed as a function $g(\pars)$
 of $\pars$:
 \begin{eqnarray}
 E_{p(\pars)}[\pars] &\equiv& \int \pars\,p(\pars)\,\dd \pars
 \\
-E_{p(\pars)}[q(\pars)] &\equiv& \int q(\pars)\,p(\pars)\,\dd \pars
+E_{p(\pars)}[g(\pars)] &\equiv& \int g(\pars)\,p(\pars)\,\dd \pars
 \quad ,
 \end{eqnarray}
 where again the integrals are implicitly definite integrals over the
 entire domain
 of $\pars$ (all the parts of $\pars$ space in which $p(\pars)$ is finite) and the
 integrals are multi-dimensional if $\pars$ is multi-dimensional.
-These expectation values are the mean values of $\pars$ and $q(\pars)$ under
+These expectation values are the mean values of $\pars$ and $g(\pars)$ under
 the pdf.  A good sampling---and really this is the definition of a good
 sampling---makes the sampling approximation to these integrals
 accurate.
@@ -275,7 +275,7 @@ with sums over samples $\pars_k$:
 \begin{eqnarray}
 E_{p(\pars)}[\pars] &\approx& \frac{1}{K}\,\sum_{k=1}^K \pars_k
 \\
-E_{p(\pars)}[q(\pars)] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
+E_{p(\pars)}[g(\pars)] &\approx& \frac{1}{K}\,\sum_{k=1}^K g(\pars_k)
 \quad .
 \end{eqnarray}
 That is, a sampling is good when any expectation value of interest is
@@ -310,9 +310,9 @@ When we run \MCMC\ sampling on $f(\pars)$, a function that differs from a
 pdf $p(\pars)$ by some unknown normalization constant, then the sampling
 permits computation of the following kinds of quantities:
 \begin{eqnarray}
-E_{p(\pars)}[q(\pars)] &\equiv& \frac{\int q(\pars)\,f(\pars)\,\dd \pars}{\int f(\pars)\,\dd \pars}
+E_{p(\pars)}[g(\pars)] &\equiv& \frac{\int g(\pars)\,f(\pars)\,\dd \pars}{\int f(\pars)\,\dd \pars}
 \\
-E_{p(\pars)}[q(\pars)] &\approx& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
+E_{p(\pars)}[g(\pars)] &\approx& \frac{1}{K}\,\sum_{k=1}^K g(\pars_k)
 \label{eq:expectationvalue}
 \quad .
 \end{eqnarray}
@@ -916,21 +916,21 @@ More precisely, the autocorrelation time is the factor by which you
 have to reduce the number of samples when you compute the variance on
 a sampling-based expectation value estimate.
 
-That is, if the expectation value $E[q]$ is computed by the sampling
+That is, if the expectation value $E[g]$ is computed by the sampling
 approximation given in \equationname~(\ref{eq:expectationvalue}),
 there is an uncertainty on that expectation given by
 \begin{eqnarray}
-  \Var[E_{p(\pars)}[q(\pars)]] &=& \frac{\tau_q}{K}\,\Var_{p(\pars)}[q(\pars)]
+  \Var[E_{p(\pars)}[g(\pars)]] &=& \frac{\tau_q}{K}\,\Var_{p(\pars)}[g(\pars)]
   \\
-  &\approx& \frac{\tau_q}{K^2}\,\sum_{k=1}^K \left(q(\pars_k) -
-    E_{p(\pars)}[q(\pars)]\right)^2
+  &\approx& \frac{\tau_q}{K^2}\,\sum_{k=1}^K \left(g(\pars_k) -
+    E_{p(\pars)}[g(\pars)]\right)^2
   \quad,
 \label{eq:tauvar}
 \end{eqnarray}
 where we are being a bit loose with terminology because this is the
-variance not on $E_{p(\pars)}[q(\pars)]$ but on our sampling-based
+variance not on $E_{p(\pars)}[g(\pars)]$ but on our sampling-based
 \emph{estimator} for
-$E_{p(\pars)}[q(\pars)]$, and the $E_{p(\pars)}[q(\pars)]$ inside the sum is
+$E_{p(\pars)}[g(\pars)]$, and the $E_{p(\pars)}[g(\pars)]$ inside the sum is
 that estimator too.
 It is slightly off-topic here, but related to this, if you have a long
 chain of length $K$ and with autocorrelation time $\tau$ and you thin
@@ -940,10 +940,10 @@ had used all $K$ samples.
 
 It is also worth noting that there is not just one autocorrelation function or
 autocorrelation time for an \MCMC\ chain.
-Instead, there is an autocorrelation time $\tau_f$ for every function
-$f(\pars)$ and these will, in general, be different.
+Instead, there is an autocorrelation time $\tau_g$ for every function
+$g(\pars)$ and these will, in general, be different.
 Therefore, the autocorrelation time used in \equationname~(\ref{eq:tauvar}) is
-the time computed on the chain of $q(\pars)$ values instead of the
+the time computed on the chain of $g(\pars)$ values instead of the
 autocorrelation time for $\pars$.
 
 A sampler with a smaller autocorrelation time is just better; you have
@@ -1450,20 +1450,20 @@ The only simple integral-based options are the posterior mean
 For example,
   imagine that by \MCMC\ you have generated
   $K$ samples $\pars_k$ of a parameter vector $\pars$.
-Now you have a scalar function $q(\pars)$ which takes the parameter vector
+Now you have a scalar function $g(\pars)$ which takes the parameter vector
   and returns a scalar value%
-  \note{For the median-of-sampling value, $q(\pars)$ needs to return a scalar,
-  but technically, for the mean-of-sampling, $q(\pars)$ can be a vector or something high-dimensional.}
+  \note{For the median-of-sampling value, $g(\pars)$ needs to return a scalar,
+  but technically, for the mean-of-sampling, $g(\pars)$ can be a vector or something high-dimensional.}
   which could be as simple as a single component of the parameter vector
   (one parameter from the list),
   or something more complex.
 The mean-of-sampling value $\mean{q}$ is just
 \begin{eqnarray}
-\mean{q} &\leftarrow& \frac{1}{K}\,\sum_{k=1}^K q(\pars_k)
+\mean{q} &\leftarrow& \frac{1}{K}\,\sum_{k=1}^K g(\pars_k)
 \quad ,
 \end{eqnarray}
-  and the median-of-sampling value is just the $[K/2]$th value of $q(\pars_k)$
-  when the $q(\pars_k)$ have been ordered (sorted).
+  and the median-of-sampling value is just the $[K/2]$th value of $g(\pars_k)$
+  when the $g(\pars_k)$ have been ordered (sorted).
 These are both produced by integrals;
   the first is the value returned by the expectation integral estimate,
   the second is the value past which half of the integrated pdf lies.
@@ -1488,10 +1488,10 @@ Again, these limits can be estimated%
   like estimate an integral or a quantile,
   is just an old-school frequentist estimator.
   A frequentist estimator of a Bayesian quantity, to be sure, but a frequentist estimator nonetheless.}
-  by ordering the $q(\pars_k)$ values,
+  by ordering the $g(\pars_k)$ values,
   and finding the $\pars$ values such that some fraction (0.68 or 0.95)
   of the samples lie between them.
-Again, to form these limits, $q(\pars)$ must be a scalar function (so sorting is well defined).
+Again, to form these limits, $g(\pars)$ must be a scalar function (so sorting is well defined).
 Because they are so afraid of being confused with frequentists,
 Bayesians often call these regions ``credible'' rather than
 ``confidence''\note{We don't like this ``credible'' terminology,
