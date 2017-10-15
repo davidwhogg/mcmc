@@ -250,7 +250,7 @@ has as many dimensions as there are elements or entries or components of $\pars$
 Also, if there are elements or entries or components of $\pars$ that are discrete
 (that is, take on only integer values or equivalent),
 then along those dimensions the integral becomes a discrete sum.
-This latter is a detail to which we return below. HOGG DO WE?
+This latter is a detail to which we return below. \textbf{HOGG DO WE?}
 
 Given this pdf $p(\pars)$, we can define \emph{expectation values}
 $E_{p(\pars)}[\pars]$
@@ -932,9 +932,9 @@ That is, if the expectation value $E[g]$ is computed by the sampling
 approximation given in \equationname~(\ref{eq:expectationvalue}),
 there is an uncertainty on that expectation given by
 \begin{eqnarray}
-  \Var[E_{p(\pars)}[g(\pars)]] &=& \frac{\tau_q}{K}\,\Var_{p(\pars)}[g(\pars)]
+  \Var[E_{p(\pars)}[g(\pars)]] &=& \frac{\tau_g}{K}\,\Var_{p(\pars)}[g(\pars)]
   \\
-  &\approx& \frac{\tau_q}{K^2}\,\sum_{k=1}^K \left(g(\pars_k) -
+  &\approx& \frac{\tau_g}{K^2}\,\sum_{k=1}^K \left(g(\pars_k) -
     E_{p(\pars)}[g(\pars)]\right)^2
   \quad,
 \label{eq:tauvar}
@@ -987,8 +987,18 @@ on which we compare performance.\note{%
 
 Of course, the autocorrelation-time definition
 (\ref{eq:autocorrelationtime}) does not by itself provide an
-\emph{estimator} for the time.
-We might first try the na\"ive estimator
+\emph{estimator} for the time. Estimating the auto-correlation time is
+notoriously difficult: It is a two-point statistic, and two-point statistics
+are much harder to estimate than one-point statistics.\note{See: All of cosmology!}
+If you are not a hard-core user of MCMC, and if all you want is heuristic indicators
+of convergence, then what you should take from this section is that the auto-correlation
+time is involved in variance estimates through \equationname~(\ref{eq:tauvar}) but that
+it is hard to estimate.
+
+If you want to think about autocorrelation estimation:\note{One of us (DFM) has written
+  much more about autocorrelation estimation in the \project{emcee} documentation
+  at \url{http://emcee.readthedocs.io/en/develop/tutorials/autocorr/}.}
+You might first try the na\"ive estimator
 \begin{eqnarray}\label{eq:tauestnaive}
 \tau &\stackrel{?}{=}& 1 + 2\,\sum_{\Delta = 1}^{N} C(\Delta)
 \end{eqnarray}
@@ -1010,7 +1020,10 @@ $\tau \le M \ll N$
 In practice, $M$ can be chosen iteratively to satisfy these constraints but it
 will only be as reliable as the chain itself.
 An estimate of $\tau$ using \equationname~(\ref{eq:tauest}) should only be
-trusted if the chain is many times ($\sim 10$) longer than $\tau$.
+trusted if the chain is many times ($\sim 100$) longer than $\tau$.\footnote{This
+  point is also emphasized at the aforementioned tutorial
+  \url{http://emcee.readthedocs.io/en/develop/tutorials/autocorr/}, where
+  a number like 50 is recommended.}
 
 One simple and sensible test of convergence is the Gelman--Rubin
 diagnostic \note{\citet{gelmanrubin}.}, which compares the variance
@@ -2075,23 +2088,6 @@ technology in the empirical sciences.
 All we are going to do here is give a cursory mention to some methods
 we know about, with some keywords that can be used to search more
 deeply.
-
-% *********** BJB talking:
-% I suggest partitioning the discussion of different methods into the following
-% two categories:
-%
-%  i) Methods for getting around the target distribution
-% ii) Methods that change the target distribution to something
-% other than the posterior pdf, to help the sampling somehow
-%
-% i) Would include things like M-H, the stretch move,
-% Hamiltonian, slice sampling (maybe skip the latter)
-% ii) would include things like annealing and Nested Sampling
-
-%%%% Hogg talking:
-% DFM: In this section, I think we should just summarize the other
-% methods, not describe them in detail.  Then we can cite the relevant
-% papers for the enthusiastic.
 
 \paragraph{Ensembles:}
 As we discussed (\sectionname~\ref{sec:tuning}), one of the critical challenges in the use of
