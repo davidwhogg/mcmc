@@ -222,7 +222,7 @@ We will leave parenthetical and philosophical matters to the footnotes,
 which appear after the main text.
 
 \section{What is a sampling?}\label{sec:sampling}
-
+\nopagebreak
 Heuristically, a sampling $\setof{\pars_k}_{k=1}^K$ from some pdf $p(\pars)$
 is a set of $K$ values $\pars_k$ that are draws from the pdf.
 Heuristically, if an enormous (large $K$) sampling could be displayed
@@ -404,8 +404,9 @@ Write a computer program that uses some standard package (such as
 \project{numpy}\note{There isn't a full citation for this package but there is \cite{numpy}.})
 to generate $K$ random numbers
 $x$ from a uniform distribution in the interval $0<x<1$.
-Now use those $K$ numbers to compute a the sampling estimate of the
-mean, variance, skewness, and kurtosis (four estimates)
+Now use those $K$ numbers to compute a sampling estimate of the
+mean, variance, skewness, and kurtosis (four estimates; look up
+definitions as needed).
 Make four plot of these four estimates as a function of $1/K$ or
 perhaps $\log_2 K$, for $K=4^n$ for $n=1$ up to $n=10$ (that is,
 $K=4$, $K=16$, and so on up to $K=1048576$).
@@ -414,7 +415,7 @@ What can you conclude?
 \end{problem}
 
 \section{Metropolis--Hastings MCMC}\label{sec:MH}
-
+\nopagebreak
 The simplest algorithm for \MCMC\ is the Metropolis--Hastings algorithm (\MH\ \MCMC).\note{%
   There are many claims that this algorithm is incorrectly named,
   with claims that it should be credited to Enrico Fermi or Stan Ulam.
@@ -439,7 +440,7 @@ The first is a handle to the function $f(\pars)$ that is the function to be samp
 In data-analysis contexts,
   this function would be the prior $p(\pars)$ times the likelihood $p(\data\given\pars)$
   evaluated at the observed data $\data$.
-The second input is a proposal pdf $q(\pars'\given\pars)$ that can be sampled,
+The second input is a handle to a proposal pdf function $q(\pars'\given\pars)$ that can deliver samples,
   such that the algorithm can draw a new position $\pars'$ in the parameter space
   given an ``old'' position $\pars$.
 This second function must meet a symmetry requirement (detailed
@@ -498,11 +499,16 @@ We will discuss the choice and tuning of this proposal distribution
   below (\sectionname~\ref{sec:tuning} and \sectionname~\ref{sec:trouble}).
 
 Importantly---for the algorithm given above to work correctly---the
-  proposal pdf must satisfy a ``detailed balance'' condition; it
-  must have the property that
+  proposal pdf must satisfy a ``detailed-balance'' condition\footnote{This
+  detailed-balance condition in \equationname~(\ref{eq:detailed-balance})
+  requires implicitly that the function $q(\pars'\given\pars)$ is also
+  properly normalized. That is, that it integrates (over $\pars'$) to unity
+  for any setting of $\pars$. That is an extremely technical point, but stands
+  as a reminder that you don't want to mess with detailed balance casually!};
+  it must have the property that
 \begin{eqnarray}
 q(\pars'\given\pars) &=& q(\pars\given\pars')
-\quad ;
+\label{eq:detailed-balance}\quad ;
 \end{eqnarray}
 that is, it must be just as easy to go one way in the parameter space
   as the other.
@@ -519,7 +525,7 @@ It is another thing to correctly write down $q(x'\given x)$.
   and you are subject to a set of new possible bugs for your code.
 If the detailed balance condition frightens you (as it frightens us),
   then just stick with pdfs that are symmetric in $\pars'$ and $\pars$,
-  like the Gaussian, or a centered uniform distribution and forget about
+  like the Gaussian, or a centered uniform distribution, and forget about
   it.
 
 In what follows, when we discuss tuning of the proposal pdf, we will
@@ -608,7 +614,7 @@ Sample in a single parameter $x$ and give the sampler as its density
 function $p(x)$ a Gaussian density with mean 2 and variance 2.
 (Note that variance is the \emph{square} of the standard deviation.)
 Give the sampler a proposal distribution $q(x'\given x)$ a Gaussian
-pdf with mean zero and variance 1.
+pdf for $x'$ with mean $x$ and variance 1.
 Initialize the sampler with $x=0$ and run the sampler for more than $10^4$ steps.
 Plot the results as a histogram, with the true density over-plotted sensibly.
 The resulting  plot should look something like \figurename~\ref{fig:MH}.
@@ -653,7 +659,7 @@ V &=& \left[\begin{array}{cc} 2.0 & 1.2 \\ 1.2 & 2.0 \end{array}\right]
 \emph{(b)} The second density function is a rectangular top-hat function that
 is uniform on the joint constraint $3<x<7$ and $1<y<9$ and zero everywhere else.
 For the proposal distribution $q(x', y'\given x, y)$ a two-dimensional Gaussian
-density with zero mean and variance tensor set to the two-dimensional
+density with mean at $[x, y]$ and variance tensor set to the two-dimensional
 identity matrix.
 Plot the two one-dimensional histograms and also a two-dimensional scatter
 plot for each sampling.
@@ -680,17 +686,17 @@ $10^{-1}$ or $10^2$)?
 
 \begin{problem}\label{prob:prop-mean}
 Why, in all the previous problems, did we give the proposal
-distributions $q(x'\given x)$ zero mean?
+distributions $q(x'\given x)$ a mean of $x$?
 What would be bad if we hadn't done that?
 Re-do \problemname~\ref{prob:twod}a with a proposal $q(x'\given x)$ with a
-non-zero mean and see what happens.
-Bonus points: Modify the acceptance--rejection criterion to deal with
+stupidly shifted mean of $x + 2$ and see what happens.
+\emph{Bonus points:} Modify the acceptance--rejection criterion to deal with
 the messed-up $q(x'\given x)$ and show that everything works once
 again.
 \end{problem}
 
 \section{Likelihoods and priors}\label{sec:likelihood}
-
+\nopagebreak
 \MCMC\ is used to obtain samples $\pars_k$ from a pdf $p(\pars)$,
   given a badly normalized all-positive function $f(\pars)$
   that is different from the pdf by an unknown factor $Z$.
@@ -712,7 +718,7 @@ sum of a log prior pdf \code{ln_prior()} and a log likelihood function
 If you are using ``flat'' (improper) priors, the \code{ln_prior()}
 function can just return a zero no matter what the parameters.
 If it is flat with bounds (that is, proper), the \code{ln_prior()}
-should check the bounds and return \code{-Inf} values if the parameter
+should check the bounds and return \code{-Inf} values when the parameter
 vector is out of bounds.
 The pseudo-code for the \code{ln_f()} function should look something
 like this:
@@ -729,7 +735,7 @@ prior pdf is easier to compute than the likelihood.
 If you find yourself in the opposite regime, adjust accordingly.
 Of course the above pseudo-code presumes that when you perform the
 accept--reject step of the \MCMC\ method, the programming language handles
-properly the \code{-Inf} values.\footnote{If you are working in a language
+properly the \code{-Inf} values.\note{If you are working in a language
 that doesn't have an \code{Inf} or doesn't evaluate comparisons correctly
 when the \code{Inf} appears, you might have to write some case code, and
 have your \code{ln_f} function return a value \emph{and} some kind of flag
@@ -808,7 +814,7 @@ target density.}
 \end{figure}
 
 \section{Convergence}\label{sec:convergence}
-
+\nopagebreak
 A key question for an \MCMC\ operator---\emph{the} key question in some
 sense---is \emph{how long to run} to be sure of having reliable
 results.
@@ -1091,7 +1097,7 @@ as a dashed line and its value is listed in the title.}
 \end{figure}
 
 \section{Tuning}\label{sec:tuning}
-
+\nopagebreak
 Most \MCMC\ methods make use of something like a ``proposal distribution''
   which determines what kinds of steps the walker can take
   as it random-walks through the parameter space.
@@ -1272,7 +1278,7 @@ Compare to what \project{emcee} gets.
 \end{problem}
 
 \section{Initialization and burn-in}\label{sec:initialization}
-
+\nopagebreak
 Just as most (though not all) \MCMC\ methods require a choice of
 proposal distribution, most (though not all) require a choice about
 initialization:
@@ -1404,7 +1410,7 @@ with unknown derivatives.
 \end{problem}
 
 \section{Results, error bars, and figures}\label{sec:results}
-
+\nopagebreak
 For a committed probabilistic scientist---frequentist or
 Bayesian---there is no ``answer'', there are only probability density
 functions (pdfs).  Any time in a paper or in an email or in a conversation
@@ -1686,7 +1692,7 @@ Comment on the results.
 \end{problem}
 
 \section{Troubleshooting and advice}\label{sec:trouble}
-
+\nopagebreak
 When issues arise with \MCMC\ sampling,
   they are sometimes difficult to diagnose:
 Is it the \MCMC\ code, the priors, the likelihood function,
@@ -2015,7 +2021,7 @@ about what changes to make or what new directions to explore.
 %% sample a posterior pdf!
 
 \section{More sophisticated sampling methods}\label{sec:methods}
-
+\nopagebreak
 As we have discussed above (\sectionname~\ref{sec:MH}),
 \MCMC\ methods are proven to be correct ``in the limit''; that is, when
 an infinite number of samples have been taken.
@@ -2299,7 +2305,7 @@ These methods are best built and operated under the supervision of a
 trained professional.
 
 \clearpage
-\paragraph{Acknowledgements:}
+\acknowledgements
 We would like to thank
           Alex Barnett (Flatiron),
           Jo Bovy (Toronto),
