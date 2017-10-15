@@ -1287,13 +1287,13 @@ be, in principle?
 The Rosenbrock density used as a demonstration case for many samplers (see, for example, \citealt{gw}).
 Test your sampler on this density:
 \begin{eqnarray}
-p(\theta_1,\,\theta_2) &\propto&
+f(\theta_1,\,\theta_2) &=&
     \exp\left(-\frac{100\,(\theta_2-{\theta_1}^2)^2+(1-\theta_1)^2}{20}\right)
 \quad.
 \end{eqnarray}
 Tune the Gaussian proposal distribution in your \MH\ \MCMC\ sampler to sample this density efficiently.
 What autocorrelation time do you get?
-Compare to what \project{emcee} gets.
+Compare to what \project{emcee}\note{Available at \url{http://dfm.io/emcee}.} gets.
 \end{problem}
 
 \section{Initialization and burn-in}\label{sec:initialization}
@@ -1355,7 +1355,8 @@ pdf that are connected by low-enough valleys that it is very unlikely
 or takes a long time for a walker to traverse from one peak to the
 next.
 If this might be an issue, then the best diagnosis is to start many
-chains in parallel and check that they lead to identical (or very
+chains in parallel with different initializations,
+  and check that they lead to identical (or very
 similar) posterior inferences (same pdf location and shape and
 statistics).
 
@@ -1390,8 +1391,8 @@ are consistent with one another, you should do so in the realm of the
 parameters you \emph{care about}, not irrelevant parameters that do
 not have impact on any present or future data.
 
-But it is worth remembering that just as \MCMC\ is not a good optimizer
-(generically, samples will not lie close to the maximum of the posterior pdf),
+But it is worth remembering that---just as \MCMC\ is not a good optimizer
+(generically, samples will not lie close to the maximum of the posterior pdf)---%
 it is also not a good \emph{search algorithm}.
 There is no sense in which (standard) \MCMC\ methods are efficient at
 searching, or engineered to search, all of parameter space.
@@ -1432,13 +1433,12 @@ with unknown derivatives.
 \nopagebreak
 For a committed probabilistic scientist---frequentist or
 Bayesian---there is no ``answer'', there are only probability density
-functions (pdfs).  Any time in a paper or in an email or in a conversation
-we say what ``the answer is''---even if we say it with an error
-bar---we have departed the probabilistic program.  There are many
-principled ways to depart the program; in another \documentname, we
-discuss the economic explanation of how we can make hard decisions in
-the context of probabilistic reasoning\note{We intend to write a subsequent
-  \documentname\ in this series about these issues.  The idea is that you
+functions (pdfs).  In a paper or in an email or in a conversation
+we might say what ``the answer is'', but even if we say it with an error
+bar, we have departed the probabilistic program.  There are many
+principled ways to depart the program; in another forum, we hope to say more
+about the economic explanation of how we can make hard decisions in
+the context of probabilistic reasoning\note{The idea is that you
   can make principled decisions by optimizing the expected utility under
   the posterior, given the data.  This is a great idea!  Of course we also
   have very deep, fundamental reasons that you \emph{can't know your utility
