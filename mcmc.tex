@@ -1117,9 +1117,10 @@ as a dashed line and its value is listed in the title.}
 
 \section{Tuning}\label{sec:tuning}
 \nopagebreak
-Most \MCMC\ methods make use of something like a ``proposal distribution''
+Most \MCMC\ methods make use of something like a ``proposal distribution'',
   which determines what kinds of steps the walker can take
   as it random-walks through the parameter space.
+This is the function we called $q(\pars'\given\pars)$ in \sectionname~\ref{sec:MH}.
 The user generally has a lot of control over what this proposal distribution might be,
   and how to choose the parameters.
 For example, in a $D$-dimensional parameter space, %do we consistently use d here?
@@ -1158,7 +1159,7 @@ This is easy to state, but hard to use in practice;
   the autocorrelation time is a hard thing to measure without a lot of data,
   so it is hard to quickly estimate it and adjust,
   much less put it into some kind of optimization loop.
-We usually use proxies for this of various kinds.
+When tuning, we usually use proxies for this.
 
 The simplest heuristic proxy statistic for tuning is the \emph{acceptance fraction}.
 If you are accepting almost all proposed steps, your step sizes are too small on average.
@@ -1181,8 +1182,7 @@ A very common---%
   and very useful---%
   kind of proposal distribution is one that cycles through parameters,
   taking a random step in just one parameter at a time.\note{This has a lot to do with Gibbs sampling, which is discussed in \sectionname~\ref{sec:methods}.}
-Aside from involving some persistence of state,
-  this kind of proposal distribution can be valuable,
+This kind of proposal distribution can be valuable,
   in part because it reduces the (almost impossible) $D$-dimensional tuning problem
   to $D$ one-dimensional problems:
 In this form of proposal distribution,
