@@ -16,10 +16,4 @@ pip install corner
 
 # Set up tectonic
 conda install -c conda-forge -c pkgw-forge tectonic
-
-# Build the paper
 tectonic --help
-cd problems
-make
-cd ..
-tectonic ms.tex
