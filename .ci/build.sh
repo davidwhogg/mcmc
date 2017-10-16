@@ -3,4 +3,4 @@
 cd problems
 make
 cd ..
-tectonic ms.tex
+tectonic mcmc.tex
