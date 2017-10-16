@@ -2,11 +2,6 @@ sudo: false
 
 language: python
 
-env:
-    matrix:
-        - PYTHON_VERSION=2.7
-        - PYTHON_VERSION=3.5
-
 addons:
     apt:
         packages:
@@ -16,18 +11,13 @@ addons:
             - texlive-fonts-extra
             - dvipng
 
-install:
-    - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
-    - bash miniconda.sh -b -p $HOME/miniconda
-    - export PATH=$HOME/miniconda/bin:$PATH
-    - hash -r
-    - conda config --set always_yes yes --set changeps1 no
-    - conda update -q conda
-    - conda info -a
+env:
+    matrix:
+        - PYTHON_VERSION=2.7
+        - PYTHON_VERSION=3.5
 
-    - conda create --yes -n test python=$PYTHON_VERSION numpy scipy matplotlib
-    - source activate test
-    - pip install corner
+install:
+    - source .ci/install.sh
 
 before_script: # configure a headless display to test plot generation
     - "export DISPLAY=:99.0"
@@ -35,14 +25,10 @@ before_script: # configure a headless display to test plot generation
     - sleep 3 # give xvfb some time to start
 
 script:
-    - make
+    - source .ci/build.sh
 
 after_success: |
     if [[ "$PYTHON_VERSION" == "2.7" ]] && [ -n "$GITHUB_API_KEY" ]; then
-        git checkout --orphan pdf
-        git rm -rf .
-        git add -f mcmc.pdf
-        git -c user.name='travis' -c user.email='travis' commit -m init
-        git push -q -f https://dfm:$GITHUB_API_KEY@github.com/davidwhogg/mcmc pdf
+        source .ci/upload.sh
     fi
 
