@@ -1315,7 +1315,7 @@ be, in principle?
 \begin{problem}\label{prob:rosenbrock}
 The Rosenbrock density used as a demonstration case for many samplers (see, for example, \citealt{gw}).
 Test your sampler on this density:
-\begin{eqnarray}
+\begin{eqnarray}\label{eq:rosenbrock}
 f(\theta_1,\,\theta_2) &=&
     \exp\left(-\frac{100\,(\theta_2-{\theta_1}^2)^2+(1-\theta_1)^2}{20}\right)
 \quad.
@@ -1735,6 +1735,17 @@ Overplot on all three plots the (above) recommended quantiles of the
 samples.
 Comment on the results.
 \end{problem}
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{problems/rosenbrock2}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:rosenbrock2}:
+\MCMC\ samples from the Rosenbrock density
+(\equationname~\ref{eq:rosenbrock}) with the mean shown with blue lines and the
+0.16-, 0.5-, and 0.84th quantiles shown as vertical dashed lines.
+    \label{fig:rosenbrock2}}
+\end{figure}
 
 \section{Troubleshooting and advice}\label{sec:trouble}
 \nopagebreak
