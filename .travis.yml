@@ -2,6 +2,15 @@ sudo: false
 
 language: python
 
+addons:
+    apt:
+        packages:
+            - texlive-latex-recommended
+            - texlive-latex-extra
+            - texlive-fonts-recommended
+            - texlive-fonts-extra
+            - dvipng
+
 env:
     matrix:
         - PYTHON_VERSION=2.7

@@ -13,7 +13,3 @@ conda info -a
 conda create --yes -n test python=$PYTHON_VERSION numpy scipy matplotlib
 source activate test
 pip install corner
-
-# Set up tectonic
-conda install -c conda-forge -c pkgw-forge tectonic
-tectonic --help
