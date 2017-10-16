@@ -1497,16 +1497,16 @@ These are both produced by integrals;
 What are your best options for the ``uncertainty'' or ``limits'' on this parameter?
 The only simple integral-based options are either variances or else posterior quantiles.
 We usually use quantiles.
-That is, the ``one-sigma'' error bar can be taken to be the half-size of the central (or smallest\note{%
-  We usually create a 68-percent (or 95-percent) interval or region by
-  excluding the top and bottom 16 percent (or 2.5 percent) of the
+That is, the ``one-sigma'' error bar can be taken to be the half-size of the central (or smallest) interval of the parameter that contains 68 percent of the posterior
+  samples.
+In our own work, We usually create a 68-percent interval or region by
+  excluding the top and bottom 16 percent of the
   posterior samples.  Some more aggressive investigators find the
   smallest interval that contains 68 (or 95) percent of the samples.
   Both are legitimate, and they are near-identical for distributions
-  that are near-symmetric around the mean.})
-  interval of the parameter that contains 68 percent of the posterior
-  samples.
-The ``two-sigma'' error bar would be the same but for the 95-percent interval.
+  that are near-symmetric around the mean.
+The ``two-sigma'' error bar would be the same but for the 95-percent interval
+  (excluding the top and bottom 2.5 percent).
 Again, these limits can be estimated%
   \note{One amusing thing about samplings,
   which are so beloved of us probabilistic (Bayesian) reasoners,
@@ -2123,7 +2123,7 @@ are often easy to parallelize to make use of multiple cores.
 
 \paragraph{Gibbs:}
 Neither \MH\ \MCMC\ nor most ensemble methods good at going to very
-  large numbers of parameters.
+  large numbers of parameters.\footnote{See the excellent rant ``Ensemble Methods are Doomed to Fail in High Dimensions'' at \url{http://andrewgelman.com/2017/03/15/ensemble-methods-doomed-fail-high-dimensions/}.}
 Even dozens of parameters can be enough to drive autocorrelation times
   extremely large.
 With larger numbers of parameters, new methods need to be considered.
