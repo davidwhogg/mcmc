@@ -59,7 +59,7 @@ Copyright 2013, 2014, 2015, 2016, 2017 the authors (OMG this took us a long time
 \affil{Max-Planck-Institut f\"ur Astronomie, K\"onigstuhl 17, D-69117 Heidelberg}
 
 \author[0000-0002-9328-5652]{Dan Foreman-Mackey}
-\affil{Center for Computational Astrophysics, Flatiron Institute, 162 Fifth Ave, New York, NY 10010, USA\hspace*{-1cm}}
+\affil{Center for Computational Astrophysics, Flatiron Institute, 162 Fifth Ave, New York, NY 10010, USA}
 \affil{Department~of~Astronomy, University~of~Washington, Box 351580, Seattle, WA 98195, USA}
 
 \begin{abstract}
@@ -2120,8 +2120,17 @@ Because ensemble methods are updating independent \MCMC\ chains, they
 are often easy to parallelize to make use of multiple cores.
 
 \paragraph{Gibbs:}
-In many problems, the parameters---the components or entries of the
-blob $\pars$---are not equivalent at all.
+Neither \MH\ \MCMC\ nor most ensemble methods good at going to very
+  large numbers of parameters.
+Even dozens of parameters can be enough to drive autocorrelation times
+  extremely large.
+With larger numbers of parameters, new methods need to be considered.
+Gibbs sampling is worth considering when the number of parameters is
+  large, and the different parameters have different ``scopes'' in the problem.
+
+In many problems that have large numbers of parameters,
+  the parameters---the components or entries of the
+  blob $\pars$---are not equivalent at all.
 Some are global parameters, which touch or have an effect on every
 sub-part of the data blob $\data$, while others are local parameteres,
 which only touch a small subset of the data.
@@ -2134,7 +2143,7 @@ non-linear function $f(\pars)$, and other directions that are very
 easy to move in (they require only partial re-calculations or the
 sampling could even be analytic and exact).
 For problems with these structures, Gibbs samplers are ideal, and
-there are good implementations.\note{For example, \project{JAGS}; find it on the internets.}
+there are good implementations.\note{For example, \project{STAN} and \project{JAGS}; find them on the internets. DFM INSERT URLs AND REFERENCES.}
 
 A trivial kind of Gibbs sampling was mentioned above (\sectionname~\ref{sec:MH}) in the
 discussion of \MH\ \MCMC:
@@ -2153,7 +2162,7 @@ parameter directions.\note{%
   caching parts of the calculation and so on.  Details would be beyond
   our scope.}
 
-Gibbs sampling can be very good for exploiting multiprocessing:
+Gibbs sampling can also be very good for exploiting multiprocessing:
 Global parameter updates might require a serial re-calculation of the
 full likelihood, but local parameter updates can be done in parallel,
 with each local parameter working on its local bit of data all at the
@@ -2166,7 +2175,13 @@ Parallelization is built in to some Gibbs implementations.\note{For
   example, \project{JAGS} automatically
   parallelizes Gibbs problems.}
 
-\paragraph{Hamiltonian or Hybrid:}
+\paragraph{Hamiltonian:}
+At time of writing, the premier approaches for problems with large numbers
+  of parameters are Hamiltonian methods.\note{For a review of the theory
+  behind these methods, see \cite{hamiltonian}.}
+These methods perform very well at large dimensions, but require (for speed)
+  analytic derivatives of the function $f(\pars)$ with respect to the parameters.
+
 In many cases of interest, the function $f(\pars)$ can be analytically
 differentiated, such that it is possible to quickly execute a gradient
 $\dd f/\dd\pars$ evaluation.
@@ -2184,8 +2199,7 @@ produces the gradient of any function you can write.\note{%
 There is a class of \MCMC\ methods that make use of gradient information
 to effectively inform the proposal distribution and thus speed sampling.
 
-DFM: more here!  For example, does this work better in large numbers
-of dimensions?  If so, we should say so.  And cite \citep{hamiltonian}.
+DFM: more here! The reason these methods are ``Hamiltonian'' is that... And cite \citep{hamiltonian}.
 
 \paragraph{Importance:}
 Sometimes it is possible to sample efficiently from a distribution
@@ -2215,29 +2229,6 @@ functions diverge.
 If the ratio of the true function to the approximate function is to be
 used as a probability for rejection of samples, then the true function
 must be greater than or equal to the approximate function everywhere!
-
-\paragraph{Slice:}
-DFM ... When is slice sampling a good idea?  DFM, can you help here?
-
-Slice sampling makes use of the point that (in one dimension) a fair
-sampling of $f(\pars)$ is a projection onto the $\pars$ axis of a
-uniform sampling of the two-dimensional region under the
-two-dimensional plot of $f(\pars)$ \vs\ $\pars$.
-The $D$-dimensional generalization is that a fair sampling of
-$f(\pars)$ is a projection onto the $\pars$ $D$-dimensional
-hypersurface of $\pars$ of a uniform sampling of the $D+1$-dimensional
-hypervolume under the hypersurface $f(\pars)$ in a hypothetical plot
-of $f(\pars)$ over the whole parameter space.
-Thinking in terms of the two-dimensional case (for simplicity), slice
-samplers make both ``horizontal'' moves in the $\pars$ direction at
-fixed $f(\pars)$ and also ``vertical'' moves in the $f(\pars)$
-direction.
-Because the sampling in the higher-dimensional space is uniform, it is
-easy to make moves to very different parts of parameter space, or
-different peaks or modes in the function $f(\pars)$.
-In our own research, we use a variant of slice sampling for problems
-involving samplings governed by Gaussian Processes.\note{DFM: Cite us
-  and Murray here.}
 
 \paragraph{Tempering:}
 A huge problem for \MCMC\ samplers---which make local moves based on
@@ -2281,9 +2272,6 @@ searching for all of the modes of the posterior pdf.
 It is also designed such that it produces not just a sampling but also
 an estimate of the integral $Z$ of the likelihood times the prior
 (the Bayes factor or fully marginalized likelihood).
-
-\paragraph{Data augmentation:}
-...HOGG Look at the relevant chapter in Brooks.
 
 \paragraph{Reversible-jump:}
 Finally, there are some extreme problems in which it is not just hard
