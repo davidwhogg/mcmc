@@ -17,7 +17,6 @@
 % style notes
 % -----------
 % - \MCMC not MCMC
-% - These documents are ``Chapters'', no?  Use \documentname.
 % - [LaTeX] newline after every full stop for proper git diffing
 % - [LaTeX] eqnarray not equation
 % - pdf not PDF
@@ -157,7 +156,7 @@ the posterior pdf $p(\pars\given\data)$. We will give some sense of what ``fair'
 in this context, below.
 
 All that said, and adhering to the traditions of the \project{Data
-  Analysis Recipes} project\note{Every \documentname\ in the \project{Data
+  Analysis Recipes} project\note{Every entry in the \project{Data
     Analysis Recipes} series begins with a rant in which we argue that
   most uses of the methods in question are not appropriate!}, we are
 compelled to note at the outset that \MCMC\ is in fact \emph{over-used}.
@@ -433,7 +432,7 @@ It is so simple that we recommend that any reader of this document
     \problemname~\ref{prob:MH} and the following problems in this
     \sectionname.
     We make the same request in a less trivial context in our
-    model-fitting \documentname\ (\citealt{fittingaline},
+    model-fitting screed (\citealt{fittingaline},
     \problemname~6 and 7), where we ask the Reader to implement \MCMC\ for
     a useful mixture model.}
 
@@ -453,8 +452,8 @@ It permits us to random-walk around the parameter space in a fair way.
 The algorithm\note{Technically this is the \emph{Metropolis} algorithm
   rather than the Metropolis--Hastings algorithm.  The difference is
   that in the Metropolis--Hastings algorithm, we permit the proposal
-  distribution to disobey detailed balance and then we correct the
-  acceptance/rejection step to recover detailed balance.} is the
+  distribution to disobey detailed balance but correct the
+  accept--reject step to recover detailed balance.} is the
 following: We have generated some set of samples, the most recent of
 which is $\pars_k$ To generate the next sample $\pars_{k+1}$ do the
 following:
@@ -583,8 +582,8 @@ That is, even if---in the end---%
   it is still valuable to build your own,
   given the simplicity of the algorithm,
   and given the intuition you gain by doing it (at least once) yourself.\note{%
-    We also make this point in a previous \documentname\ (\citealt{fittingaline});
-    the ambitious reader will find in that \documentname\ a solid example project
+    We also make this point in a previous piece (\citealt{fittingaline});
+    the ambitious reader will find in that piece a solid example project
     for using \MCMC\ in a real context.}
 
 Because many problems involve a huge amount of dynamic range in the
@@ -1967,7 +1966,7 @@ out.\note{Physicists sometimes forget this, and believe that various
   if they \emph{are} true, they don't precisely explain any
   observation, which is also affected by various kinds of auxilliary
   effects and noises for which there is (and can be, for deep reasons,
-  to be discussed in other \documentname s in this series) no extremely precise model.  So in
+  to be discussed in other documents in this series) no extremely precise model.  So in
   detail, any model of any specific observation must be wrong, even in
   the (exceedingly unlikely) event that the fundamental model is
   correct.}
@@ -2089,6 +2088,9 @@ technology in the empirical sciences.
 All we are going to do here is give a cursory mention to some methods
 we know about, with some keywords that can be used to search more
 deeply.
+There is no sense in which this list is comprehensive; these are just
+methods (or method classes) that are likely to be useful to projects similar
+to projects we ourselves have executed.
 
 \paragraph{Ensembles:}
 As we discussed (\sectionname~\ref{sec:tuning}), one of the critical challenges in the use of
@@ -2104,7 +2106,7 @@ directions at which new proposals should be made, obviating or greatly
 reducing the tuning requirements.
 We are co-authors on one of these methods,
 \project{emcee}\note{\citet{emcee}}, which is popular in the
-astrophysical sciences, but there are others\note{A few ensemble methods that
+physical sciences, but there are others\note{A few ensemble methods that
 are being used in astronomy: Differential Evolution MCMC (\citealt{demcmc,
 run-dmc}) and \project{kombine} (Farr \& Farr, in preparation).}.
 It is worty of note that ensemble methods have particular
@@ -2199,7 +2201,14 @@ produces the gradient of any function you can write.\note{%
 There is a class of \MCMC\ methods that make use of gradient information
 to effectively inform the proposal distribution and thus speed sampling.
 
-DFM: more here! The reason these methods are ``Hamiltonian'' is that... And cite \citep{hamiltonian}.
+The reason these methods are ``Hamiltonian'' is that they use a kind of
+  Hamiltonian dynamics to improve the sampling: They augment the position
+  of the walker in parameter space with a fictitious momentum in
+  parameter space, and use the derivatives in the accept-reject step.
+The momentum helps the sampler move through the space on a more efficient
+  variant of the random walk.
+These samplers are essentially the only good options when the number of
+  parameters gets very large.
 
 \paragraph{Importance:}
 Sometimes it is possible to sample efficiently from a distribution
@@ -2216,10 +2225,12 @@ You take a sampling from the approximate function (which by assumption
 was easy) and then you re-weight the sampling (or do a subsequent
 rejection of samples) using the ratio of the true function to the
 approximate function as a weight or probability.
-We use this quite a bit in our hierarchical inferences.\note{%
+We use this quite a bit in our hierarchical inferences,\note{%
   For example, we use importance sampling to convert individual-planet
   exoplanet inferences (all performed with dumb priors) into a full-population
   consistent hierarchical model in \citet{eccentricity}.}
+and in problems where the dimensionality is low.\note{see,
+  for example, \citet{joker}}
 
 Two of the significant technical details for importance sampling are the
 following:
@@ -2251,10 +2262,7 @@ prior pdf is easy to sample) makes movement in the parameter space
 easier.
 At each step, when the temperature has moved away from unity, the
 distribution being sampled is not exactly $f(\pars)$, but the results
-of the sampling are only kept for those samples taken at unit
-temperature; these in the end make a fair sampling.
-
-% DFM: Is the last sentence of the above paragraph correct??
+can be transformed into a fair sampling.
 
 \paragraph{Nested:}
 Similar to tempering-like methods are a class of methods called ``nested''
@@ -2298,7 +2306,8 @@ We would like to thank
           Alex Barnett (Flatiron),
           Jo Bovy (Toronto),
           Brendon Brewer (Auckland),
-          Will Farr (Flatiron)
+          Will Farr (Flatiron),
+          Marla Geha (Yale),
           Jonathan Goodman (NYU),
           Fengji Hou (NYU),
           Dustin Lang (Toronto),
@@ -2420,6 +2429,12 @@ N-body Integrations and Differential Evolution Markov Chain Monte Carlo}
   Pasarica,~C. \& Gelman,~A., 2010
   \href{http://www.jstor.org/stable/24308995}{Adaptively scaling the Metropolis algorithm using expected squared jumped distance},
   \textit{Statistica Sinica}, \textbf{20}(1) 343--364.
+\bibitem[Price-Whelan \etal(2017)]{joker}
+  Price-Whelan, A.~M., Hogg, D.~W., Foreman-Mackey, D. \& Rix, H.-W., 2017,
+  \href{http://adsabs.harvard.edu/abs/2017ApJ...837...20P}{\project{The Joker}: A custom Monte Carlo sampler for binary-star and
+  exoplanet radial-velocity data},
+  \textit{Astrophys.\ J.} \textbf{837} 20
+  \doi{10.3847/1538-4357/aa5e50}.
 \bibitem[Skilling(2006)]{skilling}
   Skilling, J., 2006,
   Nested sampling for general bayesian computation,
