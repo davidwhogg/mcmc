@@ -250,7 +250,8 @@ has as many dimensions as there are elements or entries or components of $\pars$
 Also, if there are elements or entries or components of $\pars$ that are discrete
 (that is, take on only integer values or equivalent),
 then along those dimensions the integral becomes a discrete sum.
-This latter is a detail to which we return below. \textbf{HOGG DO WE?}
+This latter is a detail to which we return below (briefly, in
+  \sectionname~\ref{sec:trouble}).
 
 Given this pdf $p(\pars)$, we can define \emph{expectation values}
 $E_{p(\pars)}[\pars]$
@@ -1397,8 +1398,8 @@ it is also not a good \emph{search algorithm}.
 There is no sense in which (standard) \MCMC\ methods are efficient at
 searching, or engineered to search, all of parameter space.
 If you really need to check all of parameter space, you should put
-\MCMC\ aside, and do an exhaustive search.\note{You might want to open a
-  bottle of wine or two while the code runs.}
+\MCMC\ aside, and do an exhaustive search (which will in general take an enormous
+  amount of time).
 
 \begin{problem}\label{prob:initialization}
 Re-do \problemname~\ref{prob:MH} but with different starting
@@ -1739,12 +1740,12 @@ This tests the sampler,
     possible for your sampler itself to be buggy.}), and tests that
   your prior pdfs are proper (functions that can be normalized).
 This test is most effective as a true end-to-end test of your model
-  if you structure your code such that the log probability function \code{lnprob}
+  if you structure your code such that the log probability function \code{ln_f}
   input to the \MCMC\ scheme
-  is set up as a sum of a log likelihood function \code{lnlikelihood}
-  and a prior function \code{lnprior}.
+  is set up as a sum of a log-likelihood function \code{ln_likelihood}
+  and a log-prior function \code{ln_prior}.
 The sampler can be switched to sampling the prior by a simple replacement
-  of the \code{lnlikelihood} function
+  of the \code{ln_likelihood} function
   with a trivial function that always returns zero.
 
 \MCMC\ should run well in this flat-likelihood case (priors are usually easy to sample)
@@ -1756,7 +1757,7 @@ If the walkers run off to positive or negative infinity,
 If the priors don't look as you expect,
   you either have a bug in your code,
   or else a think-o about how your priors ought to look.
-Either way, diagnosis in order.
+Either way, diagnosis is in order.
 
 \paragraph{likelihood issues:}
 Sometimes there can be problems with the likelihood function itself.
@@ -1791,7 +1792,7 @@ Things like numerical integration,
   can make the function noisy or jagged at small scales in parameter space.
 These problems hurt optimizers more than samplers,
   but they usually point to code issues.
-In general, plotting the likelihood function as a function of parameter along
+In general, plotting the likelihood function as a function of parameters along
   slices in parameter space often reveals bugs or think-os.
 
 \paragraph{low acceptance fraction:}
