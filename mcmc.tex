@@ -4,15 +4,10 @@
 
 % to-do
 % -----
-% - deal with \MCMC\ macro in footnotes.
-% - Deal with all mentions of ``DFM'' or ``HOGG''
 % - Go through github issues, if any.
-% - Need to mention case where there is an MC integral INSIDE the likelihood function
-% - Need to mention testing the likelihood function, by, say, 1-d scans back and forth.
-% - Kill all issues in this list, above, and then:
-%   - Post on arXiv
-%   - Submit to ApJ special issue
-%   - Blog about it
+% - Post on arXiv
+% - Submit to ApJ special issue
+% - Blog about it
 
 % style notes
 % -----------
@@ -74,6 +69,8 @@ practical advice for the use of \MCMC\ in real inference problems.
 We give advice on method choice, tuning for performance,
 methods for initialization, tests of convergence, troubleshooting, and use of the chain
 output to produce or report parameter estimates with associated uncertainties.
+We argue that autocorrelation time is the most important test for convergence,
+as it directly connects to the variances of sampling estimates of quantities of interest.
 We emphasize that sampling is a method for doing integrals; this guides our thinking
 about how \MCMC\ output is best used.
 \end{abstract}
@@ -900,7 +897,7 @@ the sequence will be similar, but sufficiently distant points will not
 the autocorrelation function measures this.
 
 More formally, as discussed in \sectionname~\ref{sec:sampling}, the goal of
-MCMC sampling is to compute integrals of the form given in
+\MCMC\ sampling is to compute integrals of the form given in
 \equationname~\ref{eq:the-real-integral} using the Monte Carlo approximation
 in \equationname~\ref{eq:the-real-samples}.
 The Monte Carlo error introduced by this approximation is proportional to
@@ -1004,7 +1001,7 @@ We won't go into details about how to estimate $\tau_\mathrm{int}$, but it is
 notoriously difficult: It is a two-point statistic, and two-point statistics
 are much harder to estimate than one-point statistics.\note{See: All of
 cosmology!}
-If you are not a hard-core user of MCMC, and if all you want is
+If you are not a hard-core user of \MCMC, and if all you want is
 heuristic indicators of convergence, then what you should take from this
 section is that the autocorrelation time is involved in variance estimates,
 but that it is hard to estimate.
@@ -1020,7 +1017,7 @@ references can be found elsewhere.\note{%
 %\emph{estimator} for the time. Estimating the auto-correlation time is
 %notoriously difficult: It is a two-point statistic, and two-point statistics
 %are much harder to estimate than one-point statistics.\note{See: All of cosmology!}
-%If you are not a hard-core user of MCMC, and if all you want is heuristic indicators
+%If you are not a hard-core user of \MCMC, and if all you want is heuristic indicators
 %of convergence, then what you should take from this section is that the auto-correlation
 %time is involved in variance estimates through \equationname~(\ref{eq:tauvar}) but that
 %it is hard to estimate.
@@ -1615,7 +1612,7 @@ sample as an initialization (and sacrifice your probabilism\note{We
   frequentist---but if you are using \MCMC\ you probably are doing so
   because you want the benefits of Bayesianism.}).
 This optimal-posterior parameter value is called the
-  ``maximum \foreign{a posteriori}'' or ``MAP'' value for the parameters;
+  ``maximum \foreign{a posteriori}'' or ``\acronym{MAP}'' value for the parameters;
   it is like a maximum-likelihood value but regularized by the prior.
 It is an estimator with some good (and some bad) properties, but it is not the point of \MCMC,
   and therefore outside the scope of this \documentname.
@@ -1689,7 +1686,7 @@ might find users who want to make serious use of them.\note{We have
 Of course figures are always better than tables, at least in the
 printed form of scientific publications.
 There are several figures that are useful and should be made every time you
-run MCMC and we'll describe a few here.
+run \MCMC\ and we'll describe a few here.
 
 \begin{itemize}
 \item \emph{Trace plots}~---~The first set of plots are the ``trace
@@ -2136,7 +2133,7 @@ reducing the tuning requirements.
 We are co-authors on one of these methods,
 \project{emcee}\note{\citet{emcee}}, which is popular in the
 physical sciences, but there are others\note{A few ensemble methods that
-are being used in astronomy: Differential Evolution MCMC (\citealt{demcmc,
+are being used in astronomy: Differential Evolution \MCMC\ (\citealt{demcmc,
 run-dmc}) and \project{kombine} (Farr \& Farr, in preparation).}.
 It is worty of note that ensemble methods have particular
 peculiarities about initialization and convergence diagnostics that
