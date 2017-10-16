@@ -2,7 +2,7 @@ ALL_FILES=simple_stats.pdf MH.pdf MH2.pdf twod_a.pdf twod_b.pdf MH_sigma.pdf pro
 		  improper.pdf logprior.pdf \
 		  convergence.pdf estimatetau.pdf \
 		  itertau.pdf tuning.pdf tuningtau.pdf \
-		  initialization.pdf optimization.pdf
+		  initialization.pdf optimization.pdf rosenbrock2.pdf
 
 default: $(ALL_FILES)
 
