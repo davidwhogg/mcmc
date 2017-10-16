@@ -39,8 +39,7 @@
 % Problems
 \newcommand{\problemname}{Problem}
 \newcounter{problem}
-\newenvironment{problem}{\par\medskip\noindent\textbf{\problemname~\theproblem:}%
-\refstepcounter{problem}}{}
+\newenvironment{problem}{\refstepcounter{problem}\par\medskip\noindent\textbf{\problemname~\theproblem:}}{}
 
 % Math stuff
 \newcommand{\mmatrix}[1]{\boldsymbol{#1}}

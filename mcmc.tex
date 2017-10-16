@@ -1114,7 +1114,7 @@ The autocorrelation function of the chain from \problemname~\ref{prob:MH}.}
 \end{figure}
 
 \begin{problem}\label{prob:itertau}
-Write a peice of code that estiamtes the integrated autocorrelation time for a
+Write a piece of code that estimates the integrated autocorrelation time for a
 chain of samples using an estimate of the autocorrelation function and a given
 ``window'' size $M$ (see \citealt{sokal}).
 Plot the estimated $\tau$ as a function of $M$ for several contiguous segments
@@ -1312,7 +1312,7 @@ be, in principle?
 \begin{problem}\label{prob:rosenbrock}
 The Rosenbrock density used as a demonstration case for many samplers (see, for example, \citealt{gw}).
 Test your sampler on this density:
-\begin{eqnarray}
+\begin{eqnarray}\label{eq:rosenbrock}
 f(\theta_1,\,\theta_2) &=&
     \exp\left(-\frac{100\,(\theta_2-{\theta_1}^2)^2+(1-\theta_1)^2}{20}\right)
 \quad.
@@ -1436,7 +1436,7 @@ how much longer does it take for the sampler to reach reasonable
 density?
 \end{problem}
 
-\begin{problem}
+\begin{problem}\label{prob:initialization2}
 Check the scaling you found in \problemname~\ref{prob:initialization}
 with a higher-dimensional Gaussian (try, for example, a 10-d Gaussian).
 The same or worse?
@@ -1732,6 +1732,17 @@ Overplot on all three plots the (above) recommended quantiles of the
 samples.
 Comment on the results.
 \end{problem}
+
+\begin{figure}[!htbp]
+\begin{center}
+\includegraphics[width=0.7\textwidth]{problems/rosenbrock2}
+\end{center}
+\caption{Solution to \problemname~\ref{prob:rosenbrock2}:
+\MCMC\ samples from the Rosenbrock density
+(\equationname~\ref{eq:rosenbrock}) with the mean shown with blue lines and the
+0.16-, 0.5-, and 0.84th quantiles shown as vertical dashed lines.
+    \label{fig:rosenbrock2}}
+\end{figure}
 
 \section{Troubleshooting and advice}\label{sec:trouble}
 \nopagebreak
@@ -2160,7 +2171,7 @@ In many problems that have large numbers of parameters,
   the parameters---the components or entries of the
   blob $\pars$---are not equivalent at all.
 Some are global parameters, which touch or have an effect on every
-sub-part of the data blob $\data$, while others are local parameteres,
+sub-part of the data blob $\data$, while others are local parameters,
 which only touch a small subset of the data.
 Or, in another use case, some parameters are linear parameters
 that---at fixed values of the other parameters---will have a Gaussian
@@ -2171,7 +2182,8 @@ non-linear function $f(\pars)$, and other directions that are very
 easy to move in (they require only partial re-calculations or the
 sampling could even be analytic and exact).
 For problems with these structures, Gibbs samplers are ideal, and
-there are good implementations.\note{For example, \project{STAN} and \project{JAGS}; find them on the internets. DFM INSERT URLs AND REFERENCES.}
+there are good implementations.\note{For example, \project{Stan}
+(\url{http://mc-stan.org}).}
 
 A trivial kind of Gibbs sampling was mentioned above (\sectionname~\ref{sec:MH}) in the
 discussion of \MH\ \MCMC:
@@ -2346,6 +2358,9 @@ We would like to thank
           NSF grants AST-0908357, IIS-1124794, and AST-1517237,
           NASA grant NNX12AI50G,
           and the The Moore-Sloan Data Science Environment at NYU.
+This work was performed in part under contract with the Jet Propulsion
+Laboratory (JPL) funded by NASA through the Sagan Fellowship Program executed
+by the NASA Exoplanet Science Institute.
 
 \raggedright
 \begin{thebibliography}{}\markright{References}
