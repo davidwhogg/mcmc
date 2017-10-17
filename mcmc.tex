@@ -945,46 +945,6 @@ references can be found elsewhere.\note{%
     Another good reference is a blog post by one of us (DFM) that can be found
     at \url{http://dfm.io/posts/autocorr}.}
 
-%Of course, the autocorrelation-time definition
-%(\ref{eq:autocorrelationtime}) does not by itself provide an
-%\emph{estimator} for the time. Estimating the auto-correlation time is
-%notoriously difficult: It is a two-point statistic, and two-point statistics
-%are much harder to estimate than one-point statistics.\note{See: All of cosmology!}
-%If you are not a hard-core user of \MCMC, and if all you want is heuristic indicators
-%of convergence, then what you should take from this section is that the auto-correlation
-%time is involved in variance estimates through \equationname~(\ref{eq:tauvar}) but that
-%it is hard to estimate.
-
-%If you want to think about autocorrelation estimation:\note{One of us (DFM) has written
-%  much more about autocorrelation estimation in the \project{emcee} documentation
-%  at \url{http://dfm.io/posts/autocorr}.}
-%You might first try the na\"ive estimator
-%\begin{eqnarray}\label{eq:tauestnaive}
-%\tau &\stackrel{?}{=}& 1 + 2\,\sum_{\Delta = 1}^{N} C(\Delta)
-%\end{eqnarray}
-%where the sum is over the autocorrelation function estimated based the chain
-%using \equationname~(\ref{eq:autocorrelationfn}).
-%In practice, this is a high variance estimator of the integrated
-%autocorrelation time and this variance doesn't go to zero for an infinitely
-%long chain.\note{%
-%  A.~Sokal has a clear discussion of this topic and several proposals for
-%  robust autocorrelation time estimation in a set of lecture notes
-%  \url{http://www.stat.unc.edu/faculty/cji/Sokal.pdf}.}
-%Instead, we can get a much more robust estimate of the autocorrelation time by
-%restricting the sum in \equationname~(\ref{eq:tauestnaive}) to $\Delta \le M$
-%where
-%$\tau \le M \ll N$
-%\begin{eqnarray}\label{eq:tauest}
-%\tau &=& 1 + 2\,\sum_{\Delta = 1}^{M} C(\Delta)
-%\end{eqnarray}
-%In practice, $M$ can be chosen iteratively to satisfy these constraints but it
-%will only be as reliable as the chain itself.
-%An estimate of $\tau$ using \equationname~(\ref{eq:tauest}) should only be
-%trusted if the chain is many times ($\sim 100$) longer than $\tau$.\footnote{This
-%  point is also emphasized at the aforementioned tutorial
-%  \url{http://dfm.io/posts/autocorr}, where
-%  a number like 50 is recommended.}
-
 Besides estimating the integrated autocorrelation time, another simple and
 sensible test of convergence is the Gelman--Rubin
 diagnostic\note{\citet{gelmanrubin}.}, which compares the variance (in one
@@ -1001,9 +961,6 @@ values, and that those two values agree.
 The Gelman--Rubin diagnostic is related to the autocorrelation time,
 in that it will only deliver success when the chains are much longer
 than an autocorrelation time.
-%It can also be used to assess the accuracy of the chain for performing
-%integrals---by replacing the mean of the parameter with whatever
-%integral is of most interest.
 
 Finally one last point about convergence:
 Since all convergence tests are fundamentally heuristic, it is useful
@@ -1989,9 +1946,6 @@ If your model is wrong, the richer tests of visualization of residuals
 or sensitivity to assumptions are much more likely to lead to insight
 about what changes to make or what new directions to explore.
 
-%% ...Finally, to repeat: You can't sample the likelihood!  You can only
-%% sample a posterior pdf!
-
 \section{More sophisticated sampling methods}\label{sec:methods}
 \nopagebreak
 As we have discussed above (\sectionname~\ref{sec:MH}),
@@ -2271,7 +2225,6 @@ the parameter spaces.
 These methods are best built and operated under the supervision of a
 trained professional.
 
-%\clearpage
 \acknowledgements
 We would like to thank
           Alex Barnett (Flatiron),
