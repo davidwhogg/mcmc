@@ -750,7 +750,7 @@ parameters).\note{Well, technically, \MCMC\ \emph{can} be used to sample a likel
   The purist might say that even this is not sampling a likelihood function,
   because you should only call it a ``likelihood function'' in contexts in which you are
   treating the data as fixed (at the true data values) and the parameters as variable.
-  In this context, the likelihood function is \emph{not} a pdf for the parameters,
+  In this context, the likelihood function is \emph{not} a pdf for anything,
   so it can't be sampled.}
 Despite this, in many cases,
   data analysts believe they are sampling the likelihood.
@@ -835,7 +835,7 @@ be able to solve the famously difficult discrete optimization
 problem.\note{Famously, there is ``no free lunch''
   \citep{nofreelunch}: You can't find the global optimum of a general
   optimization problem without exhaustive search of all possibilities.
-  This is very closely related---somehow---to the difficulty of sampling.}
+  This is very closely related---somehow---to the difficulty of sampling.\label{note:nofreelunch}}
 Qualitatively, you can consider the scenario where you have two modes---two
 separated regions of substantial total probability---in the posterior pdf that
 are both important but separated by a large region of low probability.
@@ -858,7 +858,7 @@ That is, you can \emph{never know} that you have correctly sampled the posterior
 For example, you can (almost) never say that your chains are
 definitely converged, or that you have the posterior pdf correct to
 some given level of accuracy.  The reason is related to the above-mentioned ``no free
-lunch'' theorem of discrete optimization \citep{nofreelunch}: In most problems there is no
+lunch'' theorem of discrete optimization (see \notename~\ref{note:nofreelunch}): In most problems there is no
 way you could have searched your parameter space finely enough to know
 this.  There are some exceptions of course.  In one kind of exception,
 your problem is convex or Gaussian, and you can analytically show that
@@ -1054,7 +1054,7 @@ references can be found elsewhere.\note{%
 
 Besides estimating the integrated autocorrelation time, another simple and
 sensible test of convergence is the Gelman--Rubin
-diagnostic,\note{\citet{gelmanrubin}.} which compares the variance (in one
+diagnostic\note{\citet{gelmanrubin}.}, which compares the variance (in one
 parameter, or your most important parameter, or all parameters) \emph{within}
 a chain to the variance \emph{across} chains.
 This requires running multiple chains, and looking at the empirical
@@ -1121,7 +1121,7 @@ Plot the estimated $\tau$ as a function of $M$ for several contiguous segments
 of the chain and overplot the sample function based on the full chain.
 What can you conclude from this plot?
 Implement an iterative procedure for automatically choosing $M$.\note{%
-The recipe given on page 16 of A.~Sokal's notes \citep{sokal} might be helpful.
+The recipe given on page 16 of Sokal's notes \citep{sokal} might be helpful.
 Note that the definition of $\tau$ that we adopt is twice the value used by
 Sokal.}
 Overplot this estimate on the plot of $\tau(M)$ and the result should look
@@ -1347,7 +1347,7 @@ typical posterior samples\note{When the dimensionality of the
   there are a lot of ways to move \emph{away} from the point you care
   about, but very few ways to move close to it.  The upshot is that
   even with an \emph{enormous} sampling, if you are in large
-  dimensions, not a single sample will be very near the optimum.}, but
+  dimensions, not a single sample will be very near the optimum.\label{note:highD}}, but
 in low dimensions (few to tens) this is often sensible.
 
 Ideally, you will initialize the walker not at a completely irrelevant
@@ -1529,8 +1529,8 @@ In our own work, We usually create a 68-percent interval or region by
   excluding the top and bottom 16 percent of the
   posterior samples.  Some more aggressive investigators find the
   smallest interval that contains 68 (or 95) percent of the samples.
-  Both are legitimate, and they are near-identical for distributions
-  that are near-symmetric around the mean.
+  Both are legitimate, and they are nearly identical for distributions
+  that are nearly symmetric around the mean.
 The ``two-sigma'' error bar would be the same but for the 95-percent interval
   (excluding the top and bottom 2.5 percent).
 Again, these limits can be estimated%
@@ -1584,7 +1584,7 @@ For one, \MCMC\ is a sampling algorithm, not an optimization algorithm;
     These issues might sound ``academic'',
     but when the number of parameters gets large (greater than, say, 10),
     many normal intuitions one might have (if any) about what is reasonably likely in a pdf
-    are regularly violated.}
+    are regularly violated. See also \notename~\ref{note:highD}.}
 For two, the closeness of the best sample to the posterior mode is a strong function of sample size,
   and with very bad scaling.%
   \note{If you have a $K$-point sampling in a $D$-dimensional parameter space,
@@ -1681,7 +1681,7 @@ might find users who want to make serious use of them.\note{We have
   samples can be put as inputs.  In \emph{principle} it is enough to
   release a \emph{description} of your prior pdf, but in practice it
   is rarely correct or specific enough for another investigator to
-  duplicate exactly.  So just augment your samples!}
+  duplicate exactly.  So just augment your samples!\label{note:importance}}
 
 Of course figures are always better than tables, at least in the
 printed form of scientific publications.
@@ -1892,7 +1892,8 @@ One of the miracles of \MCMC\ is that if you \emph{can} fairly sample
   as the sampling converges.
 
 Ensemble samplers react to multiple modes
-  by obtaining very low acceptance ratio,
+  by obtaining very low acceptance ratio\note{Although maybe this isn't
+    fundamental; see \project{kombine} at \url{https://github.com/bfarr/kombine}.},
   because the samplers in the different modes are not easily able to ``help one another''
   move efficiently.
 Again, if the acceptance ratio is low and there appear to be multiple modes,
@@ -1998,7 +1999,7 @@ The point (for our purposes) is that if you check your model hard
 enough---that is, you take enough data---you will certainly rule it
 out.\note{Physicists sometimes forget this, and believe that various
   physical theories, such as quantum electrodynamics or the
-  cold-dark-matter cosmological model, are strictly true.  First of
+  cold-dark-matter cosmological model, are strictly True with a capital ``T''.  First of
   all, there is no way to know that for sure, and second of all, even
   if they \emph{are} true, they don't precisely explain any
   observation, which is also affected by various kinds of auxilliary
@@ -2006,7 +2007,7 @@ out.\note{Physicists sometimes forget this, and believe that various
   to be discussed in other documents in this series) no extremely precise model.  So in
   detail, any model of any specific observation must be wrong, even in
   the (exceedingly unlikely) event that the fundamental model is
-  correct.}
+  correct.\label{note:truth}}
 ``Model checking'' is an enormous subject that goes way beyond the
 scope of this \documentname, for which reason we won't say much about
 it here except to make two points:
@@ -2022,7 +2023,7 @@ These are usually uninformative, because (as we noted), all models are
 wrong, and eventually the data will be good enough to return a bad
 statistic here.\note{Sometimes Bayesians like to complain that the
   chi-squared statistic is a measure of the size of your data!  That's
-  true when your model is wrong (that is, always).}
+  true when your model is wrong (that is, always); see \notename~\ref{note:truth}.}
 
 Much more informative are methods (like plotting residuals of the data
 away from the model in the space of the data) that look at what parts
@@ -2049,7 +2050,7 @@ essential for writing any paper about your results: The reader always
 wants to know the sensitivity of results to assumptions.\note{And be
   sure not to forget that there are (at least) as many assumptions
   encoded in your likelihood function as there are in your prior
-  pdfs.}
+  pdfs, probably far more. No data analysis is protected from \emph{subjectivity}.}
 Once again, it is important to find ways to display the results of
 such tests in the space of the data.
 All we will say here about these kinds of rich model tests is that you
@@ -2084,8 +2085,11 @@ can approach this limit very slowly (or not at all\note{You can get
   isolated regions of finite density separated by large seas of zero
   or near-zero density.  One disturbing thing about these situations
   is that any empirical measure of autocorrelation time will give a
-  finite answer, but the density won't be properly sampled, ever.  In
-  principle you can find these with multiple re-starts of the chain
+  finite answer, but the density won't be properly sampled, ever. This
+  problem is related to a problem that any simple empirical measure of
+  the autocorrelation time will be an under-estimate. In
+  principle you can find these badly multimodal cases
+  with multiple re-starts of the chain
   and (things like) the Gelman--Rubin diagnostic \citep{gelmanrubin}.}).
 For this reason, in the finite duration of a scientific project, most
 users of \MCMC\ have one of two (related) problems:
@@ -2141,12 +2145,15 @@ These methods make use of the distribution of a set of independent
 walkers in the parameter space ($\pars$-space) to gauge the typical step-sizes and
 directions at which new proposals should be made, obviating or greatly
 reducing the tuning requirements.
+This tuning improvement comes at the cost of a burn-in phase at the beginning
+of any run---a phase that lasts a few autocorrelation times---in which the
+ensemble expands or shrinks to fill the posterior volume.
 We are co-authors on one of these methods,
-\project{emcee}\note{\citet{emcee}}, which is popular in the
+\project{emcee}\note{\citet{emcee}.}, which is popular in the
 physical sciences, but there are others\note{A few ensemble methods that
 are being used in astronomy: Differential Evolution \MCMC\ (\citealt{demcmc,
 run-dmc}) and \project{kombine} (Farr \& Farr, in preparation).}.
-It is worty of note that ensemble methods have particular
+It is worthy of note that ensemble methods have particular
 peculiarities about initialization and convergence diagnostics that
 are worth understanding before use.\note{For example, we find
   empirically that it is better to initialize the ensemble in a ball
@@ -2212,7 +2219,7 @@ local parameters touch only individual objects in some population,
 say, and global parameters are parameters \emph{of} that population as
 a whole.
 Parallelization is built in to some Gibbs implementations.\note{For
-  example, \project{JAGS} automatically
+  example, \project{JAGS} (\url{http://mcmc-jags.sourceforge.net/}) automatically
   parallelizes Gibbs problems.}
 
 \paragraph{Hamiltonian:}
@@ -2233,7 +2240,7 @@ produces the gradient of any function you can write.\note{%
   function, using simple differentiation rules and the magic of the
   chain rule. Differentiation is a typographic operation on computer
   functions!  The idea is \emph{not} to take numerical (small
-  difference) derivatives of the code; there is no way that
+  difference) derivatives of the code; there is almost no way that
   finite-difference differentiation could help your sampling in the
   long run.}
 There is a class of \MCMC\ methods that make use of gradient information
@@ -2263,12 +2270,11 @@ You take a sampling from the approximate function (which by assumption
 was easy) and then you re-weight the sampling (or do a subsequent
 rejection of samples) using the ratio of the true function to the
 approximate function as a weight or probability.
-We use this quite a bit in our hierarchical inferences,\note{%
+We use this quite a bit in our hierarchical inferences\note{%
   For example, we use importance sampling to convert individual-planet
   exoplanet inferences (all performed with dumb priors) into a full-population
-  consistent hierarchical model in \citet{eccentricity}.}
-and in problems where the dimensionality is low.\note{see,
-  for example, \citet{joker}}
+  consistent hierarchical model in \citet{eccentricity}. See also \notename~\ref{note:importance}.},
+and in problems where the dimensionality is low.\note{see, for example, \citet{joker}.}
 
 Two of the significant technical details for importance sampling are the
 following:
@@ -2327,7 +2333,7 @@ not of fixed dimension.
 For example, if you are modeling an astronomical image with a
 collection of stars, and you don't know how many stars to use; in this
 case the number of stars itself is a parameter, so the number of
-parameters is itself a function of the parameters.\note{Our attempt to sample this very problem is \citet{brewer}.}
+parameters is itself a function of the parameters.\note{Our attempt to sample in this very problem is \citet{brewer}.}
 In these cases you can only use certain kinds of samplers (though M--H
 \MCMC\ is one you can choose), and, in addition, you need to make
 special kinds of proposals that permit the system to jump from one
