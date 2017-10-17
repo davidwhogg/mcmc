@@ -1588,10 +1588,10 @@ For one, \MCMC\ is a sampling algorithm, not an optimization algorithm;
 For two, the closeness of the best sample to the posterior mode is a strong function of sample size,
   and with very bad scaling.%
   \note{If you have a $K$-point sampling in a $D$-dimensional parameter space,
-    there is some best sample $\pars_k^{\best}$.  Now imagine that you want to make
-    that best sample 10 times better---that is, you want to find a point $\pars^{\better}$
-    that is ten times closer to the true optimum.  How many more samples do you need to take?
-    In the limit that $K$ is large, on average, you have to take a factor of
+    there is some best sample $\pars_k^{\best}$.  Now imagine that you want to
+    find a point $\pars^{\better}$
+    that is ten times closer to the true optimum.
+    In the limit that $K$ is large you have to take (on average) a \emph{factor} of
     $10^D$ more samples!
     Any reasonable optimizer is far, far better than this (in terms of compute time).}
 For three, if you just want an optimum, use an optimizer!
