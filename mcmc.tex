@@ -70,7 +70,8 @@ We give advice on method choice, tuning for performance,
 methods for initialization, tests of convergence, troubleshooting, and use of the chain
 output to produce or report parameter estimates with associated uncertainties.
 We argue that autocorrelation time is the most important test for convergence,
-as it directly connects to the variances of sampling estimates of quantities of interest.
+as it directly connects to the uncertainty on the sampling estimate of any
+quantity of interest.
 We emphasize that sampling is a method for doing integrals; this guides our thinking
 about how \MCMC\ output is best used.
 \end{abstract}
@@ -1674,7 +1675,7 @@ When issues arise with \MCMC\ sampling,
 Is it the \MCMC\ code, the priors, the likelihood function,
   the initialization, the tuning, or something else?
 
-\paragraph{Functional testing:}
+\paragraph{Functional testing}
 In addition to a full set of unit tests for every part of your code
   (yeah \emph{right}\note{If you aren't unit testing, you are probably making some very big mistakes. It makes sense to put in unit tests for every part of your code, especially the parts of your code that are relied upon for correctness in multiple locations, like your \MCMC\ sampler.}),
   we recommend building some end-to-end functional tests that permit you to perform \MCMC\
@@ -1718,7 +1719,7 @@ If the priors don't look as you expect,
   or else a think-o about how your priors ought to look.
 Either way, diagnosis is in order.
 
-\paragraph{Likelihood issues:}
+\paragraph{Likelihood issues}
 Sometimes there can be problems with the likelihood function itself.
 For example,
   when you re-call the likelihood function with the same parameters,
@@ -1755,7 +1756,7 @@ These problems hurt optimizers more than samplers (although Hamiltonian
 In general, plotting the likelihood function as a function of parameters along
   slices in parameter space often reveals bugs or think-os.
 
-\paragraph{Low acceptance fraction:}
+\paragraph{Low acceptance fraction}
 If you find that you are getting low acceptance fraction
   (in standard M-H \MCMC\ or other varieties for which there is such a concept)
   you can simply reduce the sizes of the steps you consider to increase the fraction that are accepted.
@@ -1772,7 +1773,7 @@ variance of the proposal distributon \emph{must} decrease the
 acceptance fraction.
 If it does \emph{not}, then \emph{you have a bug}.
 
-\paragraph{Sticky chains:}
+\paragraph{Sticky chains}
 If you are concerned about acceptance fraction or convergence,
   it makes sense to plot parameter values as a function of ``step number'' or iteration number.
 That is, plot the ordered chain in each parameter dimension.
@@ -1786,7 +1787,7 @@ If you are using an ensemble sampler\note{Such as \project{emcee} \citep{emcee};
 A converged run for an ensemble sampler will show every single walker traversing the parameter space
   in every dimension many times.
 
-\paragraph{Initialization-dependence:}
+\paragraph{Initialization-dependence}
 If you initialize your \MCMC\ runs in different places in parameter space,
   do you get the same (or very similar) final parameter samplings,
   in mean and variance?
@@ -1824,7 +1825,7 @@ Again, if the acceptance ratio is low and there appear to be multiple modes,
   it is likely that the sampling will also be initialization dependent,
   and it is very unlikely that your sampling is going to be converged.
 
-\paragraph{Bad initialization:}
+\paragraph{Bad initialization}
 If you initialize your sampler in a disallowed region of parameter
 space---that is, a part of the space with $f(\pars)=0$ (so your
 \code{ln_f()} function returns \code{-Inf})---it might have a very
@@ -1834,7 +1835,7 @@ initialization is permitted.
 For ensemble methods, it is important to test that \emph{all} the
 walkers in the ensemble are initialized to permitted values.
 
-\paragraph{Parameterization problems:}
+\paragraph{Parameterization problems}
 It helps to think carefully about how to parameterize.
 For example, if there is an angle $\phi$ in your problem,
   and your prior requires it to be between $0$ and $2\pi$,
@@ -1911,7 +1912,7 @@ that subspace.
 We're not claiming that that re-parameterization is always easy to
 find; the mathematics of Lagrange multipliers can be useful here.
 
-\paragraph{Model checking:}
+\paragraph{Model checking}
 \emph{All models are wrong, but some are useful.}
 That's not a quote from Box, but it's close.\note{The real quotation
   is a parenthetical sentence ``Remember that all models are wrong;
@@ -2057,7 +2058,7 @@ There is no sense in which this list is comprehensive; these are just
 methods (or method classes) that are likely to be useful to projects similar
 to projects we ourselves have executed.
 
-\paragraph{Ensembles:}
+\paragraph{Ensembles}
 As we discussed (\sectionname~\ref{sec:tuning}), one of the critical challenges in the use of
 \MCMC\ is tuning the proposal pdf $q(\pars'\given\pars)$.
 In problems in which all of the parameters (all of the components or entries of $\pars$) are somehow ``equivalent'',
@@ -2089,7 +2090,7 @@ are worth understanding before use.\note{For example, we find
 Because ensemble methods are updating independent \MCMC\ chains, they
 are often easy to parallelize to make use of multiple cores.
 
-\paragraph{Gibbs:}
+\paragraph{Gibbs}
 Neither \MH\ \MCMC\ nor most ensemble methods good at going to very
   large numbers of parameters.\footnote{See the excellent rant ``Ensemble Methods are Doomed to Fail in High Dimensions'' at \url{http://andrewgelman.com/2017/03/15/ensemble-methods-doomed-fail-high-dimensions/}.}
 Even dozens of parameters can be enough to drive autocorrelation times
@@ -2146,7 +2147,7 @@ Parallelization is built in to some Gibbs implementations.\note{For
   example, \project{JAGS} (\url{http://mcmc-jags.sourceforge.net/}) automatically
   parallelizes Gibbs problems.}
 
-\paragraph{Hamiltonian:}
+\paragraph{Hamiltonian}
 At time of writing, the premier approaches for problems with large numbers
   of parameters are Hamiltonian methods.\note{For a review of the theory
   behind these methods, see \cite{hamiltonian}.}
@@ -2184,7 +2185,7 @@ At the present day,
   these samplers are essentially the only good options when the number of
   parameters gets very large.
 
-\paragraph{Importance:}
+\paragraph{Importance}
 Sometimes it is possible to sample efficiently from a distribution
 that is close to the target function $f(\pars)$ you care about, even when the target $f(\pars)$ itself is
 hard to sample efficiently with \MCMC.
@@ -2214,7 +2215,7 @@ If the ratio of the true function to the approximate function is to be
 used as a probability for rejection of samples, then the true function
 must be greater than or equal to the approximate function everywhere!
 
-\paragraph{Tempering:}
+\paragraph{Tempering}
 A huge problem for \MCMC\ samplers---which make local moves based on
 local positioning in the parameter space---is that there can be
 multiple modes in the function $f(\pars)$, separated by valleys of
@@ -2241,7 +2242,7 @@ At each step, when the temperature has moved away from unity, the
 distribution being sampled is not exactly $f(\pars)$, but the results
 can be transformed into a fair sampling.
 
-\paragraph{Nested:}
+\paragraph{Nested}
 Similar to tempering-like methods are a class of methods called ``nested''
 samplers\note{For example, see \citet{skilling} and \citet{dnest}},
 which also smoothly change the target distribution away from $f(\pars)$.
@@ -2258,7 +2259,7 @@ It is also designed such that it produces not just a sampling but also
 an estimate of the integral $Z$ of the likelihood times the prior
 (the Bayes factor or fully marginalized likelihood).
 
-\paragraph{Reversible-jump:}
+\paragraph{Reversible-jump}
 Finally, there are some extreme problems in which it is not just hard
 to sample in the parameter space, but the parameter space itself is
 not of fixed dimension.
