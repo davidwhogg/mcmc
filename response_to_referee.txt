@@ -1,0 +1,136 @@
+Dear Frank:
+
+Please find enclosed our revised version of MS#AAS07769, Data analysis
+recipes: Using Markov Chain Monte Carlo by Hogg & Foreman-Mackey.
+
+In what follows, the referee comments are indented and our responses
+are not.
+
+Thank you,
+
+David
+
+
+     ---------------------------------------------------------------------- 
+     Referee Report 
+
+     The authors provide a simple, and somehow anecdotal discussion
+     about MCMC methods (for astronomers, although the title don't
+     explicitly says it) in an informal and pragmatic style.
+
+We figured that because this is in the AAS journals, that would supply
+the relevant context, though we wouldn't object to modifying the title
+slightly.
+
+     The concept of conveying an intuitive description of statistical
+     methods for the broad astronomical community is certainly
+     something I support, however I would like to ask the authors and
+     editor to consider some caveats below.
+
+     Novelty and references
+
+     The draft lacks of some important literature contextualization. A
+     critical one is a recent Annual Review of Astronomy and
+     Astrophysics entitled Markov Chain Monte Carlo Methods for
+     Bayesian Data Analysis in Astronomy
+     https://arxiv.org/abs/1706.01629
+
+Yes, we know this paper. We now cite it [WHERE].
+
+     I would like the authors to please explain how their review
+     brings something new to the literature, considering the amount of
+     good and available material about MCMC.
+
+Good point. We are more explicit about this [WHERE]. The idea is to
+delve deeper here, but on MCMC specifically, but not so much about new
+developments; more like we are trying to specifically emphasize the
+importance of basic good pratices; we say that more clearly now.
+
+     Such as e.g.
+
+     Doing Bayesian Data Analysis, Second Edition: A Tutorial with R,
+     JAGS, and Stan, by John Kruschke, and many others
+
+We also now cite some of this literature [WHERE; DO THIS].
+
+     A potential reason is to update the readers about recent
+     developments in the field.  But again, the authors seems to
+     ignore the current astronomical literature. For example, the
+     authors are aware of Statistical Bayesian packages such as JAGS
+     and Stan, but do not cite two recent books in Astronomy that make
+     use of them, such as:
+
+     Bayesian Methods for the Physical Sciences: Learning from
+     Examples in Astronomy and Physics, Springer Series in
+     Astrostatistics, 2015 Andreon, and Weaver
+
+     And 
+
+     Bayesian Models for Astrophysical Data: Using R, JAGS, Python,
+     and Stan, Cambridge University press, Hilbe, de Souza and Ishida,
+     2017
+
+Good point; these are all now cited [WHERE].
+
+     2. Confidence versus credible intervals 
+
+     I am sure the authors are aware of the difference between both,
+     and should know they don't even agree beyond simple cases: such
+     as for normally distributed data. Hence the quote "Because they
+     are so afraid of being confused with frequentists, Bayesians
+     often call these regions "credible" rather than "confidence""
+
+     Not only seems inappropriate for a scientific paper, but it is
+     actually misleading. See for instance The fallacy of placing
+     confidence in confidence intervals, Morey et al. 2015
+     https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4742505/
+
+     Moreover, such discussion -- Bayesian vs Frequentist -- has far
+     deeper roots. See e.g. Probability theory, the logic of science,
+     E.T. Jaynes, Cambridge University Press 2003.
+
+Actually, our problem is with the *names*. We agree with the referee
+that these two things are importantly and substantially different! We
+have fixed that all up in the text now [DO THIS].
+
+     3. Lack of discussion about prediction vs credible intervals. 
+
+[UHHH SUP?]
+
+     4. Model check 
+
+     Lack of contemporary discussion such as e.g. Gabry et
+     al. Visualization in Bayesian workflow,
+     https://arxiv.org/abs/1709.01449
+
+Ooh that's a great reference! We cite this and were pleased to be
+pointed at this.
+
+     5. MORE SOPHISTICATED SAMPLING METHODS 
+
+     Please consider adding some material about 
+
+     Approximate Bayesian Computation, since it has gained space in astronomy e.g. 
+
+     https://arxiv.org/abs/1608.07606
+     https://arxiv.org/abs/1607.01782 
+     https://arxiv.org/abs/1504.06129 
+     https://arxiv.org/abs/1202.1426
+
+Good point -- we are even working on this ourselves. We added a small
+bit of discussion about this [WHERE].
+
+     ---------------------------------------------------------------------- 
+     Statistics Editor Comments:
+
+     As a didactic presentation, I suggest two additions:
+
+     (a) Add a table listing MCMC approaches so the reader appreciates
+     the variety of options available
+     (e.g. https://www.rdocumentation.org/packages/LaplacesDemon/versions/16.0.1/topics/LaplacesDemon)
+
+     (b) Discuss how to choose when MCMC sampling and when
+     optimization (e.g. EM Algorithm or simplex) is appropriate. The
+     former is commonly used for characterizing Bayesian posteriors
+     while the latter are commonly used for maximizing likelihoods.
+
