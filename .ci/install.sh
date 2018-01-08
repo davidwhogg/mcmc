@@ -12,4 +12,4 @@ conda info -a
 # Python problems
 conda create --yes -n test python=$PYTHON_VERSION numpy scipy matplotlib tqdm
 source activate test
-pip install corner https://github.com/dfm/emcee/archive/develop.zip
+pip install corner https://github.com/dfm/emcee/archive/master.zip
