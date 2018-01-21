@@ -93,8 +93,10 @@ Good point; these are all now cited [WHERE].
      E.T. Jaynes, Cambridge University Press 2003.
 
 Actually, our problem is with the *names*. We agree with the referee
-that these two things are importantly and substantially different! We
-have fixed that all up in the text now [DO THIS].
+that these two things are importantly and substantially different!
+They have totally different meanings, of course. We have fixed that
+all up in the text now, making it clear that these are not the same
+thing at ALL [DO THIS].
 
      3. Lack of discussion about prediction vs credible intervals. 
 
