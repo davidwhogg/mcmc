@@ -101,7 +101,14 @@ the point) and also the text that is so footnoted.
 
      3. Lack of discussion about prediction vs credible intervals. 
 
-[UHHH SUP?]
+We interpreted this telegraphic comment to mean: Shouldn't the paper
+say something about the fact that you might want to put a
+probabilistic interval on a prediction for new data (like a new
+observation of a binary star's velocity, given past observations).  We
+considered this out of scope, because we don't have much or any
+content on decision theory, experimental design, or model
+checking. There is lots there, though, and it is deserving of more
+attention.
 
      4. Model check 
 
@@ -110,7 +117,7 @@ the point) and also the text that is so footnoted.
      https://arxiv.org/abs/1709.01449
 
 Ooh that's a great reference! We cite this and were pleased to be
-pointed at this.
+pointed at this. [DO THIS]
 
      5. MORE SOPHISTICATED SAMPLING METHODS 
 
