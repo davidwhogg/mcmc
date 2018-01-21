@@ -54,7 +54,7 @@ importance of basic good pratices; we say that more clearly now.
      Doing Bayesian Data Analysis, Second Edition: A Tutorial with R,
      JAGS, and Stan, by John Kruschke, and many others
 
-We also now cite some of this literature [WHERE; DO THIS].
+We also now cite this too [WHERE; DO THIS].
 
      A potential reason is to update the readers about recent
      developments in the field.  But again, the authors seems to
