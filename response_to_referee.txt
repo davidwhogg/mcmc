@@ -20,7 +20,7 @@ David
 
 We figured that because this is in the AAS journals, that would supply
 the relevant context, though we wouldn't object to modifying the title
-slightly.
+slightly. We have not made a change here.
 
      The concept of conveying an intuitive description of statistical
      methods for the broad astronomical community is certainly
@@ -35,7 +35,10 @@ slightly.
      Bayesian Data Analysis in Astronomy
      https://arxiv.org/abs/1706.01629
 
-Yes, we know this paper. We now cite it [WHERE].
+Yes, we know this paper. We now cite it near the end of the first
+Section, and near the beginning of Section 10. We note in both places
+that the Sharma review goes into much more depth on methods than we
+do; our goals here are far more introductory.
 
      I would like the authors to please explain how their review
      brings something new to the literature, considering the amount of
