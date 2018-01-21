@@ -1421,10 +1421,15 @@ Again, these limits can be estimated%
   and finding the $\pars$ values such that some fraction (0.68 or 0.95)
   of the samples lie between them.
 Again, to form these limits, $g(\pars)$ must be a scalar function (so sorting is well defined).
-Because they are so afraid of being confused with frequentists,
-Bayesians often call these regions ``credible'' rather than
-``confidence''\note{We don't like this ``credible'' terminology,
-  though we sometimes adopt it to avoid confusion.}
+Because of the danger of having them confused with frequentist uncertainties,
+Bayesians usually call these regions ``credible'' rather than
+``confidence'' regions.\note{We don't like this terminology, because there is
+  nothing about the words ``confidence'' and ``credible'' that properly
+  distinguish the difference between these very different things.
+  Confidence regions say what regions of parameter space make data like the
+  observed data; credible regions say what regions of parameter space are
+  probable given the data. The latter require priors for their construction
+  and are the intervals produced by \MCMC.}
 
 One amusing thing is that if you choose the 68-percent interval sensibly,
   but use as the ``measurement'' the posterior mean,

@@ -96,7 +96,8 @@ Actually, our problem is with the *names*. We agree with the referee
 that these two things are importantly and substantially different!
 They have totally different meanings, of course. We have fixed that
 all up in the text now, making it clear that these are not the same
-thing at ALL [DO THIS].
+thing at ALL. We changed both the footnote (and extended it to make
+the point) and also the text that is so footnoted.
 
      3. Lack of discussion about prediction vs credible intervals. 
 
