@@ -149,7 +149,7 @@ stumbling blocks. So we have not made a change here.
 We explicitly consider this out of scope, as we have said both early in
 the paper, and in the Advanced-Methods section. We call out to much more
 comprehensive reviews of methods now, which have these tables and full
-descriptions of the methods.
+descriptions of the methods. [MAKE THIS TRUE]
 
      (b) Discuss how to choose when MCMC sampling and when
      optimization (e.g. EM Algorithm or simplex) is appropriate. The
