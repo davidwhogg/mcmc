@@ -1919,15 +1919,21 @@ Cross-validation\note{Cross-validation is an incredibly valuable set
   of techniques that all astronomers should know.
   it is not clear what to cite here, but one possibility is \citet{crossval}.}
 is a framework for constructing
-valuable tests of this form, as is posterior predictive checks\note{%
+valuable tests of this form, as is posterior predictive checking.\note{%
   The posterior predictive check is one of the Bayesian equivalents of
   a goodness-of-fit test \citep{ppcheck}.}
+Indeed, making posterior predictions of new data, and testing the
+model by taking completely new data and comparing to those predictions,
+is the strongest test of any model. Each sample from the \MCMC\ chain
+provides a prediction for future data; the distribution over these sample
+predictions is the posterior prediction for new data.
 Importantly, you want to find ways to compare your model to your data
 \emph{in the space of the data}.
-Don't just look at the parameter space of your model!
+Don't just look at the parameter space of your model. Look at the data.
 It is the data that really exist, especially when all models are wrong!
 
-There are model checking methods (like varying the prior and
+There are model checking methods (like varying the prior or assumptions
+in the likelihood function and
 re-running \MCMC) that test the sensitivity of results to assumptions.
 Not only are these very valuable for testing the model, they are
 essential for writing any paper about your results: The reader always
@@ -1953,7 +1959,10 @@ no guidance about how to use it (and indeed there are only heuristics
 to reach for).
 If your model is wrong, the richer tests of visualization of residuals
 or sensitivity to assumptions are much more likely to lead to insight
-about what changes to make or what new directions to explore.
+about what changes to make or what new directions to explore.\footnote{%
+  There is a growing idea that Bayesian inference---and inference in general---is
+  about much more than inferring parameter values: It is about understanding and
+  elaborating models (for example, \citealt{gabry}).}
 
 \section{More sophisticated sampling methods}\label{sec:methods}
 \nopagebreak
@@ -2293,6 +2302,10 @@ by the NASA Exoplanet Science Institute.
     inference and the abundance of earth analogs from noisy, incomplete catalogs},
   \textit{Astrophys.\ J.}\ \textbf{795} 64
   \doi{10.1088/0004-637X/795/1/64}.
+\bibitem[Gabry \etal(2017)]{gabry}
+  Gabry, J., Simpson, D., Vehtari, A., Betancourt, M., \& Gelman, A., 2017,
+  {Visualization in Bayesian workflow},
+  \arxiv{1709.01449}.
 \bibitem[Geisser(1993)]{crossval}
   Geisser,~S., 1993,
   \textit{Predictive Inference: An Introduction},

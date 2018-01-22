@@ -105,10 +105,8 @@ We interpreted this telegraphic comment to mean: Shouldn't the paper
 say something about the fact that you might want to put a
 probabilistic interval on a prediction for new data (like a new
 observation of a binary star's velocity, given past observations).  We
-considered this out of scope, because we don't have much or any
-content on decision theory, experimental design, or model
-checking. There is lots there, though, and it is deserving of more
-attention.
+put in a mention in the Model Checking subsection. It is certainly
+deserving of more attention than it gets here.
 
      4. Model check 
 
@@ -116,8 +114,10 @@ attention.
      al. Visualization in Bayesian workflow,
      https://arxiv.org/abs/1709.01449
 
-Ooh that's a great reference! We cite this and were pleased to be
-pointed at this. [DO THIS]
+Ooh that's a great reference! We cite this in the relevant place now,
+and were pleased to be pointed at this. Indeed, Gelman has been a
+great public voice in support of taking this broader view of what
+Bayesian inference is.
 
      5. MORE SOPHISTICATED SAMPLING METHODS 
 
@@ -130,8 +130,12 @@ pointed at this. [DO THIS]
      https://arxiv.org/abs/1504.06129 
      https://arxiv.org/abs/1202.1426
 
-Good point -- we are even working on this ourselves. We added a small
-bit of discussion about this [WHERE].
+While we agree that the ABC developments are exciting -- and some of
+them are being worked on by us!! -- we do consider this out of
+scope. As we now better explain in the paper, we aren't trying to
+cover the whole ground of inference, we are just trying to introduce
+the uninitiated to the method and help them get over the initial
+stumbling blocks. So we have not made a change here.
 
      ---------------------------------------------------------------------- 
      Statistics Editor Comments:
@@ -142,8 +146,14 @@ bit of discussion about this [WHERE].
      the variety of options available
      (e.g. https://www.rdocumentation.org/packages/LaplacesDemon/versions/16.0.1/topics/LaplacesDemon)
 
+We explicitly consider this out of scope, as we have said both early in
+the paper, and in the Advanced-Methods section. We call out to much more
+comprehensive reviews of methods now, which have these tables and full
+descriptions of the methods.
+
      (b) Discuss how to choose when MCMC sampling and when
      optimization (e.g. EM Algorithm or simplex) is appropriate. The
      former is commonly used for characterizing Bayesian posteriors
      while the latter are commonly used for maximizing likelihoods.
 
+We have addes more detail to our optimization comments. [DO THIS]
