@@ -177,7 +177,14 @@ choices of prior pdf, \emph{optimizes the likelihood}.\note{Of course
   sampling a posterior pdf.  That is, for some, the fact that when
   someone ``wants'' to optimize, it is actually useful that they
   choose the ``wrong'' tool, because that ``wrong'' tool gives them
-  back something far more useful than the output of any optimizer!}
+  back something far more useful than the output of any optimizer!
+  However it is true that when the data are extremely informative
+  (that is, the posterior is very narrow), there is not much difference
+  between optimizing the posterior and sampling it, nor between optimizing
+  the likelihood and optimizing the posterior. That is, all inference
+  methods sort-of converge as the data become very informative. That can be
+  an important point when you are working on a problem where the posterior
+  is very narrow.}
 This is another bad reason!
 
 Both of these reasons for using \MCMC---that it is a parameter-space
