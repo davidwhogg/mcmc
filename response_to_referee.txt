@@ -44,17 +44,18 @@ do; our goals here are far more introductory.
      brings something new to the literature, considering the amount of
      good and available material about MCMC.
 
-Good point. We are more explicit about this [WHERE]. The idea is to
-delve deeper here, but on MCMC specifically, but not so much about new
-developments; more like we are trying to specifically emphasize the
-importance of basic good pratices; we say that more clearly now.
+Good point. We are slightly more explicit about this now in the
+introductory section, in the paragraph starting "In what
+follows...". The idea is to provide a getting-started user-manual for
+MCMC conceptually or specifically, but not really review new
+developments or sophisticated methods. It is more like we are trying
+to specifically emphasize the importance of basic good pratices; we
+say that more clearly now.
 
      Such as e.g.
 
      Doing Bayesian Data Analysis, Second Edition: A Tutorial with R,
      JAGS, and Stan, by John Kruschke, and many others
-
-We also now cite this too [WHERE; DO THIS].
 
      A potential reason is to update the readers about recent
      developments in the field.  But again, the authors seems to
@@ -73,7 +74,9 @@ We also now cite this too [WHERE; DO THIS].
      and Stan, Cambridge University press, Hilbe, de Souza and Ishida,
      2017
 
-Good point; these are all now cited [WHERE].
+Good point; these are all now cited in the same "In what follows..."
+paragraph, where we explain our difference from the rest of the
+literature.
 
      2. Confidence versus credible intervals 
 

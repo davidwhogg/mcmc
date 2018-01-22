@@ -200,9 +200,20 @@ methods.\note{For a description of various different sampling methods,
   given from the point of view of an astrophysicist, see the review by
   \citet{sharma}. We say a bit about different \MCMC\ methods in
   \sectionname~\ref{sec:methods}, but our discussion is limited
-  relative to Sharma's review.}
-It will be about how to use \MCMC, including diagnosis and
-trouble-shooting.
+  relative to Sharma's review. For even more depth, there are relevant
+  book-length treatments of \MCMC; our favorite is \citet{mcmchandbook}.
+  There are also
+  good books on Bayesian data analysis more generally that
+  include discussion of \MCMC\ as a part of that;
+  for example, \citet{kruschke}, and \citet{andreon} and \citet{hilbe}.}
+Think of this \documentname\ as a getting-started document for a new user
+of \MCMC\ methods.
+It concentrates on conceptual points, and questions we get asked
+frequently by users, with a concentration on how an \MCMC\ project is
+diagnosed and tested, and how its outputs are used responsibly.
+Most of what we say will
+be applicable to any \MCMC\ method; in that sense the discussion is general.
+And all in the language---more-or-less---of an astrophysicist.
 
 The first couple of \sectionname s will describe what a sampling is, and how
 the simplest \MCMC\ method, the Metropolis-Hastings algorithm, can
@@ -2011,7 +2022,8 @@ We will try to name some current implementations in the notes, but any
 list compiled today will be incomplete tomorrow.\note{One check-point
   in this literature is the compilation volume by
   \citet{mcmchandbook}, but much has been developed and changed even
-  since that was written.}
+  since that was written. For less in-depth but more current---and
+  more astrophysically relevant---coverage, see also the review by \citet{sharma}.}
 The spaces of \MCMC\ methods and \MCMC\ method implementations are both
 growing rapidly, in part because \MCMC\ has become such a core
 technology in the empirical sciences.
@@ -2021,9 +2033,7 @@ we know about, with some keywords that can be used to search more
 deeply.
 There is no sense in which this list is comprehensive; these are just
 methods (or method classes) that are likely to be useful to projects
-similar to projects we ourselves have executed.\note{There is a
-  more in-depth and more comprehensive list of astrophyically relevant
-  \MCMC\ methods in the review by \citet{sharma}.}
+similar to projects we ourselves have executed.
 
 \paragraph{Ensembles}
 As we discussed (\sectionname~\ref{sec:tuning}), one of the critical challenges in the use of
@@ -2270,11 +2280,16 @@ by the NASA Exoplanet Science Institute.
 
 \raggedright
 \begin{thebibliography}{}\markright{References}
+\bibitem[Andreon \& Weaver(2015)]{andreon}
+  Andreon, S. \& Weaver, B., 2015,
+  \textit{Bayesian Methods for the Physical Sciences: Learning from Examples in Astronomy and Physics},
+  Springer
+  \isbn{9783319152875}.
 \bibitem[Box \& Draper(1987)]{box}
   Box,~G.~E.~P. \& Draper,~N.~R.\ 1987,
   \textit{Empirical Model Building and Response Surfaces},
   John Wiley \& Sons, New York, NY
-  \isbn{978-0471810339}.
+  \isbn{978-0471810339}.  
 \bibitem[Brewer \etal(2011)]{dnest}
   Brewer,~B.~J., P\'artay,~L.~B. \& Cs\'anyi,~G., 2011,
   {Diffusive nested sampling},
@@ -2334,6 +2349,11 @@ by the NASA Exoplanet Science Institute.
   Ensemble samplers with affine invariance,
   \textit{Comm.\.Appl.\,Math.\,Comp.\,Sci.}, \textbf{5}(1), 65–-80
   \doi{10.2140/camcos.2010.5.65}.
+\bibitem[Hilbe \etal(2017)]{hilbe}
+  Hilbe, J. M., de~Souza, R. S., \& Ishida, E. E. O., 2017,
+  \textit{Bayesian Models for Astrophysical Data: Using R, JAGS, Python, and Stan},
+  Cambridge University Press
+  \isbn{9781107133082}.
 \bibitem[Hogg \etal(2010a)]{fittingaline}
   Hogg,~D.~W., Bovy,~J., \& Lang,~D., 2010a,
   Data analysis recipes: Fitting a model to data,
@@ -2350,6 +2370,11 @@ by the NASA Exoplanet Science Institute.
   Hou,~F., Goodman,~J., \& Hogg,~D.~W., 2014,
   The probabilities of orbital-companion models for stellar radial velocity data,
   \arxiv{1401.6128}.
+\bibitem[Kruschke(2015)]{kruschke}
+  Kruschke, J. K., 2015,
+  \textit{Doing Bayesian Data Analysis: A Tutorial with R, JAGS, and Stan}, 2ed,
+  Academic Press
+  \isbn{9780124058880}.
 \bibitem[Lang \& Hogg(2012)]{cometholmes}
   Lang,~D. \& Hogg,~D.~W., 2012,
   \href{http://adsabs.harvard.edu/abs/2012AJ....144...46L}{Searching for comets on the World Wide Web:
